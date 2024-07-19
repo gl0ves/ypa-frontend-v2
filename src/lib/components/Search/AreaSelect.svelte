@@ -1,28 +1,70 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
-	export let options: string[] = [];
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import InputWithLabel from './InputWithLabel.svelte';
+
+	$: areas = $page.data.areas
+		? ($page.data.areas.map((a: string) => {
+				return { label: a, value: a };
+			}) as { label: string; value: string }[])
+		: [];
+
+	$: selectedAreas =
+		$page.url.searchParams.getAll('areas')?.map((value) => ({
+			label: value,
+			value: value
+		})) || [];
+
+	type Selected<T> = { value: T; label?: string };
+
+	const handleAreaSelected = (selected: Selected<unknown>[] | undefined) => {
+		if (!selected) return;
+
+		// Map selected areas to their values
+		const selectedValues = selected.map((area) => area.value);
+
+		// Create a new URLSearchParams object from the current search parameters
+		const params = new URLSearchParams(window.location.search);
+
+		params.delete('page');
+		params.delete('areas');
+
+		// Update the 'areas' parameter with the joined list of selected area values
+		selectedValues.forEach((area) => {
+			if (typeof area !== 'string') return;
+			params.append('areas', area);
+		});
+
+		// Navigate using the updated parameters
+		goto(`?${params.toString()}`);
+	};
 </script>
 
-<Select.Root
-	multiple
-	selected={selectedColors}
-	onSelectedChange={(s) => {
-		if (s) {
-			formData.colors = s.map((c) => c.value);
-		} else {
-			formData.colors = [];
-		}
-	}}
->
-	{#each formData.colors as color}
-		<input name={attrs.name} hidden value={color} />
-	{/each}
-	<Select.Trigger {...attrs}>
-		<Select.Value placeholder="Select colors" />
-	</Select.Trigger>
-	<Select.Content>
-		{#each Object.entries(colors) as [value, label]}
-			<Select.Item {value} {label} />
+<InputWithLabel label="Areas">
+	<Select.Root
+		multiple
+		disabled={areas.length === 0}
+		selected={selectedAreas}
+		onSelectedChange={(areas) => handleAreaSelected(areas)}
+	>
+		{#each areas as area}
+			<input name={area.label ?? ''} hidden value={area.value} />
 		{/each}
-	</Select.Content>
-</Select.Root>
+		<Select.Trigger class="w-[250px]">
+			<Select.Value
+				placeholder={areas.length === 0 ? 'Please select a region' : 'Select up to 10 areas'}
+			/>
+		</Select.Trigger>
+		<Select.Content class="overflow-y-auto max-h-[300px] max-w-[250px]">
+			{#each areas as area}
+				<Select.Item
+					disabled={selectedAreas.length === 10 &&
+						selectedAreas.every((a) => a.value !== area.value)}
+					value={area.value}
+					label={area.label ?? ''}
+				/>
+			{/each}
+		</Select.Content>
+	</Select.Root>
+</InputWithLabel>

@@ -84,3 +84,10 @@
 			'calt' 1;
 	}
 }
+/* Ensure Tailwind processes the custom background image */
+
+@layer utilities {
+	.bg-hero {
+		background-image: url('https://cdn.yourpropertyabroad.com/static/banner.jpg');
+	}
+}

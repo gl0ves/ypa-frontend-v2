@@ -4,26 +4,34 @@
 	import { mediaQuery } from 'svelte-legos';
 	import * as Pagination from '$lib/components/ui/pagination/index.js';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+
 	const isDesktop = mediaQuery('(min-width: 768px)');
 
-	export let count;
+	export let count: number;
 
-	$: perPage = 16;
+	$: perPage = 18;
 	$: siblingCount = $isDesktop ? 1 : 0;
+	$: currentPage = parseInt($page.url.searchParams.get('page') || '1', 10);
 
 	const navigate = async (page: number) => {
-		const params = new URLSearchParams({ page: page.toString() });
-		return goto(`?${params.toString()}`, { noScroll: true });
+		const params = new URLSearchParams($page.url.searchParams);
+		params.set('page', page.toString());
+		return goto(`?${params.toString()}`, { keepFocus: true });
 	};
 
-	const next = async (page: number | undefined) => {
-		if (page === undefined) return;
-		await navigate(page + 1);
+	const next = async () => {
+		const nextPage = Math.min(currentPage + 1, Math.ceil(count / perPage));
+		if (nextPage !== currentPage) {
+			await navigate(nextPage);
+		}
 	};
 
-	const prev = async (page: number | undefined) => {
-		if (page === undefined) return;
-		await navigate(page - 1);
+	const prev = async () => {
+		const prevPage = Math.max(currentPage - 1, 1);
+		if (prevPage !== currentPage) {
+			await navigate(prevPage);
+		}
 	};
 </script>
 
@@ -33,11 +41,10 @@
 	{perPage}
 	{siblingCount}
 	let:pages
-	let:currentPage
 >
 	<Pagination.Content>
 		<Pagination.Item>
-			<Pagination.PrevButton on:click={() => prev(currentPage)}>
+			<Pagination.PrevButton on:click={prev} disabled={currentPage <= 1}>
 				<IconChevronLeft class="h-4 w-4" />
 				<span class="hidden sm:block">Previous</span>
 			</Pagination.PrevButton>
@@ -50,7 +57,7 @@
 			{:else}
 				<Pagination.Item>
 					<Pagination.Link
-						on:click={() => currentPage !== page && navigate(page.value)}
+						on:click={() => navigate(page.value)}
 						{page}
 						isActive={currentPage === page.value}
 					>
@@ -60,7 +67,7 @@
 			{/if}
 		{/each}
 		<Pagination.Item>
-			<Pagination.NextButton on:click={() => next(currentPage)}>
+			<Pagination.NextButton on:click={next} disabled={currentPage >= Math.ceil(count / perPage)}>
 				<span class="hidden sm:block">Next</span>
 				<IconChevronRight class="h-4 w-4" />
 			</Pagination.NextButton>

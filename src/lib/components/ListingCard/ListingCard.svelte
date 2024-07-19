@@ -25,7 +25,7 @@
 
 <div class="w-96 bg-white shadow rounded-lg overflow-hidden cursor-pointer">
 	<div class="relative h-48 w-full">
-		<img src={listing.images} alt="Listing thumbnail" class="absolute h-full w-full object-cover" />
+		<img src={listing.image} alt="Listing thumbnail" class="absolute h-full w-full object-cover" />
 		<div class="absolute bottom-0 left-0 bg-secondary text-white font-semibold p-2">
 			{listing.region}
 		</div>

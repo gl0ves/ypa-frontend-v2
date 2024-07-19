@@ -1,46 +1,46 @@
 export const regions = [
 	{
 		value: '',
-		text: 'All regions'
+		label: 'All regions'
 	},
 	{
-		value: 'Costa Almeria',
-		text: 'Costa Almería'
+		value: 'costa-almeria',
+		label: 'Costa Almería'
 	},
 	{
-		value: 'Costa Blanca',
-		text: 'Costa Blanca'
+		value: 'costa-blanca',
+		label: 'Costa Blanca'
 	},
 	{
-		value: 'Costa Calida',
-		text: 'Costa Cálida'
+		value: 'costa-calida',
+		label: 'Costa Cálida'
 	},
 	{
-		value: 'Costa del Sol',
-		text: 'Costa del Sol'
+		value: 'costa-del-sol',
+		label: 'Costa del Sol'
 	},
 	{
-		value: 'Gran Canaria',
-		text: 'Gran Canaria'
+		value: 'gran-canaria',
+		label: 'Gran Canaria'
 	},
 	{
-		value: 'Ibiza',
-		text: 'Ibiza'
+		value: 'ibiza',
+		label: 'Ibiza'
 	},
 	{
-		value: 'Lanzarote',
-		text: 'Lanzarote'
+		value: 'lanzarote',
+		label: 'Lanzarote'
 	},
 	{
-		value: 'Mallorca',
-		text: 'Mallorca'
+		value: 'mallorca',
+		label: 'Mallorca'
 	},
 	{
-		value: 'Menorca',
-		text: 'Menorca'
+		value: 'menorca',
+		label: 'Menorca'
 	},
 	{
-		value: 'Tenerife',
-		text: 'Tenerife'
+		value: 'tenerife',
+		label: 'Tenerife'
 	}
 ];
