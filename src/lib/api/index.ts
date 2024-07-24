@@ -22,4 +22,22 @@ const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
 	return (await res.json()) as { results: { area: string }[]; next: string };
 };
 
-export { fetchListings, fetchAreas };
+const fetchApi = async (path: string, options: RequestInit = {}) => {
+	const base = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173';
+	const url = new URL(path, base);
+
+	try {
+		const response = await fetch(url.toString(), options);
+
+		if (!response.ok) {
+			throw new Error(`API request failed: ${response.statusText}`);
+		}
+
+		return response.json();
+	} catch (error) {
+		console.error('Failed to fetch from API:', error);
+		throw error;
+	}
+};
+
+export { fetchListings, fetchAreas, fetchApi };

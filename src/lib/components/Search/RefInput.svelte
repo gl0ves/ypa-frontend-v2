@@ -1,16 +1,28 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Input } from '$lib/components/ui/input';
-	import InputWithLabel from './InputWithLabel.svelte';
+	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 	import { debounce } from '$lib/utils';
+	import { page } from '$app/stores';
+
+	let inputValue = '';
+
+	$: {
+		// Update input value when URL changes
+		const refParam = $page.url.searchParams.get('ref');
+		inputValue = refParam ?? '';
+	}
 
 	const handleInputChange = (event: Event) => {
 		const target = event.target as HTMLInputElement;
-		const value = target.value;
-		const params = new URLSearchParams(window.location.search);
+		inputValue = target.value;
+		const params = new URLSearchParams($page.url.searchParams);
 		params.delete('page');
-		if (value === '') params.delete('ref');
-		else params.set('ref', value);
+		if (inputValue === '') {
+			params.delete('ref');
+		} else {
+			params.set('ref', inputValue);
+		}
 		goto(`?${params.toString()}`, { keepFocus: true });
 	};
 
@@ -18,5 +30,11 @@
 </script>
 
 <InputWithLabel label="Identifier">
-	<Input on:input={debouncedInputChange} class="w-[250px]" type="text" placeholder="Search" />
+	<Input
+		value={inputValue}
+		on:input={debouncedInputChange}
+		class="w-[250px]"
+		type="text"
+		placeholder="Search"
+	/>
 </InputWithLabel>

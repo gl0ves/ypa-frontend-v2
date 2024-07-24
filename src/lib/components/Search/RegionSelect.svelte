@@ -4,31 +4,38 @@
 	import { onMount } from 'svelte';
 	import { regions } from './regions';
 	import { page } from '$app/stores';
-	import InputWithLabel from './InputWithLabel.svelte';
+	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 
-	const params = $page.url.searchParams;
-	const regionParam = params.get('region');
+	$: searchParams = $page.url.searchParams;
+	$: regionParam = searchParams.get('region');
+	$: regionObj = regions.find((region) => region.value === regionParam);
+	$: selectedRegion = regionObj
+		? { label: regionObj.label, value: regionObj.value }
+		: { label: 'All Regions', value: '' };
 
 	onMount(() => {
 		if (!regionParam) {
+			const params = new URLSearchParams($page.url.searchParams);
 			params.delete('region');
 			goto(`?${params.toString()}`);
 		}
 	});
 
-	$: selectedRegion = regionParam
-		? { label: regionParam, value: regionParam }
-		: { label: 'All Regions', value: '' };
-
 	const handleRegionSelected = (region: string) => {
+		const params = new URLSearchParams($page.url.searchParams);
+
 		params.delete('page');
 		params.delete('region');
-		if (!region) {
+
+		if (region) {
+			if (params.get('region') !== region) {
+				params.delete('areas');
+			}
+			params.set('region', region);
+		} else {
 			params.delete('areas');
-			return goto(`?${params.toString()}`);
 		}
-		if (params.get('region') != region) params.delete('areas');
-		params.set('region', region);
+
 		goto(`?${params.toString()}`);
 	};
 </script>

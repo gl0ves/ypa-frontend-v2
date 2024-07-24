@@ -2,7 +2,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputWithLabel from './InputWithLabel.svelte';
+	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 
 	$: areas = $page.data.areas
 		? ($page.data.areas.map((a: string) => {

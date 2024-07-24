@@ -1,10 +1,11 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
-
+	import { createEventDispatcher } from 'svelte';
 	export let bedOrBath: 'bedrooms' | 'bathrooms';
+
+	const dispatch = createEventDispatcher();
 
 	const options = [
 		{ label: 'Any amount', value: 0 },
@@ -15,25 +16,20 @@
 		{ label: '5+', value: 5 }
 	];
 
-	$: params = $page.url.searchParams;
-	$: param = params.get(bedOrBath) || '0';
-	$: selectedOption = options.find((option) => option.value.toString() === param);
-
-	const handleOptionSelect = (option: number | undefined) => {
-		const updatedParams = new URLSearchParams(params);
-		if (option === undefined) return;
-		if (option === 0) updatedParams.delete(bedOrBath);
-		if (option >= 1) updatedParams.set(bedOrBath, option.toString());
-		goto(`?${updatedParams.toString()}`);
+	const param = $page.url.searchParams.get(bedOrBath);
+	$: selectedOption = options.find((option) => option.value.toString() === param) || {
+		label: 'Any amount',
+		value: 0
 	};
+
+	$: {
+		dispatch(`${bedOrBath}-selected`, selectedOption);
+	}
 </script>
 
 <InputWithLabel bind:label={bedOrBath}>
-	<Select.Root
-		selected={selectedOption}
-		onSelectedChange={(option) => handleOptionSelect(option?.value)}
-	>
-		<Select.Trigger class="w-[250px]">
+	<Select.Root bind:selected={selectedOption}>
+		<Select.Trigger>
 			<Select.Value />
 		</Select.Trigger>
 		<Select.Content>

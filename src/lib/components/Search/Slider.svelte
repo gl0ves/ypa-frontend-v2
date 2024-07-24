@@ -1,47 +1,45 @@
 <script lang="ts">
 	import { Slider } from '$lib/components/ui/slider';
-	import InputWithLabel from './InputWithLabel.svelte';
+	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
-	let min = 0;
-	let max = 1000000;
-	let step = 25000;
-	let sliderValues = { min: min, max: max };
+	const MIN = 0;
+	const MAX = 1000000;
+	const STEP = 25000;
 
-	// Reactive statement to update sliderValues when min or max changes
-	$: sliderValues = { min, max };
+	let sliderValues: [number, number];
 
-	// Ensure the sliderValues object updates when the slider's value changes
+	$: {
+		const minPrice = Number($page.url.searchParams.get('min_price')) || MIN;
+		const maxPrice = Number($page.url.searchParams.get('max_price')) || MAX;
+		sliderValues = [minPrice, maxPrice];
+	}
+
 	const updateValues = (values: number[]) => {
-		sliderValues.min = values[0];
-		sliderValues.max = values[1];
+		const [min, max] = values;
+		const params = new URLSearchParams($page.url.searchParams);
 
-		const params = new URLSearchParams(window.location.search);
 		params.delete('page');
-		if (sliderValues.min === 0) params.delete('min_price');
-		if (sliderValues.max === 1000000) params.delete('max_price');
-		if (sliderValues.min > 0) params.set('min_price', values[0].toString());
-		if (sliderValues.max < 1000000) params.set('max_price', values[1].toString());
+		if (min === MIN) params.delete('min_price');
+		else params.set('min_price', min.toString());
+
+		if (max === MAX) params.delete('max_price');
+		else params.set('max_price', max.toString());
+
 		goto(`?${params.toString()}`);
 	};
 </script>
 
 <div class="text-left w-[600px] min-w-[200px]">
 	<InputWithLabel label="Price">
-		<Slider
-			value={[sliderValues.min, sliderValues.max]}
-			{min}
-			{max}
-			{step}
-			onValueChange={updateValues}
-		/>
+		<Slider value={sliderValues} min={MIN} max={MAX} step={STEP} onValueChange={updateValues} />
 	</InputWithLabel>
 	<div class="flex justify-between text-lg text-white">
-		<span>€{new Intl.NumberFormat('en-US').format(sliderValues.min)}</span>
-		<span
-			>€{new Intl.NumberFormat('en-US').format(sliderValues.max)}{sliderValues.max >= 1000000
-				? '+'
-				: ''}</span
-		>
+		<span>€{new Intl.NumberFormat('en-US').format(sliderValues[0])}</span>
+		<span>
+			€{new Intl.NumberFormat('en-US').format(sliderValues[1])}
+			{sliderValues[1] >= MAX ? '+' : ''}
+		</span>
 	</div>
 </div>

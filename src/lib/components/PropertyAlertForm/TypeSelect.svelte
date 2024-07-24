@@ -1,8 +1,10 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { goto } from '$app/navigation';
+	import { createEventDispatcher } from 'svelte';
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+
+	const dispatch = createEventDispatcher();
 
 	const options = [
 		{ label: 'Any type', value: '' },
@@ -14,28 +16,21 @@
 		{ label: 'Penthouse', value: 'Penthouse' }
 	];
 
-	$: param = $page.url.searchParams.get('type') || 'Any type';
+	const param = $page.url.searchParams.get('type') || 'Any type';
 
 	$: selectedOption = options.find((option) => option.value === param) || {
 		value: '',
 		label: 'Any type'
 	};
 
-	const handleOptionSelect = (option: string | undefined) => {
-		if (option === undefined) return;
-		const params = new URLSearchParams($page.url.searchParams);
-		params.delete('page');
-		params.set('type', option.toString());
-		goto(`?${params.toString()}`);
-	};
+	$: {
+		dispatch('type-selected', selectedOption);
+	}
 </script>
 
 <InputWithLabel label="Type">
-	<Select.Root
-		selected={selectedOption}
-		onSelectedChange={(option) => handleOptionSelect(option?.value)}
-	>
-		<Select.Trigger class="w-[250px]">
+	<Select.Root bind:selected={selectedOption}>
+		<Select.Trigger>
 			<Select.Value />
 		</Select.Trigger>
 		<Select.Content>
