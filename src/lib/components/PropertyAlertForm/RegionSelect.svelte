@@ -21,7 +21,7 @@
 	}
 </script>
 
-<InputWithLabel label="Regions">
+<InputWithLabel textColor="text-black" label="Regions">
 	<Select.Root bind:selected={selectedRegion}>
 		<Select.Trigger>
 			<Select.Value placeholder="Select a region" />

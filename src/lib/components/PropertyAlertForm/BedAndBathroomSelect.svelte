@@ -27,7 +27,7 @@
 	}
 </script>
 
-<InputWithLabel bind:label={bedOrBath}>
+<InputWithLabel textColor="text-black" bind:label={bedOrBath}>
 	<Select.Root bind:selected={selectedOption}>
 		<Select.Trigger>
 			<Select.Value />

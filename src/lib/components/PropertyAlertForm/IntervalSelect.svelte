@@ -7,28 +7,19 @@
 	const dispatch = createEventDispatcher();
 
 	const options = [
-		{ label: 'Any type', value: '' },
-		{ label: 'Apartment', value: 'Apartment' },
-		{ label: 'Commercial and Hotel', value: 'Commercial and Hotel' },
-		{ label: 'Finca / Rural house', value: 'Finca / Rural house' },
-		{ label: 'House / Villa', value: 'House / Villa' },
-		{ label: 'Land', value: 'Land' },
-		{ label: 'Penthouse', value: 'Penthouse' }
+		{ label: 'Every day', value: 1 },
+		{ label: 'Once a week', value: 7 },
+		{ label: 'Once a month', value: 30 }
 	];
 
-	const param = $page.url.searchParams.get('type') || 'Any type';
-
-	$: selectedOption = options.find((option) => option.value === param) || {
-		value: '',
-		label: 'Any type'
-	};
+	$: selectedOption = options[0];
 
 	$: {
-		dispatch('type-selected', selectedOption);
+		dispatch('interval-selected', selectedOption);
 	}
 </script>
 
-<InputWithLabel textColor="text-black" label="Type">
+<InputWithLabel textColor="text-black" label="How often would you like to receive alerts?">
 	<Select.Root bind:selected={selectedOption}>
 		<Select.Trigger>
 			<Select.Value />

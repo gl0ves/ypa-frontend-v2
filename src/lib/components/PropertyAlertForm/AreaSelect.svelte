@@ -35,7 +35,7 @@
 	}
 </script>
 
-<InputWithLabel label="Areas">
+<InputWithLabel textColor="text-black" label="Areas">
 	<Select.Root multiple bind:selected={selectedAreas} disabled={areas.length === 0}>
 		{#each areas as area}
 			<input name={area.label ?? ''} hidden value={area.value} />
