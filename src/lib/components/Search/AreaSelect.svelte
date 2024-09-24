@@ -4,10 +4,12 @@
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 
-	$: areas = $page.data.areas
-		? ($page.data.areas.map((a: string) => {
+	console.log($page.data.areas);
+
+	$: areas = $page.data.areas.length
+		? $page.data.areas.map((a: string) => {
 				return { label: a, value: a };
-			}) as { label: string; value: string }[])
+			})
 		: [];
 
 	$: selectedAreas =

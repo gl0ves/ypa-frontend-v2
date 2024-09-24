@@ -8,6 +8,6 @@ export const load = async ({ fetch, params, url }) => {
 	return {
 		listings: listings.results,
 		listingsCount: listings.count,
-		areas: areas.results.map((a) => a.area)
+		areas: areas
 	};
 };

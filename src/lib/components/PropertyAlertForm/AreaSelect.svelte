@@ -4,55 +4,56 @@
 	import { page } from '$app/stores';
 	import InputWithLabel from '$lib/components/ui/input-with-label/InputWithLabel.svelte';
 
-	const searched = $page.url.searchParams.getAll('areas') || [];
+	export let selected: string[] = [];
+	export let options: string[] = [];
+
+	console.log(options);
+	console.log(selected);
+
+	type ComponentArea = {
+		label: string;
+		value: string;
+	};
+
 	const dispatch = createEventDispatcher();
-	export let propAreas: { area: string }[] = [];
-	const searchedAreas = $page.data.areas;
+	const searchedAreas = selected
 
 	const parseSearchAreas = (area: string) => {
 		return { label: area, value: area };
 	};
 
-	$: areas = searchedAreas.length ? searchedAreas.map(parseSearchAreas) : [];
-
-	$: selectedAreas =
-		searched.map((value) => ({
-			label: value,
-			value: value
-		})) || [];
+	$: selectedAreas = searchedAreas.length ? searchedAreas.map(parseSearchAreas) : [];
 
 	$: {
 		dispatch('area-selected', selectedAreas);
 	}
 
 	$: {
-		if (propAreas) {
-			areas = propAreas.map((a) => ({ label: a.area, value: a.area }));
-			selectedAreas = selectedAreas.filter((selected) =>
-				areas.some((area: { label: string; value: string }) => area.value === selected.value)
-			);
+		if (options.length) {
+			const selectedValues = options.filter((option) => selected.includes(option));
 		}
 	}
+
+	const isDisabled = (area: ComponentArea) => {
+		return selected.length >= 10 && !selected.some((s) => s === area.value);
+	};
 </script>
 
 <InputWithLabel textColor="text-black" label="Areas">
-	<Select.Root multiple bind:selected={selectedAreas} disabled={areas.length === 0}>
-		{#each areas as area}
+	<Select.Root multiple bind:selected={selectedAreas} disabled={selectedAreas.length === 0}>
+		{#each selectedAreas as area}
 			<input name={area.label ?? ''} hidden value={area.value} />
 		{/each}
 		<Select.Trigger>
 			<Select.Value
-				placeholder={areas.length === 0 ? 'Please select a region' : 'Select up to 10 areas'}
+				placeholder={selectedAreas.length === 0
+					? 'Please select a region'
+					: 'Select up to 10 areas'}
 			/>
 		</Select.Trigger>
 		<Select.Content class="overflow-y-auto max-h-[300px]">
-			{#each areas as area}
-				<Select.Item
-					disabled={selectedAreas.length === 10 &&
-						!selectedAreas.some((a) => a.value === area.value)}
-					value={area.value}
-					label={area.label ?? ''}
-				/>
+			{#each selectedAreas as area}
+				<Select.Item disabled={isDisabled(area)} value={area.value} label={area.label ?? ''} />
 			{/each}
 		</Select.Content>
 	</Select.Root>

@@ -11,33 +11,21 @@ const fetchListings = async (url: URL, fetch: FetchFunction, region?: string) =>
 	searchParams.set('limit', limit.toString());
 	searchParams.set('offset', offset.toString());
 	if (region) searchParams.set('region', region);
-	const res = await fetch(`/api/v2/listings/?${searchParams.toString()}`);
+	const res = await fetch(`/backend/v2/listings/?${searchParams.toString()}`);
 	return await res.json();
 };
 
 const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
 	const searchRegion = region ?? url.searchParams.get('region') ?? undefined;
-	if (!searchRegion) return { results: [], next: null };
-	const res = await fetch(`/api/v2/listings/?limit=1000&display=areas&region=${searchRegion}`);
-	return (await res.json()) as { results: { area: string }[]; next: string };
+	if (!searchRegion) return [];
+	const res = await fetch(`/backend/v2/listings/?limit=1000&display=areas&region=${searchRegion}`);
+	const { results } = await res.json();
+	return results;
 };
 
-const fetchApi = async (path: string, options: RequestInit = {}) => {
-	const base = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173';
-	const url = new URL(path, base);
-
-	try {
-		const response = await fetch(url.toString(), options);
-
-		if (!response.ok) {
-			throw new Error(`API request failed: ${response.statusText}`);
-		}
-
-		return response.json();
-	} catch (error) {
-		console.error('Failed to fetch from API:', error);
-		throw error;
-	}
+const fetchAlerts = async (url: URL, fetch: FetchFunction, identifier: string) => {
+	const res = await fetch(`/backend/alerts/${identifier}/get_property_alert/`);
+	return await res.json();
 };
 
-export { fetchListings, fetchAreas, fetchApi };
+export { fetchListings, fetchAreas, fetchAlerts };

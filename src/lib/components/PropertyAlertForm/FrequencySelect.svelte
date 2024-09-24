@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { createEventDispatcher } from 'svelte';
-	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 
 	const dispatch = createEventDispatcher();

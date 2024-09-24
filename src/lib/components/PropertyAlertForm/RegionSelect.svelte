@@ -5,19 +5,25 @@
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { invalidate } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	const dispatch = createEventDispatcher();
 
+	export let selected: string | null = null;
+	const selectedDataRegion = regions.find((region) => region.value === selected);
+
 	const searchParams = $page.url.searchParams;
 	const regionParam = searchParams.get('region');
-	const regionObj = regions.find((region) => region.value === regionParam);
+	const regionObj = selectedDataRegion
+		? selectedDataRegion
+		: regions.find((region) => region.value === regionParam);
 	let selectedRegion = regionObj
 		? { label: regionObj.label, value: regionObj.value }
 		: { label: 'All Regions', value: '' };
 
 	$: {
 		dispatch('region-selected', selectedRegion.value);
-		invalidate('areas');
+		if (browser) invalidate('areas');
 	}
 </script>
 

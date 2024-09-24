@@ -23,9 +23,13 @@
 	});
 </script>
 
-<div class="w-96 bg-white shadow rounded-lg overflow-hidden cursor-pointer">
+<div class="w-96 bg-white shadow rounded-lg overflow-hidden">
 	<div class="relative h-48 w-full">
-		<img src={listing.image} alt="Listing thumbnail" class="absolute h-full w-full object-cover" />
+		<img
+			src={listing.image}
+			alt="Listing thumbnail"
+			class="absolute h-full w-full object-cover cursor-pointer"
+		/>
 		<div class="absolute bottom-0 left-0 bg-secondary text-white font-semibold p-2">
 			{listing.region}
 		</div>
@@ -81,7 +85,7 @@
 				</a>
 
 				<button
-					class="p-2 rounded-full flex items-center hover:bg-gray-100"
+					class="p-2 rounded-full flex items-center hover:bg-gray-100 cursor-pointer"
 					on:click={() => navigator.clipboard.writeText(href)}
 					on:keydown={(event) => {
 						if (event.key === 'Enter' || event.key === ' ') {

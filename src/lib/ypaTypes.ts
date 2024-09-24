@@ -14,4 +14,17 @@ type Listing = {
 	price: number;
 };
 
-export type { Listing };
+type AlertFormData = {
+	first_name: string | null;
+	email: string | null;
+	region: string | null;
+	areas: string[];
+	bedrooms: number | null;
+	bathrooms: number | null;
+	price_min: number;
+	price_max: number;
+	type: string | null;
+	frequency: 1 | 7 | 30;
+};
+
+export type { Listing, AlertFormData };
