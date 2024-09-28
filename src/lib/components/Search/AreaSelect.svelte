@@ -4,8 +4,6 @@
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 
-	console.log($page.data.areas);
-
 	$: areas = $page.data.areas.length
 		? $page.data.areas.map((a: string) => {
 				return { label: a, value: a };

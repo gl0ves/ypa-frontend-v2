@@ -39,13 +39,16 @@
 		frequency: 7
 	} as AlertFormData;
 
-	$: regionAreas = [];
+	let regionAreas: string[] = [];
 
-	console.log(regionAreas);
+	$: {
+		regionAreas = []
+	}
 
 	const fetchAreas = async (region: string) => {
 		const res = await fetch(`/api/areas?region=${region}`);
-		regionAreas = await res.json();
+		const { results } = await res.json()
+		regionAreas = results
 	};
 
 	const handleAreaSelected = (e: CustomEvent<string[]>) => {
