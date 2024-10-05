@@ -17,6 +17,7 @@
 	];
 
 	const param = $page.url.searchParams.get(bedOrBath);
+
 	$: selectedOption = options.find((option) => option.value.toString() === param) || {
 		label: 'Any amount',
 		value: 0

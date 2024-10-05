@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores'; // Import the page store for accessing route parameters
 	import RegionSelect from './RegionSelect.svelte';
-	import AreaSelect from './AreaSelect.svelte';
+	import AreaSelect from '../AreaSelect.svelte';
 	import BedAndBathroomSelect from './BedAndBathroomSelect.svelte';
 	import TypeSelect from './TypeSelect.svelte';
 	import Slider from './Slider.svelte';
@@ -13,9 +13,37 @@
 	import { goto } from '$app/navigation';
 
 	$: showRegionSelect = $page.params.region === undefined;
+	$: areas = $page.data.areas.length ? $page.data.areas : [];
+	$: paramAreas = $page.url.searchParams.getAll('areas') || [];
+	$: selectedAreas = paramAreas;
 
 	const resetSearch = (_e: Event) => {
 		goto('/');
+	};
+
+	const handleAreaSelected = (e: CustomEvent<string>) => {
+		if (!e.detail) return;
+
+		if (selectedAreas.includes(e.detail)) {
+			selectedAreas = selectedAreas.filter((area) => area !== e.detail);
+		} else {
+			selectedAreas = [...selectedAreas, e.detail];
+		}
+
+		// Create a new URLSearchParams object from the current search parameters
+		const params = new URLSearchParams(window.location.search);
+
+		params.delete('page');
+		params.delete('areas');
+
+		// Update the 'areas' parameter with the joined list of selected area values
+		selectedAreas.forEach((area) => {
+			if (typeof area !== 'string') return;
+			params.append('areas', area);
+		});
+
+		// Navigate using the updated parameters
+		goto(`?${params.toString()}`);
 	};
 </script>
 
@@ -43,7 +71,9 @@
 					<RegionSelect />
 				{/if}
 
-				<AreaSelect />
+				<div class="w-[250px]">
+					<AreaSelect options={areas} selected={paramAreas} on:area-selected={handleAreaSelected} />
+				</div>
 
 				<BedAndBathroomSelect bedOrBath="bedrooms" />
 				<BedAndBathroomSelect bedOrBath="bathrooms" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AreaSelect from './AreaSelect.svelte';
+	import AreaSelect from '../AreaSelect.svelte';
 	import RegionSelect from './RegionSelect.svelte';
 	import BedAndBathroomSelect from './BedAndBathroomSelect.svelte';
 	import TypeSelect from './TypeSelect.svelte';
@@ -10,7 +10,8 @@
 	import TermsAndConditions from '../Policy/TermsAndConditions.svelte';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 	import Input from '../ui/input/input.svelte';
-	import PriceSelect from './PriceSelect.svelte';
+	import PriceSelect from './MaximumPriceSelect.svelte';
+	import { page } from '$app/stores';
 	import { type AlertFormData } from '$lib/ypaTypes';
 
 	export let defaultFormData: AlertFormData = {
@@ -20,7 +21,6 @@
 		areas: [],
 		bedrooms: null,
 		bathrooms: null,
-		price_min: 0,
 		price_max: 1000000,
 		type: null,
 		frequency: 7
@@ -33,31 +33,31 @@
 		areas: [],
 		bedrooms: null,
 		bathrooms: null,
-		price_min: 0,
 		price_max: 1000000,
 		type: null,
 		frequency: 7
 	} as AlertFormData;
 
-	let regionAreas: string[] = [];
-
-	$: {
-		regionAreas = []
-	}
+	let regionAreas: string[];
+	$: regionAreas = [];
 
 	const fetchAreas = async (region: string) => {
 		const res = await fetch(`/api/areas?region=${region}`);
-		const { results } = await res.json()
-		regionAreas = results
+		const { results } = await res.json();
+		regionAreas = results;
 	};
 
-	const handleAreaSelected = (e: CustomEvent<string[]>) => {
-		formData.areas = e.detail;
+	const handleAreaSelected = (e: CustomEvent<string>) => {
+		if (formData.areas.includes(e.detail)) {
+			formData.areas = formData.areas.filter((area) => area !== e.detail);
+		} else {
+			formData.areas = [...formData.areas, e.detail];
+		}
 	};
 
 	const handleRegionSelected = (e: CustomEvent<string>) => {
-		console.log('region selected', e.detail);
 		formData.region = e.detail;
+		formData.areas = [];
 		if (formData.region) fetchAreas(e.detail);
 	};
 
@@ -83,6 +83,7 @@
 
 	onMount(() => {
 		formData = defaultFormData;
+		formData.areas = $page.url.searchParams.getAll('areas');
 	});
 
 	let formSubmitted = false;
@@ -102,6 +103,14 @@
 			formSubmissionFailed = true;
 		}
 	};
+
+	// const handleOpenChange = () => {
+	// 	if (formSubmitted) {
+	// 		formSubmitted = false;
+	// 		formSubmissionFailed = false;
+	// 		formData = defaultFormData;
+	// 	}
+	// };
 </script>
 
 <Dialog.Root>
@@ -129,13 +138,26 @@
 				<div class="grid gap-4 z-100000">
 					<div class="grid items-center gap-4">
 						<InputWithLabel textColor="text-black" label="First Name">
-							<Input bind:value={formData.first_name} />
+							<Input
+								required
+								placeholder="What is your first name?"
+								bind:value={formData.first_name}
+							/>
 						</InputWithLabel>
 						<InputWithLabel textColor="text-black" label="Email">
-							<Input bind:value={formData.email} />
+							<Input
+								required
+								placeholder="Where should we send the alerts?"
+								bind:value={formData.email}
+							/>
 						</InputWithLabel>
 						<RegionSelect on:region-selected={handleRegionSelected} />
-						<AreaSelect options={regionAreas} on:area-selected={handleAreaSelected} />
+						<AreaSelect
+							areaSelectLabelColor="text-black"
+							options={regionAreas}
+							selected={formData.areas}
+							on:area-selected={handleAreaSelected}
+						/>
 						<BedAndBathroomSelect
 							bedOrBath="bedrooms"
 							on:bedrooms-selected={handleBedroomsSelected}
@@ -156,7 +178,11 @@
 					Abroad may store and process my contact information to help me find a property.
 				</Dialog.Description>
 				<Dialog.Footer>
-					<Button on:click={submitForm} type="submit">CREATE</Button>
+					<Button
+						disabled={!formData.first_name || !formData.email}
+						on:click={submitForm}
+						type="submit">CREATE</Button
+					>
 				</Dialog.Footer>
 			{/if}
 		</Dialog.Content>

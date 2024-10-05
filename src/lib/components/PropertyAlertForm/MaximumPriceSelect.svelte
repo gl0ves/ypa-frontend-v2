@@ -26,7 +26,7 @@
 	}
 </script>
 
-<InputWithLabel textColor="text-black" label="How often would you like to receive alerts?">
+<InputWithLabel textColor="text-black" label="Max price?">
 	<Select.Root bind:selected={selectedOption}>
 		<Select.Trigger>
 			<Select.Value />
