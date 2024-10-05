@@ -19,8 +19,6 @@
 	$: parsedOptions = options.map(parseSelected);
 	$: parsedSelected = selected.map(parseSelected);
 
-	console.log(parsedSelected);
-
 	const dispatch = createEventDispatcher();
 	const handleAreaSelected = (selected: string) => {
 		if (!selected) return;
@@ -36,7 +34,7 @@
 	$: combinedLabel = truncateLabel(parsedSelected.map((area) => area.label).join(', '));
 </script>
 
-<Popover.Root bind:open let:ids>
+<Popover.Root bind:open>
 	<Popover.Trigger asChild let:builder>
 		<InputWithLabel label="Areas" textColor={areaSelectLabelColor}>
 			<Button

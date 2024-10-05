@@ -1,20 +1,13 @@
 <script lang="ts">
-	import AreaSelect from '../AreaSelect.svelte';
-	import RegionSelect from './RegionSelect.svelte';
-	import BedAndBathroomSelect from './BedAndBathroomSelect.svelte';
-	import TypeSelect from './TypeSelect.svelte';
-	import FrequencySelect from './FrequencySelect.svelte';
+
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { onMount } from 'svelte';
 	import TermsAndConditions from '../Policy/TermsAndConditions.svelte';
-	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
-	import Input from '../ui/input/input.svelte';
-	import PriceSelect from './MaximumPriceSelect.svelte';
-	import { page } from '$app/stores';
+	import PropertyAlertFormContent from './PropertyAlertFormContent.svelte';
+	import { savePropertyAlert } from '$lib/api';
 	import { type AlertFormData } from '$lib/ypaTypes';
 
-	export let defaultFormData: AlertFormData = {
+    export let defaultFormData: AlertFormData = {
 		first_name: null,
 		email: null,
 		region: null,
@@ -25,92 +18,24 @@
 		type: null,
 		frequency: 7
 	};
-
-	$: formData = {
-		first_name: null,
-		email: null,
-		region: null,
-		areas: [],
-		bedrooms: null,
-		bathrooms: null,
-		price_max: 1000000,
-		type: null,
-		frequency: 7
-	} as AlertFormData;
-
-	let regionAreas: string[];
-	$: regionAreas = [];
-
-	const fetchAreas = async (region: string) => {
-		const res = await fetch(`/api/areas?region=${region}`);
-		const { results } = await res.json();
-		regionAreas = results;
-	};
-
-	const handleAreaSelected = (e: CustomEvent<string>) => {
-		if (formData.areas.includes(e.detail)) {
-			formData.areas = formData.areas.filter((area) => area !== e.detail);
-		} else {
-			formData.areas = [...formData.areas, e.detail];
-		}
-	};
-
-	const handleRegionSelected = (e: CustomEvent<string>) => {
-		formData.region = e.detail;
-		formData.areas = [];
-		if (formData.region) fetchAreas(e.detail);
-	};
-
-	const handleBedroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		formData.bedrooms = e.detail.value;
-	};
-
-	const handleBathroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		formData.bathrooms = e.detail.value;
-	};
-
-	const handleTypeSelected = (e: CustomEvent<{ label: string; value: string }>) => {
-		formData.type = e.detail.value;
-	};
-
-	const handleFrequencySelected = (e: CustomEvent<{ label: string; value: 1 | 7 | 30 }>) => {
-		formData.frequency = e.detail.value;
-	};
-
-	const handlePriceSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		formData.price_max = e.detail.value;
-	};
-
-	onMount(() => {
-		formData = defaultFormData;
-		formData.areas = $page.url.searchParams.getAll('areas');
-	});
-
+	let formData: AlertFormData = defaultFormData;
 	let formSubmitted = false;
 	let formSubmissionFailed = false;
 
-	const submitForm = async () => {
-		const response = await fetch('/api/alerts', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(formData)
-		});
-		if (response.ok) {
+	
+	const submitPropertyAlert = async () => {
+		const response = await savePropertyAlert(formData);
+		if(response.ok) {
 			formSubmitted = true;
 		} else {
 			formSubmissionFailed = true;
 		}
+	}
+
+	const handleFormDataUpdated = (e: CustomEvent) => {
+		formData = { ...formData, ...e.detail };
 	};
 
-	// const handleOpenChange = () => {
-	// 	if (formSubmitted) {
-	// 		formSubmitted = false;
-	// 		formSubmissionFailed = false;
-	// 		formData = defaultFormData;
-	// 	}
-	// };
 </script>
 
 <Dialog.Root>
@@ -135,42 +60,7 @@
 			</Dialog.Header>
 
 			{#if !formSubmitted}
-				<div class="grid gap-4 z-100000">
-					<div class="grid items-center gap-4">
-						<InputWithLabel textColor="text-black" label="First Name">
-							<Input
-								required
-								placeholder="What is your first name?"
-								bind:value={formData.first_name}
-							/>
-						</InputWithLabel>
-						<InputWithLabel textColor="text-black" label="Email">
-							<Input
-								required
-								placeholder="Where should we send the alerts?"
-								bind:value={formData.email}
-							/>
-						</InputWithLabel>
-						<RegionSelect on:region-selected={handleRegionSelected} />
-						<AreaSelect
-							areaSelectLabelColor="text-black"
-							options={regionAreas}
-							selected={formData.areas}
-							on:area-selected={handleAreaSelected}
-						/>
-						<BedAndBathroomSelect
-							bedOrBath="bedrooms"
-							on:bedrooms-selected={handleBedroomsSelected}
-						/>
-						<BedAndBathroomSelect
-							bedOrBath="bathrooms"
-							on:bathrooms-selected={handleBathroomsSelected}
-						/>
-						<TypeSelect on:type-selected={handleTypeSelected} />
-						<FrequencySelect on:frequency-selected={handleFrequencySelected} />
-						<PriceSelect on:price-selected={handlePriceSelected} />
-					</div>
-				</div>
+				<PropertyAlertFormContent defaultFormData={defaultFormData} on:formDataUpdated={handleFormDataUpdated}/>
 				<Dialog.Description>
 					By clicking create below, you consent to allow Your Property Abroad to store and process
 					the information submitted above to provide you the services requested. You can view the
@@ -180,7 +70,7 @@
 				<Dialog.Footer>
 					<Button
 						disabled={!formData.first_name || !formData.email}
-						on:click={submitForm}
+						on:click={submitPropertyAlert}
 						type="submit">CREATE</Button
 					>
 				</Dialog.Footer>

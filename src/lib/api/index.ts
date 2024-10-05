@@ -1,4 +1,5 @@
 import type { Load } from '@sveltejs/kit';
+import {type AlertFormData} from '$lib/ypaTypes';
 
 // Define the type for the fetch function parameter using the Fetch function from the Load context
 type FetchFunction = Parameters<Load>[0]['fetch'];
@@ -23,9 +24,20 @@ const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
 	return results;
 };
 
-const fetchAlerts = async (url: URL, fetch: FetchFunction, identifier: string) => {
+const fetchAlerts = async (fetch: FetchFunction, identifier: string) => {
 	const res = await fetch(`/backend/alerts/${identifier}/get_property_alert/`);
 	return await res.json();
 };
 
-export { fetchListings, fetchAreas, fetchAlerts };
+const savePropertyAlert = async (alertFormData:AlertFormData) => {
+	const response = await fetch('/api/alerts', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(alertFormData)
+	});
+	return response
+};
+
+export { fetchListings, fetchAreas, fetchAlerts, savePropertyAlert };
