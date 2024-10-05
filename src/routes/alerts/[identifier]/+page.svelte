@@ -78,7 +78,7 @@
 		<FrequencySelect
 			selected={formData.frequency}
 			on:frequency-selected={handleFrequencySelected}
-		/>MaximumPriceSelect
+		/>
 		<MaximumPriceSelect selected={formData.price_max} on:price-selected={handlePriceSelected} />
 	</div>
 </div>
