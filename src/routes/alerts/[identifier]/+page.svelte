@@ -1,12 +1,12 @@
 <script lang="ts">
-	import AreaSelect from '$lib/components/PropertyAlertForm/AreaSelect.svelte';
+	import AreaSelect from '$lib/components/AreaSelect.svelte';
 	import RegionSelect from '$lib/components/PropertyAlertForm/RegionSelect.svelte';
 	import BedAndBathroomSelect from '$lib/components/PropertyAlertForm/BedAndBathroomSelect.svelte';
 	import TypeSelect from '$lib/components/PropertyAlertForm/TypeSelect.svelte';
 	import FrequencySelect from '$lib/components/PropertyAlertForm/FrequencySelect.svelte';
 	import InputWithLabel from '$lib/components/ui/input-with-label/InputWithLabel.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import PriceSelect from '$lib/components/PropertyAlertForm/PriceSelect.svelte';
+	import MaximumPriceSelect from '$lib/components/PropertyAlertForm/MaximumPriceSelect.svelte';
 	import { type AlertFormData } from '$lib/ypaTypes';
 	import { onMount } from 'svelte';
 	export let data: { alert: AlertFormData };
@@ -78,7 +78,7 @@
 		<FrequencySelect
 			selected={formData.frequency}
 			on:frequency-selected={handleFrequencySelected}
-		/>
-		<PriceSelect selected={formData.price_max} on:price-selected={handlePriceSelected} />
+		/>MaximumPriceSelect
+		<MaximumPriceSelect selected={formData.price_max} on:price-selected={handlePriceSelected} />
 	</div>
 </div>
