@@ -22,7 +22,7 @@ type AlertFormData = {
 	areas: string[];
 	bedrooms: number | null;
 	bathrooms: number | null;
-	price_max: number;
+	price_max: number | null;
 	type: string | null;
 	frequency: 1 | 7 | 30;
 };

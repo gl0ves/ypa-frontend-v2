@@ -7,14 +7,15 @@
 	import { type AlertFormData } from '$lib/ypaTypes';
 
 	export let defaultFormData: AlertFormData = {
+		identifier: null,
 		first_name: null,
 		email: null,
 		region: null,
 		areas: [],
-		bedrooms: null,
-		bathrooms: null,
-		price_max: 1000000,
-		type: null,
+		bedrooms: 0,
+		bathrooms: 0,
+		price_max: null,
+		type: '',
 		frequency: 7
 	};
 	let formData: AlertFormData = defaultFormData;

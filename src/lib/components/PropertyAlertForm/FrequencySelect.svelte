@@ -2,6 +2,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { createEventDispatcher } from 'svelte';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	export let selected: number = 7;
 
 	const dispatch = createEventDispatcher();
 
@@ -11,7 +12,7 @@
 		{ label: 'Once a month', value: 30 }
 	];
 
-	$: selectedOption = options[0];
+	$: selectedOption = options.find((option) => option.value === selected);
 
 	$: {
 		dispatch('interval-selected', selectedOption);

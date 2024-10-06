@@ -3,7 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
-
+	export let selected: string = ($page.url.searchParams.get('type') ?? '') as string;
 	const dispatch = createEventDispatcher();
 
 	const options = [
@@ -16,9 +16,7 @@
 		{ label: 'Penthouse', value: 'Penthouse' }
 	];
 
-	const param = $page.url.searchParams.get('type') || 'Any type';
-
-	$: selectedOption = options.find((option) => option.value === param) || {
+	$: selectedOption = options.find((option) => option.value === selected) || {
 		value: '',
 		label: 'Any type'
 	};

@@ -4,6 +4,7 @@
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 	import { createEventDispatcher } from 'svelte';
 	export let bedOrBath: 'bedrooms' | 'bathrooms';
+	export let selected: number = parseInt($page.url.searchParams.get(bedOrBath) || '0');
 
 	const dispatch = createEventDispatcher();
 
@@ -16,9 +17,7 @@
 		{ label: '5+', value: 5 }
 	];
 
-	const param = $page.url.searchParams.get(bedOrBath);
-
-	$: selectedOption = options.find((option) => option.value.toString() === param) || {
+	$: selectedOption = options.find((option) => option.value === selected) || {
 		label: 'Any amount',
 		value: 0
 	};

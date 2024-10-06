@@ -2,6 +2,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { createEventDispatcher } from 'svelte';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	export let selected: number | null = null;
 
 	const dispatch = createEventDispatcher();
 
@@ -19,7 +20,7 @@
 		{ label: 'No limit', value: null }
 	];
 
-	$: selectedOption = { label: 'No limit', value: null };
+	$: selectedOption = options.find((option) => option.value === selected);
 
 	$: {
 		dispatch('price-selected', selectedOption);

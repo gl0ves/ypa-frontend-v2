@@ -15,14 +15,15 @@
 	const dispatch = createEventDispatcher();
 	const showEmail = $page.params.identifier ? false : true;
 	export let defaultFormData = {
+		identifier: null,
 		first_name: null,
 		email: null,
 		region: null,
 		areas: [],
-		bedrooms: null,
-		bathrooms: null,
-		price_max: 1000000,
-		type: null,
+		bedrooms: 0,
+		bathrooms: 0,
+		price_max: null,
+		type: '',
 		frequency: 7
 	} as AlertFormData;
 
@@ -117,10 +118,21 @@
 			selected={defaultFormData.areas}
 			on:area-selected={handleAreaSelected}
 		/>
-		<BedAndBathroomSelect bedOrBath="bedrooms" on:bedrooms-selected={handleBedroomsSelected} />
-		<BedAndBathroomSelect bedOrBath="bathrooms" on:bathrooms-selected={handleBathroomsSelected} />
-		<TypeSelect on:type-selected={handleTypeSelected} />
-		<FrequencySelect on:frequency-selected={handleFrequencySelected} />
-		<PriceSelect on:price-selected={handlePriceSelected} />
+		<BedAndBathroomSelect
+			selected={defaultFormData.bedrooms || 0}
+			bedOrBath="bedrooms"
+			on:bedrooms-selected={handleBedroomsSelected}
+		/>
+		<BedAndBathroomSelect
+			selected={defaultFormData.bedrooms || 0}
+			bedOrBath="bathrooms"
+			on:bathrooms-selected={handleBathroomsSelected}
+		/>
+		<TypeSelect selected={defaultFormData.type || ''} on:type-selected={handleTypeSelected} />
+		<FrequencySelect
+			selected={defaultFormData.frequency}
+			on:frequency-selected={handleFrequencySelected}
+		/>
+		<PriceSelect selected={defaultFormData.price_max} on:price-selected={handlePriceSelected} />
 	</div>
 </div>
