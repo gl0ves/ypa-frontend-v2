@@ -1,9 +1,10 @@
-export async function POST({ request, fetch }) {
+export async function DELETE({ request, fetch, params, url }) {
 	const requestData = await request.json();
+	const all = Boolean(url.searchParams.get('all')) === true ? '?all=true' : '';
 	const response = await fetch(
-		`/backend/alerts/${requestData.identifier || 'null'}/create_property_alert/`,
+		`/backend/alerts/${params.identifier}/delete_property_alert/${all}`,
 		{
-			method: 'POST',
+			method: 'DELETE',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(requestData)
 		}

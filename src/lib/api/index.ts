@@ -1,5 +1,5 @@
 import type { Load } from '@sveltejs/kit';
-import {type AlertFormData} from '$lib/ypaTypes';
+import { type AlertFormData } from '$lib/ypaTypes';
 
 // Define the type for the fetch function parameter using the Fetch function from the Load context
 type FetchFunction = Parameters<Load>[0]['fetch'];
@@ -29,7 +29,7 @@ const fetchAlert = async (fetch: FetchFunction, identifier: string) => {
 	return await res.json();
 };
 
-const savePropertyAlert = async (alertFormData:AlertFormData) => {
+const savePropertyAlert = async (alertFormData: AlertFormData) => {
 	const response = await fetch('/api/alerts', {
 		method: 'POST',
 		headers: {
@@ -37,26 +37,16 @@ const savePropertyAlert = async (alertFormData:AlertFormData) => {
 		},
 		body: JSON.stringify(alertFormData)
 	});
-	return response
-};
-
-const updatePropertyAlert = async (alertFormData:AlertFormData, identifier: string) => {
-	const response = await fetch(`/api/alerts/${identifier}/update_property_alert/`, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(alertFormData)
-	});
-	return response
+	return response;
 };
 
 const deletePropertyAlert = async (identifier: string, all: boolean) => {
-	const param = all ? "?all=true" : "" 
-	const response = await fetch(`/api/alerts/${identifier}/delete_property_alert/` + param, {
+	const param = all ? '?all=true' : '';
+	const response = await fetch(`/api/alerts/${identifier}` + param, {
 		method: 'DELETE'
 	});
-	return response
-}
+	return response;
+};
 
-export { fetchListings, fetchAreas, fetchAlert, savePropertyAlert, updatePropertyAlert, deletePropertyAlert };
+// NOTE: The routes defined here are the ones that are in the routes/api folder
+export { fetchListings, fetchAreas, fetchAlert, savePropertyAlert, deletePropertyAlert };

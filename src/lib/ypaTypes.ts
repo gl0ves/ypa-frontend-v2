@@ -15,6 +15,7 @@ type Listing = {
 };
 
 type AlertFormData = {
+	identifier: string | null;
 	first_name: string | null;
 	email: string | null;
 	region: string | null;

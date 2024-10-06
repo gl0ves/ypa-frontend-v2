@@ -3,7 +3,8 @@ import { type AlertFormData } from '$lib/ypaTypes';
 
 export const load = async ({ fetch, params }) => {
 	const identifier = params.identifier;
-	const alert = await fetchAlert( fetch, identifier) as AlertFormData;
+	const alert = (await fetchAlert(fetch, identifier)) as AlertFormData;
+	console.log(alert);
 	return {
 		alert
 	};

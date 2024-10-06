@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import TermsAndConditions from '../Policy/TermsAndConditions.svelte';
@@ -7,7 +6,7 @@
 	import { savePropertyAlert } from '$lib/api';
 	import { type AlertFormData } from '$lib/ypaTypes';
 
-    export let defaultFormData: AlertFormData = {
+	export let defaultFormData: AlertFormData = {
 		first_name: null,
 		email: null,
 		region: null,
@@ -22,20 +21,18 @@
 	let formSubmitted = false;
 	let formSubmissionFailed = false;
 
-	
 	const submitPropertyAlert = async () => {
 		const response = await savePropertyAlert(formData);
-		if(response.ok) {
+		if (response.ok) {
 			formSubmitted = true;
 		} else {
 			formSubmissionFailed = true;
 		}
-	}
+	};
 
 	const handleFormDataUpdated = (e: CustomEvent) => {
 		formData = { ...formData, ...e.detail };
 	};
-
 </script>
 
 <Dialog.Root>
@@ -60,7 +57,7 @@
 			</Dialog.Header>
 
 			{#if !formSubmitted}
-				<PropertyAlertFormContent defaultFormData={defaultFormData} on:formDataUpdated={handleFormDataUpdated}/>
+				<PropertyAlertFormContent {defaultFormData} on:formDataUpdated={handleFormDataUpdated} />
 				<Dialog.Description>
 					By clicking create below, you consent to allow Your Property Abroad to store and process
 					the information submitted above to provide you the services requested. You can view the
