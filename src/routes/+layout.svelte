@@ -4,6 +4,6 @@
 </script>
 
 <Navbar />
-<div class="w-full px-4 md:px-0">
+<div class="w-full">
 	<slot />
 </div>

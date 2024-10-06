@@ -10,10 +10,10 @@
 	const dispatch = createEventDispatcher();
 
 	export let selected: string | null = null;
-	const selectedDataRegion = regions.find((region) => region.value === selected);
-
+	const selectedDataRegion = regions.find((region) => region.label === selected || region.value === selected);
 	const searchParams = $page.url.searchParams;
 	const regionParam = searchParams.get('region');
+	
 	const regionObj = selectedDataRegion
 		? selectedDataRegion
 		: regions.find((region) => region.value === regionParam);

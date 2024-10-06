@@ -24,7 +24,7 @@ const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
 	return results;
 };
 
-const fetchAlerts = async (fetch: FetchFunction, identifier: string) => {
+const fetchAlert = async (fetch: FetchFunction, identifier: string) => {
 	const res = await fetch(`/backend/alerts/${identifier}/get_property_alert/`);
 	return await res.json();
 };
@@ -40,4 +40,23 @@ const savePropertyAlert = async (alertFormData:AlertFormData) => {
 	return response
 };
 
-export { fetchListings, fetchAreas, fetchAlerts, savePropertyAlert };
+const updatePropertyAlert = async (alertFormData:AlertFormData, identifier: string) => {
+	const response = await fetch(`/api/alerts/${identifier}/update_property_alert/`, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(alertFormData)
+	});
+	return response
+};
+
+const deletePropertyAlert = async (identifier: string, all: boolean) => {
+	const param = all ? "?all=true" : "" 
+	const response = await fetch(`/api/alerts/${identifier}/delete_property_alert/` + param, {
+		method: 'DELETE'
+	});
+	return response
+}
+
+export { fetchListings, fetchAreas, fetchAlert, savePropertyAlert, updatePropertyAlert, deletePropertyAlert };

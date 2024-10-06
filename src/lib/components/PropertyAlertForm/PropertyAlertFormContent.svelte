@@ -13,10 +13,8 @@
 	import { type AlertFormData } from '$lib/ypaTypes';
 
     const dispatch = createEventDispatcher();
-
-    export let defaultFormData
-
-	$: formData = {
+	const showEmail = $page.params.identifier ? false : true;
+    export let defaultFormData = {
 		first_name: null,
 		email: null,
 		region: null,
@@ -32,8 +30,10 @@
 	$: regionAreas = [];
 
 	onMount(() => {
-		formData = defaultFormData;
-		formData.areas = $page.url.searchParams.getAll('areas');
+		const paramAreas = $page.url.searchParams.getAll('areas')
+		if(paramAreas.length) {
+			defaultFormData.areas = paramAreas;
+		}
 	});
 
 
@@ -44,45 +44,45 @@
 	};
 
 	const handleAreaSelected = (e: CustomEvent<string>) => {
-		if (formData.areas.includes(e.detail)) {
-			formData.areas = formData.areas.filter((area) => area !== e.detail);
+		if (defaultFormData.areas.includes(e.detail)) {
+			defaultFormData.areas = defaultFormData.areas.filter((area) => area !== e.detail);
 		} else {
-			formData.areas = [...formData.areas, e.detail];
+			defaultFormData.areas = [...defaultFormData.areas, e.detail];
 		}
-        console.log(e.detail,formData.areas)
-        dispatch('formDataUpdated', formData)
+        console.log(e.detail,defaultFormData.areas)
+        dispatch('formDataUpdated', defaultFormData)
 	};
 
 	const handleRegionSelected = (e: CustomEvent<string>) => {
-		formData.region = e.detail;
-		formData.areas = [];
-		if (formData.region) fetchAreas(e.detail);
-        dispatch('formDataUpdated', formData)
+		defaultFormData.region = e.detail;
+		defaultFormData.areas = [];
+		if (defaultFormData.region) fetchAreas(e.detail);
+        dispatch('formDataUpdated', defaultFormData)
 	};
 
 	const handleBedroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		formData.bedrooms = e.detail.value;
-        dispatch('formDataUpdated', formData)
+		defaultFormData.bedrooms = e.detail.value;
+        dispatch('formDataUpdated', defaultFormData)
 	};
 
 	const handleBathroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		formData.bathrooms = e.detail.value;
-        dispatch('formDataUpdated', formData)
+		defaultFormData.bathrooms = e.detail.value;
+        dispatch('formDataUpdated', defaultFormData)
 	};
 
 	const handleTypeSelected = (e: CustomEvent<{ label: string; value: string }>) => {
-		formData.type = e.detail.value;
-        dispatch('formDataUpdated', formData)
+		defaultFormData.type = e.detail.value;
+        dispatch('formDataUpdated', defaultFormData)
 	};
 
 	const handleFrequencySelected = (e: CustomEvent<{ label: string; value: 1 | 7 | 30 }>) => {
-		formData.frequency = e.detail.value;
-        dispatch('formDataUpdated', formData)
+		defaultFormData.frequency = e.detail.value;
+        dispatch('formDataUpdated', defaultFormData)
 	};
 
 	const handlePriceSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		formData.price_max = e.detail.value;
-        dispatch('formDataUpdated', formData)
+		defaultFormData.price_max = e.detail.value;
+        dispatch('formDataUpdated', defaultFormData)
 	};
 
 
@@ -95,21 +95,24 @@
             <Input
                 required
                 placeholder="What is your first name?"
-                bind:value={formData.first_name}
+                bind:value={defaultFormData.first_name}
             />
         </InputWithLabel>
-        <InputWithLabel textColor="text-black" label="Email">
-            <Input
-                required
-                placeholder="Where should we send the alerts?"
-                bind:value={formData.email}
-            />
-        </InputWithLabel>
-        <RegionSelect on:region-selected={handleRegionSelected} />
+		{#if showEmail}
+			<InputWithLabel textColor="text-black" label="Email">
+				<Input
+					required
+					placeholder="Where should we send the alerts?"
+					bind:value={defaultFormData.email}
+				/>
+			</InputWithLabel>
+		{/if}
+		<!-- TODO: Region is not being passed as well as other -->
+        <RegionSelect selected={defaultFormData.region} on:region-selected={handleRegionSelected} />
         <AreaSelect
             areaSelectLabelColor="text-black"
             options={regionAreas}
-            selected={formData.areas}
+            selected={defaultFormData.areas}
             on:area-selected={handleAreaSelected}
         />
         <BedAndBathroomSelect
