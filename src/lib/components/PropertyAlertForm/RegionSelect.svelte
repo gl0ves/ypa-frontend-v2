@@ -10,10 +10,12 @@
 	const dispatch = createEventDispatcher();
 
 	export let selected: string | null = null;
-	const selectedDataRegion = regions.find((region) => region.label === selected || region.value === selected);
+	const selectedDataRegion = regions.find(
+		(region) => region.label === selected || region.value === selected
+	);
 	const searchParams = $page.url.searchParams;
 	const regionParam = searchParams.get('region');
-	
+
 	const regionObj = selectedDataRegion
 		? selectedDataRegion
 		: regions.find((region) => region.value === regionParam);
@@ -22,8 +24,10 @@
 		: { label: 'All Regions', value: '' };
 
 	$: {
-		dispatch('region-selected', selectedRegion.value);
-		if (browser) invalidate('areas');
+		if (selected !== selectedRegion.value) {
+			dispatch('region-selected', selectedRegion.value);
+			if (browser) invalidate('areas');
+		}
 	}
 </script>
 

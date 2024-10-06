@@ -35,6 +35,7 @@
 		if (paramAreas.length) {
 			defaultFormData.areas = paramAreas;
 		}
+		if (defaultFormData.region) fetchAreas(defaultFormData.region);
 	});
 
 	const fetchAreas = async (region: string) => {
@@ -54,6 +55,7 @@
 	};
 
 	const handleRegionSelected = (e: CustomEvent<string>) => {
+		console.log('region selected', e.detail);
 		defaultFormData.region = e.detail;
 		defaultFormData.areas = [];
 		if (defaultFormData.region) fetchAreas(e.detail);
