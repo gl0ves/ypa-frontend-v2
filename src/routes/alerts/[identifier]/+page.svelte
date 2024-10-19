@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js';
-
 	import PropertyAlertFormContent from '$lib/components/PropertyAlertForm/PropertyAlertFormContent.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import { page } from '$app/stores';
 	import { type AlertFormData } from '$lib/ypaTypes';
 	import { deletePropertyAlert, savePropertyAlert } from '$lib/api';
@@ -19,7 +18,7 @@
 	const update = async () => {
 		formData.identifier = identifier;
 		const response = await savePropertyAlert(formData);
-		if (response.ok) {
+		if (response.status === 200) {
 			formSubmitted = true;
 		} else {
 			formSubmissionFailed = true;

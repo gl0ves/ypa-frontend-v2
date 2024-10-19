@@ -11,20 +11,20 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { type AlertFormData } from '$lib/ypaTypes';
-
 	const dispatch = createEventDispatcher();
 	const showEmail = $page.params.identifier ? false : true;
 	export let defaultFormData = {
 		identifier: null,
 		first_name: null,
 		email: null,
-		region: null,
-		areas: [],
-		bedrooms: 0,
-		bathrooms: 0,
 		price_max: null,
-		type: '',
-		frequency: 7
+		frequency: 7,
+		region: $page.url.searchParams.get('region') || null,
+		areas: $page.url.searchParams.getAll('areas') || [],
+		bedrooms: parseInt($page.url.searchParams.get('bedrooms') ?? '0'),
+		bathrooms: parseInt($page.url.searchParams.get('bathrooms') ?? '0'),
+
+		type: $page.url.searchParams.get('type') || ''
 	} as AlertFormData;
 
 	let regionAreas: string[];
@@ -50,12 +50,10 @@
 		} else {
 			defaultFormData.areas = [...defaultFormData.areas, e.detail];
 		}
-		console.log(e.detail, defaultFormData.areas);
 		dispatch('formDataUpdated', defaultFormData);
 	};
 
 	const handleRegionSelected = (e: CustomEvent<string>) => {
-		console.log('region selected', e.detail);
 		defaultFormData.region = e.detail;
 		defaultFormData.areas = [];
 		if (defaultFormData.region) fetchAreas(e.detail);
@@ -63,11 +61,17 @@
 	};
 
 	const handleBedroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
+		console.log('bedrooms');
+		console.log(e.detail.value);
+		console.log(e.detail.label);
 		defaultFormData.bedrooms = e.detail.value;
 		dispatch('formDataUpdated', defaultFormData);
 	};
 
 	const handleBathroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
+		console.log('bathrooms');
+		console.log(e.detail.value);
+		console.log(e.detail.label);
 		defaultFormData.bathrooms = e.detail.value;
 		dispatch('formDataUpdated', defaultFormData);
 	};
@@ -112,7 +116,6 @@
 				/>
 			</InputWithLabel>
 		{/if}
-		<!-- TODO: Region is not being passed as well as other -->
 		<RegionSelect selected={defaultFormData.region} on:region-selected={handleRegionSelected} />
 		<AreaSelect
 			areaSelectLabelColor="text-black"
@@ -126,7 +129,7 @@
 			on:bedrooms-selected={handleBedroomsSelected}
 		/>
 		<BedAndBathroomSelect
-			selected={defaultFormData.bedrooms || 0}
+			selected={defaultFormData.bathrooms || 0}
 			bedOrBath="bathrooms"
 			on:bathrooms-selected={handleBathroomsSelected}
 		/>

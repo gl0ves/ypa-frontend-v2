@@ -19,14 +19,15 @@ const fetchListings = async (url: URL, fetch: FetchFunction, region?: string) =>
 const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
 	const searchRegion = region ?? url.searchParams.get('region') ?? undefined;
 	if (!searchRegion) return [];
-	const res = await fetch(`/backend/v2/listings/?limit=1000&display=areas&region=${searchRegion}`);
-	const { results } = await res.json();
+	const response = await fetch(`/backend/v2/listings/?limit=1000&display=areas&region=${searchRegion}`);
+	const { results } = await response.json();
 	return results;
 };
 
 const fetchAlert = async (fetch: FetchFunction, identifier: string) => {
-	const res = await fetch(`/backend/alerts/${identifier}/get_property_alert/`);
-	return await res.json();
+	const response = await fetch(`/backend/alerts/${identifier}/get_property_alert/`);
+	const data = await response.json() as AlertFormData;
+	return {alert: data, status: response.status};
 };
 
 const savePropertyAlert = async (alertFormData: AlertFormData) => {
@@ -37,7 +38,7 @@ const savePropertyAlert = async (alertFormData: AlertFormData) => {
 		},
 		body: JSON.stringify(alertFormData)
 	});
-	return response.json();
+	return {data: response.json(), status: response.status};
 };
 
 const deletePropertyAlert = async (identifier: string, all: boolean) => {

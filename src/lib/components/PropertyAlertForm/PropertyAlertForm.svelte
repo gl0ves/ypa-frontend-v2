@@ -24,7 +24,7 @@
 
 	const submitPropertyAlert = async () => {
 		const response = await savePropertyAlert(formData);
-		if (response.ok) {
+		if (response.status == 200) {
 			formSubmitted = true;
 		} else {
 			formSubmissionFailed = true;

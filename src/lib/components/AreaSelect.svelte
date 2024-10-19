@@ -28,10 +28,11 @@
 	let open = false;
 
 	const truncateLabel = (label: string, maxLength = 25) => {
+		if (!label) return 'Select areas...';
 		return label.length > maxLength ? label.slice(0, maxLength) + '...' : label;
 	};
 
-	$: combinedLabel = truncateLabel(parsedSelected.map((area) => area.label).join(', '));
+	$: combinedLabel = truncateLabel([...selected].join(', '));
 </script>
 
 <Popover.Root bind:open>
@@ -43,14 +44,12 @@
 				disabled={!options.length}
 				role="combobox"
 				aria-expanded={open}
-				class="w-[100%] justify-between overflow-hidden truncate"
+				class="w-[100%] max-w-[100%] justify-between overflow-hidden truncate"
 			>
 				{#if !options.length}
 					Please select a region
-				{:else if parsedSelected.length > 0}
-					{combinedLabel}
 				{:else}
-					Select areas...
+					{combinedLabel}
 				{/if}
 				<IconCaret class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 			</Button>

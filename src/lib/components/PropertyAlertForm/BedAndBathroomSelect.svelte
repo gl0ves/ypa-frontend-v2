@@ -1,11 +1,11 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 	import { createEventDispatcher } from 'svelte';
 	export let bedOrBath: 'bedrooms' | 'bathrooms';
-	export let selected: number = parseInt($page.url.searchParams.get(bedOrBath) || '0');
+	export let selected: number;
 
+	// TODO: Dispatch on change
 	const dispatch = createEventDispatcher();
 
 	const options = [
@@ -16,17 +16,17 @@
 		{ label: '4+', value: 4 },
 		{ label: '5+', value: 5 }
 	];
+	let selectedOption = options.find((option) => option.value == selected);
 
-	$: selectedOption = options.find((option) => option.value === selected) || {
+	$: selectedOption = options.find((option) => option.value == selected) || {
 		label: 'Any amount',
 		value: 0
 	};
-
-	$: {
-		dispatch(`${bedOrBath}-selected`, selectedOption);
-	}
 </script>
 
+{selected} - {selectedOption.value}
+
+<!-- Make sure that the value passed to the prop is whats used, no default value -->
 <InputWithLabel textColor="text-black" bind:label={bedOrBath}>
 	<Select.Root bind:selected={selectedOption}>
 		<Select.Trigger>
