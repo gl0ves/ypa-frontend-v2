@@ -37,7 +37,7 @@ const savePropertyAlert = async (alertFormData: AlertFormData) => {
 		},
 		body: JSON.stringify(alertFormData)
 	});
-	return response;
+	return response.json();
 };
 
 const deletePropertyAlert = async (identifier: string, all: boolean) => {

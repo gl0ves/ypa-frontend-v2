@@ -26,7 +26,7 @@
 		}
 	};
 
-	const deleteAllPropertyAlerts = async (all = false) => {
+	const handleDeletePropertyAlert = async (all = false) => {
 		const response = await deletePropertyAlert(identifier, all);
 		if (response.ok) {
 			formSubmitted = true;
@@ -38,16 +38,27 @@
 
 <div class="flex flex-col items-center justify-center h-full py-5">
 	<h1 class="text-primary flex font-semibold text-3xl pb-5">Update your alert</h1>
-	<PropertyAlertFormContent defaultFormData={formData} on:formDataUpdated={handleFormDataUpdated} />
-	<div class="grid gap-2 pt-5">
-		<Button disabled={!formData.first_name} on:click={update} type="submit">SAVE</Button>
+	{#if formSubmissionFailed}
+		<p class="text-primary text-lg">An error occurred while updating your alert</p>
+	{/if}
+	{#if formSubmitted}
+		<p class="text-primary text-lg">Your alert has been updated successfully</p>
+	{/if}
+	{#if !formSubmitted}
+		<PropertyAlertFormContent
+			defaultFormData={formData}
+			on:formDataUpdated={handleFormDataUpdated}
+		/>
+		<div class="grid gap-2 pt-5">
+			<Button disabled={!formData.first_name} on:click={update} type="submit">SAVE</Button>
 
-		<Button variant="destructive" on:click={() => deleteAllPropertyAlerts} type="submit"
-			>DELETE ALERT</Button
-		>
+			<Button variant="destructive" on:click={() => handleDeletePropertyAlert()} type="submit"
+				>DELETE ALERT</Button
+			>
 
-		<Button variant="destructive" on:click={() => deleteAllPropertyAlerts(true)} type="submit"
-			>DELETE ALL ALERTS</Button
-		>
-	</div>
+			<Button variant="destructive" on:click={() => handleDeletePropertyAlert(true)} type="submit"
+				>DELETE ALL ALERTS</Button
+			>
+		</div>
+	{/if}
 </div>
