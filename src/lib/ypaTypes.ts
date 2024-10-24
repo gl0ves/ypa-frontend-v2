@@ -25,6 +25,7 @@ type AlertFormData = {
 	price_max: number | null;
 	type: string | null;
 	frequency: 1 | 7 | 30;
+	verified: boolean;
 };
 
 export type { Listing, AlertFormData };

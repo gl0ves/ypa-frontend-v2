@@ -1,34 +1,44 @@
 <script lang="ts">
 	import AreaSelect from '../AreaSelect.svelte';
-	import RegionSelect from './RegionSelect.svelte';
-	import BedAndBathroomSelect from './BedAndBathroomSelect.svelte';
-	import TypeSelect from './TypeSelect.svelte';
-	import FrequencySelect from './FrequencySelect.svelte';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 	import Input from '../ui/input/input.svelte';
-	import PriceSelect from './MaximumPriceSelect.svelte';
+	import Select from '$lib/components/Select/Select.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import { type AlertFormData } from '$lib/ypaTypes';
-	const dispatch = createEventDispatcher();
-	const showEmail = $page.params.identifier ? false : true;
-	export let defaultFormData = {
+	import {
+		propertyTypeOptions,
+		emailFrequencyOptions,
+		propertyRegionOptions,
+		maxPriceOptions,
+		bedAndBathroomOptions
+	} from '$lib/data/options';
+
+	import { page } from '$app/stores';
+
+	const searchParams = $page.url.searchParams;
+	const parsedPriceMax = parseInt(searchParams.get('max_price') ?? '0');
+	const priceMax = parsedPriceMax === 0 ? null : parsedPriceMax;
+
+	export let defaultFormData: AlertFormData = {
 		identifier: null,
 		first_name: null,
 		email: null,
-		price_max: null,
+		region: searchParams.get('region'),
+		areas: searchParams.getAll('areas') ?? [],
+		bedrooms: parseInt(searchParams.get('bedrooms') ?? '0'),
+		bathrooms: parseInt(searchParams.get('bathrooms') ?? '0'),
+		price_max: priceMax,
+		type: searchParams.get('type'),
 		frequency: 7,
-		region: $page.url.searchParams.get('region') || null,
-		areas: $page.url.searchParams.getAll('areas') || [],
-		bedrooms: parseInt($page.url.searchParams.get('bedrooms') ?? '0'),
-		bathrooms: parseInt($page.url.searchParams.get('bathrooms') ?? '0'),
+		verified: false
+	};
 
-		type: $page.url.searchParams.get('type') || ''
-	} as AlertFormData;
+	const dispatch = createEventDispatcher();
+
+	const showEmail = $page.params.identifier ? false : true;
 
 	let regionAreas: string[];
-	$: regionAreas = [];
 
 	onMount(() => {
 		const paramAreas = $page.url.searchParams.getAll('areas');
@@ -61,17 +71,11 @@
 	};
 
 	const handleBedroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		console.log('bedrooms');
-		console.log(e.detail.value);
-		console.log(e.detail.label);
 		defaultFormData.bedrooms = e.detail.value;
 		dispatch('formDataUpdated', defaultFormData);
 	};
 
 	const handleBathroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		console.log('bathrooms');
-		console.log(e.detail.value);
-		console.log(e.detail.label);
 		defaultFormData.bathrooms = e.detail.value;
 		dispatch('formDataUpdated', defaultFormData);
 	};
@@ -116,28 +120,54 @@
 				/>
 			</InputWithLabel>
 		{/if}
-		<RegionSelect selected={defaultFormData.region} on:region-selected={handleRegionSelected} />
+		<!-- Regions -->
+		<Select
+			options={propertyRegionOptions}
+			label="Region"
+			selected={defaultFormData.region}
+			on:selected={handleRegionSelected}
+		/>
+		<!-- Areas -->
 		<AreaSelect
 			areaSelectLabelColor="text-black"
 			options={regionAreas}
 			selected={defaultFormData.areas}
 			on:area-selected={handleAreaSelected}
 		/>
-		<BedAndBathroomSelect
-			selected={defaultFormData.bedrooms || 0}
-			bedOrBath="bedrooms"
-			on:bedrooms-selected={handleBedroomsSelected}
+		<!-- Bathrooms -->
+		<Select
+			options={bedAndBathroomOptions}
+			label="Bathrooms"
+			selected={defaultFormData.bathrooms}
+			on:selected={handleBathroomsSelected}
 		/>
-		<BedAndBathroomSelect
-			selected={defaultFormData.bathrooms || 0}
-			bedOrBath="bathrooms"
-			on:bathrooms-selected={handleBathroomsSelected}
+		<!-- Bedrooms -->
+		<Select
+			options={bedAndBathroomOptions}
+			label="Bedrooms"
+			selected={defaultFormData.bedrooms}
+			on:selected={handleBedroomsSelected}
 		/>
-		<TypeSelect selected={defaultFormData.type || ''} on:type-selected={handleTypeSelected} />
-		<FrequencySelect
+		<!-- Types -->
+		<Select
+			options={propertyTypeOptions}
+			label="Type"
+			selected={defaultFormData.type}
+			on:selected={handleTypeSelected}
+		/>
+		<!-- Frequency -->
+		<Select
+			options={emailFrequencyOptions}
+			label="How often would you like to receive alerts?"
 			selected={defaultFormData.frequency}
-			on:frequency-selected={handleFrequencySelected}
+			on:selected={handleFrequencySelected}
 		/>
-		<PriceSelect selected={defaultFormData.price_max} on:price-selected={handlePriceSelected} />
+		<!-- Max price -->
+		<Select
+			options={maxPriceOptions}
+			label="Max price"
+			selected={defaultFormData.price_max}
+			on:selected={handlePriceSelected}
+		/>
 	</div>
 </div>

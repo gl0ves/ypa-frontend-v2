@@ -6,21 +6,9 @@
 	import { savePropertyAlert } from '$lib/api';
 	import { type AlertFormData } from '$lib/ypaTypes';
 
-	export let defaultFormData: AlertFormData = {
-		identifier: null,
-		first_name: null,
-		email: null,
-		region: null,
-		areas: [],
-		bedrooms: 0,
-		bathrooms: 0,
-		price_max: null,
-		type: '',
-		frequency: 7
-	};
-	let formData: AlertFormData = defaultFormData;
 	let formSubmitted = false;
 	let formSubmissionFailed = false;
+	let formData: AlertFormData;
 
 	const submitPropertyAlert = async () => {
 		const response = await savePropertyAlert(formData);
@@ -58,7 +46,7 @@
 			</Dialog.Header>
 
 			{#if !formSubmitted}
-				<PropertyAlertFormContent {defaultFormData} on:formDataUpdated={handleFormDataUpdated} />
+				<PropertyAlertFormContent on:formDataUpdated={handleFormDataUpdated} />
 				<Dialog.Description>
 					By clicking create below, you consent to allow Your Property Abroad to store and process
 					the information submitted above to provide you the services requested. You can view the
@@ -67,7 +55,7 @@
 				</Dialog.Description>
 				<Dialog.Footer>
 					<Button
-						disabled={!formData.first_name || !formData.email}
+						disabled={!formData?.first_name || !formData?.email}
 						on:click={submitPropertyAlert}
 						type="submit">CREATE</Button
 					>

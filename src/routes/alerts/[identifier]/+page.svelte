@@ -4,12 +4,22 @@
 	import { page } from '$app/stores';
 	import { type AlertFormData } from '$lib/ypaTypes';
 	import { deletePropertyAlert, savePropertyAlert } from '$lib/api';
+	import { onMount } from 'svelte';
 
 	const identifier = $page.params.identifier;
 
 	let formData: AlertFormData = $page.data.alert;
 	let formSubmitted = false;
 	let formSubmissionFailed = false;
+	let alertVerified = formData.verified;
+
+	onMount(() => {
+		if (!alertVerified) {
+			console.log('saving');
+			console.log(formData);
+			savePropertyAlert(formData);
+		}
+	});
 
 	const handleFormDataUpdated = (e: CustomEvent) => {
 		formData = { ...formData, ...e.detail };
@@ -18,11 +28,12 @@
 	const update = async () => {
 		formData.identifier = identifier;
 		const response = await savePropertyAlert(formData);
+		const data = await response.json();
+		console.log(data);
 		if (response.status === 200) {
-			formSubmitted = true;
-		} else {
-			formSubmissionFailed = true;
+			return (formSubmitted = true);
 		}
+		return (formSubmissionFailed = true);
 	};
 
 	const handleDeletePropertyAlert = async (all = false) => {
@@ -42,6 +53,9 @@
 	{/if}
 	{#if formSubmitted}
 		<p class="text-primary text-lg">Your alert has been updated successfully</p>
+	{/if}
+	{#if alertVerified}
+		<p class="text-primary text-lg">Your email has been verified!</p>
 	{/if}
 	{#if !formSubmitted}
 		<PropertyAlertFormContent

@@ -2,13 +2,13 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { regions } from './regions';
+	import { propertyRegionOptions } from '$lib/data/options';
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
 
 	$: searchParams = $page.url.searchParams;
 	$: regionParam = searchParams.get('region');
-	$: regionObj = regions.find((region) => region.value === regionParam);
+	$: regionObj = propertyRegionOptions.find((region) => region.value === regionParam);
 	$: selectedRegion = regionObj
 		? { label: regionObj.label, value: regionObj.value }
 		: { label: 'All Regions', value: '' };
@@ -50,7 +50,7 @@
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
-				{#each regions as region}
+				{#each propertyRegionOptions as region}
 					<Select.Item value={region.value} label={region.label}>{region.label}</Select.Item>
 				{/each}
 			</Select.Group>
