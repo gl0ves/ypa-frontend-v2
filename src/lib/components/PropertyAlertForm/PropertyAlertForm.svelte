@@ -5,10 +5,24 @@
 	import PropertyAlertFormContent from './PropertyAlertFormContent.svelte';
 	import { savePropertyAlert } from '$lib/api';
 	import { type AlertFormData } from '$lib/ypaTypes';
+	import { type Options } from '$lib/data/options';
 
-	let formSubmitted = false;
-	let formSubmissionFailed = false;
-	let formData: AlertFormData;
+	let formSubmitted = $state(false);
+	let formSubmissionFailed = $state(false);
+	let formData: AlertFormData = $state({
+		identifier: null,
+		first_name: null,
+		email: null,
+		region: null,
+		areas: [],
+		bedrooms: null,
+		bathrooms: null,
+		price_max: null,
+		type: null,
+		frequency: 1,
+		verified: false
+	});
+	const { options }: { options: Options } = $props();
 
 	const submitPropertyAlert = async () => {
 		const response = await savePropertyAlert(formData);
@@ -46,7 +60,7 @@
 			</Dialog.Header>
 
 			{#if !formSubmitted}
-				<PropertyAlertFormContent on:formDataUpdated={handleFormDataUpdated} />
+				<PropertyAlertFormContent {options} on:formDataUpdated={handleFormDataUpdated} />
 				<Dialog.Description>
 					By clicking create below, you consent to allow Your Property Abroad to store and process
 					the information submitted above to provide you the services requested. You can view the

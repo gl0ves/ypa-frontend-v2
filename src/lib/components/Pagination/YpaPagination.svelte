@@ -1,22 +1,19 @@
 <script lang="ts">
 	import IconChevronLeft from '~icons/mdi/chevron-left';
 	import IconChevronRight from '~icons/mdi/chevron-right';
-	import { mediaQuery } from 'svelte-legos';
 	import * as Pagination from '$lib/components/ui/pagination/index.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	const isDesktop = mediaQuery('(min-width: 768px)');
+	const params = $page.url.searchParams;
 
-	export let count: number;
+	let { count }: { count: number } = $props();
 
-	$: perPage = 18;
-	$: siblingCount = $isDesktop ? 1 : 0;
-	$: currentPage = parseInt($page.url.searchParams.get('page') || '1', 10);
-	$: totalPages = Math.max(1, Math.ceil(count / perPage));
+	const perPage = 18;
+	const currentPage = $derived(parseInt($page.url.searchParams.get('page') || '1', 10));
+	const totalPages = $derived(Math.max(1, Math.ceil(count / perPage)));
 
 	const navigate = async (page: number) => {
-		const params = new URLSearchParams($page.url.searchParams);
 		params.set('page', page.toString());
 		return goto(`?${params.toString()}`, { keepFocus: true });
 	};
@@ -37,13 +34,7 @@
 </script>
 
 {#if count > 0}
-	<Pagination.Root
-		class="sticky bottom-0 z-50 bg-white py-2 border-t"
-		{count}
-		{perPage}
-		{siblingCount}
-		let:pages
-	>
+	<Pagination.Root class="sticky bottom-0 z-50 bg-white py-2 border-t" {count} {perPage} let:pages>
 		<Pagination.Content>
 			<Pagination.Item>
 				<Pagination.PrevButton on:click={prev} disabled={currentPage <= 1}>

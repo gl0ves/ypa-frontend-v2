@@ -8,14 +8,15 @@
 	import RefInput from './RefInput.svelte';
 	import PropertyAlertyForm from '../PropertyAlertForm/PropertyAlertForm.svelte';
 	import { Button } from '$lib/components/ui/button';
-
-	import { listingsCount } from '$lib/store';
 	import { goto } from '$app/navigation';
+	import { type Options } from '$lib/data/options';
 
-	$: showRegionSelect = $page.params.region === undefined;
-	$: areas = $page.data.areas.length ? $page.data.areas : [];
-	$: paramAreas = $page.url.searchParams.getAll('areas') || [];
-	$: selectedAreas = paramAreas;
+	let areas = $page.data.areas.length ? $page.data.areas : [];
+	let showRegionSelect = $state($page.params.region === undefined);
+	let paramAreas = $state($page.url.searchParams.getAll('areas'));
+
+	const { data }: { data: { options: Options; listingsCount: number } } = $props();
+	const { options } = data;
 
 	const resetSearch = (_e: Event) => {
 		goto('/');
@@ -24,10 +25,10 @@
 	const handleAreaSelected = (e: CustomEvent<string>) => {
 		if (!e.detail) return;
 
-		if (selectedAreas.includes(e.detail)) {
-			selectedAreas = selectedAreas.filter((area) => area !== e.detail);
+		if (paramAreas.includes(e.detail)) {
+			paramAreas = paramAreas.filter((area) => area !== e.detail);
 		} else {
-			selectedAreas = [...selectedAreas, e.detail];
+			paramAreas = [...paramAreas, e.detail];
 		}
 
 		// Create a new URLSearchParams object from the current search parameters
@@ -37,7 +38,7 @@
 		params.delete('areas');
 
 		// Update the 'areas' parameter with the joined list of selected area values
-		selectedAreas.forEach((area) => {
+		paramAreas.forEach((area) => {
 			if (typeof area !== 'string') return;
 			params.append('areas', area);
 		});
@@ -63,7 +64,7 @@
 				{/if}
 			</h2>
 			<h2 class="uppercase font-semibold text-xl text-white">
-				{$listingsCount} results
+				{data.listingsCount} results
 			</h2>
 
 			<div class="flex-wrap text-left flex justify-center gap-8 pb-6 mb-6 pt-6 rounded-lg">
@@ -86,7 +87,7 @@
 			</div>
 			<div class="flex justify-center gap-8">
 				<Button on:click={(e) => resetSearch(e)}>RESET</Button>
-				<PropertyAlertyForm />
+				<PropertyAlertyForm {options} />
 			</div>
 		</div>
 	</div>

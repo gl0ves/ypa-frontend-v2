@@ -1,4 +1,19 @@
 // TODO: Move to load function
+export type OptionsKeys =
+	| 'propertyTypeOptions'
+	| 'propertyRegionOptions'
+	| 'emailFrequencyOptions'
+	| 'maxPriceOptions'
+	| 'bedAndBathroomOptions';
+
+export type Option = {
+	label: string;
+	value: string | number | null;
+};
+
+export type Options = {
+	[key in OptionsKeys]: Option[];
+};
 
 export const propertyTypeOptions = [
 	{ label: 'Any type', value: '' },

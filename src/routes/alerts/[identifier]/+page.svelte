@@ -8,17 +8,16 @@
 
 	const identifier = $page.params.identifier;
 
-	let formData: AlertFormData = $page.data.alert;
-	let formSubmitted = false;
-	let formSubmissionFailed = false;
-	let alertVerified = formData.verified;
+	let formData: AlertFormData = $state($page.data.alert);
+	let formSubmitted = $state(false);
+	let formSubmissionFailed = $state(false);
+	let alertVerified = $state(false);
 
 	onMount(() => {
-		if (!alertVerified) {
-			console.log('saving');
-			console.log(formData);
-			savePropertyAlert(formData);
+		if (!formData.verified) {
+			formData.verified = true;
 		}
+		update();
 	});
 
 	const handleFormDataUpdated = (e: CustomEvent) => {
@@ -29,9 +28,11 @@
 		formData.identifier = identifier;
 		const response = await savePropertyAlert(formData);
 		const data = await response.json();
-		console.log(data);
-		if (response.status === 200) {
+		if (response.status === 200 && alertVerified) {
 			return (formSubmitted = true);
+		}
+		if (response.status === 200 && !alertVerified) {
+			return (alertVerified = true);
 		}
 		return (formSubmissionFailed = true);
 	};
@@ -58,10 +59,8 @@
 		<p class="text-primary text-lg">Your email has been verified!</p>
 	{/if}
 	{#if !formSubmitted}
-		<PropertyAlertFormContent
-			defaultFormData={formData}
-			on:formDataUpdated={handleFormDataUpdated}
-		/>
+		<!-- Maybe pass defaults here anyways -->
+		<PropertyAlertFormContent on:formDataUpdated={handleFormDataUpdated} />
 		<div class="grid gap-2 pt-5">
 			<Button disabled={!formData.first_name} on:click={update} type="submit">SAVE</Button>
 

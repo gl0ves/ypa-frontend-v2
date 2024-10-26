@@ -1,5 +1,5 @@
 import type { Load } from '@sveltejs/kit';
-import { type AlertFormData } from '$lib/ypaTypes';
+import { type AlertFormData, type Listing } from '$lib/ypaTypes';
 
 // Define the type for the fetch function parameter using the Fetch function from the Load context
 type FetchFunction = Parameters<Load>[0]['fetch'];
@@ -13,7 +13,7 @@ const fetchListings = async (url: URL, fetch: FetchFunction, region?: string) =>
 	searchParams.set('offset', offset.toString());
 	if (region) searchParams.set('region', region);
 	const res = await fetch(`/backend/v2/listings/?${searchParams.toString()}`);
-	return await res.json();
+	return (await res.json()) as { results: Listing[]; count: number };
 };
 
 const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
@@ -22,7 +22,7 @@ const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
 	const response = await fetch(
 		`/backend/v2/listings/?limit=1000&display=areas&region=${searchRegion}`
 	);
-	const { results } = await response.json();
+	const { results } = (await response.json()) as { results: string[] };
 	return results;
 };
 
@@ -40,7 +40,6 @@ const savePropertyAlert = async (alertFormData: AlertFormData) => {
 		},
 		body: JSON.stringify(alertFormData)
 	});
-
 	return response;
 };
 

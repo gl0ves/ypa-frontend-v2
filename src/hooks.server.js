@@ -7,13 +7,7 @@ export async function handleFetch({ request, fetch }) {
 		const options = {
 			method: request.method,
 			headers: request.headers,
-			body: body,
-			credentials: request.credentials,
-			cache: request.cache,
-			redirect: request.redirect,
-			referrer: request.referrer,
-			integrity: request.integrity,
-			mode: request.mode
+			body: body
 		};
 		request = new Request(
 			request.url.replace('http://localhost:5173/backend/', 'http://ypa-backend:8000/api/'),

@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { Listing } from '$lib/ypaTypes';
 	import ListingCard from '$lib/components/ListingCard/ListingCard.svelte';
-
 	import YpaPagination from '$lib/components/Pagination/YpaPagination.svelte';
-	export let data: { listings: Listing[]; listingsCount: number };
+	let { data }: { data: { listings: Listing[]; listingsCount: number } } = $props();
 </script>
 
 <div class="flex justify-center flex-wrap gap-8">

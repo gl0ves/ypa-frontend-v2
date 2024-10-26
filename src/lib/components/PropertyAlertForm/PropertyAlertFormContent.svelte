@@ -5,22 +5,27 @@
 	import Select from '$lib/components/Select/Select.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
+
 	import { type AlertFormData } from '$lib/ypaTypes';
-	import {
-		propertyTypeOptions,
-		emailFrequencyOptions,
-		propertyRegionOptions,
-		maxPriceOptions,
-		bedAndBathroomOptions
-	} from '$lib/data/options';
+	import { type Options } from '$lib/data/options';
 
 	import { page } from '$app/stores';
+
+	const { options }: { options: Options } = $props();
+
+	const {
+		propertyRegionOptions,
+		bedAndBathroomOptions,
+		propertyTypeOptions,
+		emailFrequencyOptions,
+		maxPriceOptions
+	} = options;
 
 	const searchParams = $page.url.searchParams;
 	const parsedPriceMax = parseInt(searchParams.get('max_price') ?? '0');
 	const priceMax = parsedPriceMax === 0 ? null : parsedPriceMax;
 
-	export let defaultFormData: AlertFormData = {
+	let defaultFormData: AlertFormData = $state({
 		identifier: null,
 		first_name: null,
 		email: null,
@@ -32,13 +37,13 @@
 		type: searchParams.get('type'),
 		frequency: 7,
 		verified: false
-	};
+	});
 
 	const dispatch = createEventDispatcher();
 
 	const showEmail = $page.params.identifier ? false : true;
 
-	let regionAreas: string[];
+	let regionAreas: string[] = $state([]);
 
 	onMount(() => {
 		const paramAreas = $page.url.searchParams.getAll('areas');
