@@ -1,4 +1,3 @@
-// TODO: Move to load function
 export type OptionsKeys =
 	| 'propertyTypeOptions'
 	| 'propertyRegionOptions'
@@ -12,7 +11,11 @@ export type Option = {
 };
 
 export type Options = {
-	[key in OptionsKeys]: Option[];
+	propertyTypeOptions: propertyTypeOptions[];
+	propertyRegionOptions: PropertyRegionOption[];
+	maxPriceOptions: MaxPriceOptions[];
+	bedAndBathroomOptions: BedAndBathroomOptions[];
+	emailFrequencyOptions: EmailFrequencyOptions[];
 };
 
 export type PropertyRegionOption = {
@@ -20,8 +23,29 @@ export type PropertyRegionOption = {
 	label: string;
 };
 
+export type MaxPriceOptions = {
+	label: string;
+	value: number | null;
+};
+
+export type BedAndBathroomOptions = {
+	label: string;
+	value: number;
+};
+
+export type EmailFrequencyOptions = {
+	label: string;
+	value: number;
+};
+
+export type propertyTypeOptions = {
+	label: string;
+	value: string | null;
+};
+
+// TODO: Make types of these with Zod or something
 export const propertyTypeOptions = [
-	{ label: 'Any type', value: '' },
+	{ label: 'Any type', value: null },
 	{ label: 'Apartment', value: 'Apartment' },
 	{ label: 'Commercial and Hotel', value: 'Commercial and Hotel' },
 	{ label: 'Finca / Rural house', value: 'Finca / Rural house' },

@@ -1,9 +1,8 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { type Selected } from 'bits-ui';
-	import { createEventDispatcher } from 'svelte';
 	import InputWithLabel from '$lib/components/ui/input-with-label/InputWithLabel.svelte';
-	const dispatch = createEventDispatcher();
+
 	type HandleSelectValue = Selected<string | number | null> | undefined;
 
 	let {

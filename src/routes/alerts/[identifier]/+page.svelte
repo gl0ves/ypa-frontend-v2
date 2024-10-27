@@ -5,10 +5,12 @@
 	import { type AlertFormData } from '$lib/ypaTypes';
 	import { deletePropertyAlert, savePropertyAlert } from '$lib/api';
 	import { onMount } from 'svelte';
+	import { type Options } from '$lib/data/options';
 
 	const identifier = $page.params.identifier;
 
 	let formData: AlertFormData = $state($page.data.alert);
+	let options: Options = $page.data.options;
 	let formSubmitted = $state(false);
 	let formSubmissionFailed = $state(false);
 	let alertVerified = $state(false);
@@ -60,7 +62,7 @@
 	{/if}
 	{#if !formSubmitted}
 		<!-- Maybe pass defaults here anyways -->
-		<PropertyAlertFormContent on:formDataUpdated={handleFormDataUpdated} />
+		<PropertyAlertFormContent {options} on:formDataUpdated={handleFormDataUpdated} />
 		<div class="grid gap-2 pt-5">
 			<Button disabled={!formData.first_name} on:click={update} type="submit">SAVE</Button>
 
