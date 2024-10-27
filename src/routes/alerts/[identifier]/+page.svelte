@@ -15,6 +15,8 @@
 	let formSubmissionFailed = $state(false);
 	let alertVerified = $state(false);
 
+	// TODO: Add a deleted / verified / updated state
+
 	onMount(() => {
 		if (!formData.verified) {
 			formData.verified = true;
@@ -22,8 +24,8 @@
 		update();
 	});
 
-	const handleFormDataUpdated = (e: CustomEvent) => {
-		formData = { ...formData, ...e.detail };
+	const handleFormDataUpdated = (data: AlertFormData) => {
+		formData = { ...formData, ...data };
 	};
 
 	const update = async () => {
@@ -62,14 +64,16 @@
 	{/if}
 	{#if !formSubmitted}
 		<!-- Maybe pass defaults here anyways -->
-		<PropertyAlertFormContent {options} on:formDataUpdated={handleFormDataUpdated} />
+		<PropertyAlertFormContent
+			{options}
+			{formData}
+			handleFormDataUpdated={(data) => handleFormDataUpdated(data)}
+		/>
 		<div class="grid gap-2 pt-5">
 			<Button disabled={!formData.first_name} on:click={update} type="submit">SAVE</Button>
-
 			<Button variant="destructive" on:click={() => handleDeletePropertyAlert()} type="submit"
 				>DELETE ALERT</Button
 			>
-
 			<Button variant="destructive" on:click={() => handleDeletePropertyAlert(true)} type="submit"
 				>DELETE ALL ALERTS</Button
 			>

@@ -13,9 +13,14 @@
 	type SelectValue = string | number | null | undefined;
 
 	const {
+		formData,
 		options,
 		handleFormDataUpdated
-	}: { options: Options; handleFormDataUpdated: (data: AlertFormData) => void } = $props();
+	}: {
+		formData: AlertFormData;
+		options: Options;
+		handleFormDataUpdated: (data: AlertFormData) => void;
+	} = $props();
 
 	const {
 		propertyRegionOptions,
@@ -36,29 +41,29 @@
 		closestPrice = priceOptions.find((price) => price >= parsedPriceMax) || null;
 	}
 
-	let defaultFormData: AlertFormData = $state({
-		identifier: null,
-		first_name: null,
-		email: null,
-		region: searchParams.get('region'),
-		areas: searchParams.getAll('areas') ?? [],
-		bedrooms: parseInt(searchParams.get('bedrooms') ?? '0'),
-		bathrooms: parseInt(searchParams.get('bathrooms') ?? '0'),
-		price_max: closestPrice,
-		type: searchParams.get('type'),
-		frequency: 7,
-		verified: false
-	});
+	let defaultFormData: AlertFormData = $state(
+		formData || {
+			identifier: null,
+			first_name: null,
+			email: null,
+			region: searchParams.get('region'),
+			areas: searchParams.getAll('areas') ?? [],
+			bedrooms: parseInt(searchParams.get('bedrooms') ?? '0'),
+			bathrooms: parseInt(searchParams.get('bathrooms') ?? '0'),
+			price_max: closestPrice,
+			type: searchParams.get('type'),
+			frequency: 7,
+			verified: false
+		}
+	);
 
 	const showEmail = $page.params.identifier ? false : true;
 
 	let regionAreas: string[] = $state([]);
 
+	console.log(defaultFormData);
+
 	onMount(() => {
-		const paramAreas = $page.url.searchParams.getAll('areas');
-		if (paramAreas.length) {
-			defaultFormData.areas = paramAreas;
-		}
 		if (defaultFormData.region) fetchAreas(defaultFormData.region);
 	});
 

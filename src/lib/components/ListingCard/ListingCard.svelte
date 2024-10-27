@@ -9,27 +9,37 @@
 	import IconLocation from '~icons/mdi/location';
 
 	import type { Listing } from '$lib/ypaTypes';
-	import { onMount } from 'svelte';
+
+	// TODO Import some type
+	// import { type ... }
+
 	import Separator from '../ui/separator/separator.svelte';
 	import Button from '../ui/button/button.svelte';
 
+	import { goto } from '$app/navigation';
+
 	import { formatPrice } from '$lib/utils';
 
-	export let listing: Listing;
-	let href: string;
+	const { listing }: { listing: Listing } = $props();
 
-	onMount(() => {
-		href = `https://yourpropertyabroad.com/listings/${listing.region}/${listing.ref}/`;
-	});
+	// TODO: Add env variable for the domain
+	const baseUrl = 'localhost:5173';
+	const listingUrl = `/${listing.region}/properties/${listing.ref}`;
+
+	const goToListing = () => {
+		goto(listingUrl);
+	};
 </script>
 
 <div class="w-96 bg-white shadow rounded-lg overflow-hidden">
 	<div class="relative h-48 w-full">
-		<img
-			src={listing.image}
-			alt="Listing thumbnail"
-			class="absolute h-full w-full object-cover cursor-pointer"
-		/>
+		<button onclick={() => goToListing()}>
+			<img
+				src={listing.image}
+				alt="Listing thumbnail"
+				class="absolute h-full w-full object-cover cursor-pointer"
+			/>
+		</button>
 		<div class="absolute bottom-0 left-0 bg-secondary text-white font-semibold p-2">
 			{listing.region}
 		</div>
@@ -62,14 +72,14 @@
 			<Button class="font-semibold">MORE INFO</Button>
 			<div class="flex space-x-2 justify-end">
 				<a
-					href="https://www.facebook.com/sharer/sharer.php?u={href}"
+					href="https://www.facebook.com/sharer/sharer.php?u={listingUrl}"
 					target="_blank"
 					class="p-2 rounded-full flex items-center text-facebook hover:bg-gray-100"
 				>
 					<IconFacebook class="h-6 w-6" />
 				</a>
 				<a
-					href="whatsapp://send?text={href}"
+					href="whatsapp://send?text={listingUrl}"
 					data-action="share/whatsapp/share"
 					target="_blank"
 					class="p-2 rounded-full flex items-center text-whatsapp hover:bg-gray-100"
@@ -77,7 +87,7 @@
 					<IconWhatsApp class="h-6 w-6" />
 				</a>
 				<a
-					href={`mailto:?subject=Check out this&body=${href}`}
+					href={`mailto:?subject=Check out this&body=${listingUrl}`}
 					target="_blank"
 					class="p-2 rounded-full flex items-center hover:bg-gray-100"
 				>
@@ -86,10 +96,10 @@
 
 				<button
 					class="p-2 rounded-full flex items-center hover:bg-gray-100 cursor-pointer"
-					on:click={() => navigator.clipboard.writeText(href)}
-					on:keydown={(event) => {
+					onclick={() => navigator.clipboard.writeText(listingUrl)}
+					onkeydown={(event) => {
 						if (event.key === 'Enter' || event.key === ' ') {
-							navigator.clipboard.writeText(href);
+							navigator.clipboard.writeText(listingUrl);
 						}
 					}}
 				>
