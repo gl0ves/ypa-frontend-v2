@@ -11,24 +11,27 @@
 	import { goto } from '$app/navigation';
 	import { type Options } from '$lib/data/options';
 
-	let areas = $page.data.areas.length ? $page.data.areas : [];
 	let showRegionSelect = $state($page.params.region === undefined);
 	let paramAreas = $state($page.url.searchParams.getAll('areas'));
+	let region = $state($page.url.searchParams.get('region'));
 
-	const { data }: { data: { options: Options; listingsCount: number } } = $props();
+	const { data }: { data: { options: Options; listingsCount: number; areas: string[] } } = $props();
 	const { options } = data;
 
 	const resetSearch = (_e: Event) => {
 		goto('/');
 	};
 
-	const handleAreaSelected = (e: CustomEvent<string>) => {
-		if (!e.detail) return;
+	const clearAreaState = () => {
+		paramAreas = [];
+	};
 
-		if (paramAreas.includes(e.detail)) {
-			paramAreas = paramAreas.filter((area) => area !== e.detail);
+	const handleAreaSelected = (value: string) => {
+		console.log('triggered area selector');
+		if (paramAreas.includes(value)) {
+			paramAreas = paramAreas.filter((area) => area !== value);
 		} else {
-			paramAreas = [...paramAreas, e.detail];
+			paramAreas = [...paramAreas, value];
 		}
 
 		// Create a new URLSearchParams object from the current search parameters
@@ -46,6 +49,9 @@
 		// Navigate using the updated parameters
 		goto(`?${params.toString()}`);
 	};
+
+	$inspect(paramAreas);
+	$inspect(region);
 </script>
 
 <div class="min-w-full bg-hero bg-cover bg-center p-4 md:p-12 mb-8 relative">
@@ -69,15 +75,19 @@
 
 			<div class="flex-wrap text-left flex justify-center gap-8 pb-6 mb-6 pt-6 rounded-lg">
 				{#if showRegionSelect}
-					<RegionSelect />
+					<RegionSelect {clearAreaState} {options} />
 				{/if}
 
 				<div class="w-[250px]">
-					<AreaSelect options={areas} selected={paramAreas} on:area-selected={handleAreaSelected} />
+					<AreaSelect
+						options={data.areas}
+						selected={paramAreas}
+						handleSelect={handleAreaSelected}
+					/>
 				</div>
 
-				<BedAndBathroomSelect bedOrBath="bedrooms" />
-				<BedAndBathroomSelect bedOrBath="bathrooms" />
+				<BedAndBathroomSelect {options} bedOrBath="bedrooms" />
+				<BedAndBathroomSelect {options} bedOrBath="bathrooms" />
 
 				<TypeSelect />
 				<RefInput />

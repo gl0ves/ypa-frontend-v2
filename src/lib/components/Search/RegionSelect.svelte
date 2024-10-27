@@ -1,27 +1,24 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { propertyRegionOptions } from '$lib/data/options';
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import { type PropertyRegionOption, type Options } from '$lib/data/options';
 
-	$: searchParams = $page.url.searchParams;
-	$: regionParam = searchParams.get('region');
-	$: regionObj = propertyRegionOptions.find((region) => region.value === regionParam);
-	$: selectedRegion = regionObj
-		? { label: regionObj.label, value: regionObj.value }
-		: { label: 'All Regions', value: '' };
+	const { options, clearAreaState }: { options: Options; clearAreaState: () => void } = $props();
 
-	onMount(() => {
-		if (!regionParam) {
-			const params = new URLSearchParams($page.url.searchParams);
-			params.delete('region');
-			goto(`?${params.toString()}`);
-		}
+	const { propertyRegionOptions } = options;
+
+	const searchParams = $derived($page.url.searchParams);
+	const regionParam = $derived(searchParams.get('region'));
+	let selectedRegion = $state(propertyRegionOptions.find((region) => region.value === regionParam));
+
+	$effect(() => {
+		selectedRegion = propertyRegionOptions.find((region) => region.value === regionParam);
 	});
 
-	const handleRegionSelected = (region: string) => {
+	const handleRegionSelected = (region: string | number) => {
+		if (typeof region !== 'string') return;
 		const params = new URLSearchParams($page.url.searchParams);
 
 		params.delete('page');
@@ -30,10 +27,12 @@
 		if (region) {
 			if (params.get('region') !== region) {
 				params.delete('areas');
+				clearAreaState();
 			}
 			params.set('region', region);
 		} else {
 			params.delete('areas');
+			clearAreaState();
 		}
 
 		goto(`?${params.toString()}`);

@@ -33,8 +33,8 @@
 		}
 	};
 
-	const handleFormDataUpdated = (e: CustomEvent) => {
-		formData = { ...formData, ...e.detail };
+	const handleFormDataUpdated = (data: AlertFormData) => {
+		formData = { ...formData, ...data };
 	};
 </script>
 
@@ -60,7 +60,10 @@
 			</Dialog.Header>
 
 			{#if !formSubmitted}
-				<PropertyAlertFormContent {options} on:formDataUpdated={handleFormDataUpdated} />
+				<PropertyAlertFormContent
+					{options}
+					handleFormDataUpdated={(data) => handleFormDataUpdated(data)}
+				/>
 				<Dialog.Description>
 					By clicking create below, you consent to allow Your Property Abroad to store and process
 					the information submitted above to provide you the services requested. You can view the

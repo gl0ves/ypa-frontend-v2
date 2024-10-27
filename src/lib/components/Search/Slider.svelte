@@ -16,18 +16,24 @@
 		sliderValues = [minPrice, maxPrice];
 	}
 
+	let debounceTimeout: number;
+
 	const updateValues = (values: number[]) => {
-		const [min, max] = values;
-		const params = new URLSearchParams($page.url.searchParams);
+		clearTimeout(debounceTimeout);
 
-		params.delete('page');
-		if (min === MIN) params.delete('min_price');
-		else params.set('min_price', min.toString());
+		debounceTimeout = setTimeout(() => {
+			const [min, max] = values;
+			const params = new URLSearchParams($page.url.searchParams);
 
-		if (max === MAX) params.delete('max_price');
-		else params.set('max_price', max.toString());
+			params.delete('page');
+			if (min === MIN) params.delete('min_price');
+			else params.set('min_price', min.toString());
 
-		goto(`?${params.toString()}`);
+			if (max === MAX) params.delete('max_price');
+			else params.set('max_price', max.toString());
+
+			goto(`?${params.toString()}`);
+		}, 200);
 	};
 </script>
 

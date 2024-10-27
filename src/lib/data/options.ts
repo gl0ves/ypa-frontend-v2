@@ -15,6 +15,11 @@ export type Options = {
 	[key in OptionsKeys]: Option[];
 };
 
+export type PropertyRegionOption = {
+	value: string | null;
+	label: string;
+};
+
 export const propertyTypeOptions = [
 	{ label: 'Any type', value: '' },
 	{ label: 'Apartment', value: 'Apartment' },

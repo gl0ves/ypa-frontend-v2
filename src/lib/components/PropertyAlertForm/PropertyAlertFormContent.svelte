@@ -11,7 +11,12 @@
 
 	import { page } from '$app/stores';
 
-	const { options }: { options: Options } = $props();
+	type SelectValue = string | number | null | undefined;
+
+	const {
+		options,
+		handleFormDataUpdated
+	}: { options: Options; handleFormDataUpdated: (data: AlertFormData) => void } = $props();
 
 	const {
 		propertyRegionOptions,
@@ -21,7 +26,7 @@
 		maxPriceOptions
 	} = options;
 
-	const searchParams = $page.url.searchParams;
+	const searchParams = $state($page.url.searchParams);
 	const parsedPriceMax = parseInt(searchParams.get('max_price') ?? '0');
 	const priceMax = parsedPriceMax === 0 ? null : parsedPriceMax;
 
@@ -38,8 +43,6 @@
 		frequency: 7,
 		verified: false
 	});
-
-	const dispatch = createEventDispatcher();
 
 	const showEmail = $page.params.identifier ? false : true;
 
@@ -59,49 +62,40 @@
 		regionAreas = results;
 	};
 
-	const handleAreaSelected = (e: CustomEvent<string>) => {
-		if (defaultFormData.areas.includes(e.detail)) {
-			defaultFormData.areas = defaultFormData.areas.filter((area) => area !== e.detail);
+	const handleAreaSelected = (value: string) => {
+		if (defaultFormData.areas.includes(value)) {
+			defaultFormData.areas = defaultFormData.areas.filter((area) => area !== value);
 		} else {
-			defaultFormData.areas = [...defaultFormData.areas, e.detail];
+			defaultFormData.areas = [...defaultFormData.areas, value];
 		}
-		dispatch('formDataUpdated', defaultFormData);
+		handleFormDataUpdated(defaultFormData);
 	};
 
-	const handleRegionSelected = (e: CustomEvent<string>) => {
-		defaultFormData.region = e.detail;
+	const handleRegionSelected = (value: SelectValue) => {
+		if (value != null || typeof value !== 'string') return;
+		defaultFormData.region = value;
 		defaultFormData.areas = [];
-		if (defaultFormData.region) fetchAreas(e.detail);
-		dispatch('formDataUpdated', defaultFormData);
+		if (defaultFormData.region) fetchAreas(value);
+		handleFormDataUpdated(defaultFormData);
 	};
 
-	const handleBedroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		defaultFormData.bedrooms = e.detail.value;
-		dispatch('formDataUpdated', defaultFormData);
+	const handleTypeSelect = (value: string | number | null | undefined) => {
+		if (value != null || typeof value !== 'string') return;
+		defaultFormData.type = value;
+		handleFormDataUpdated(defaultFormData);
 	};
 
-	const handleBathroomsSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		defaultFormData.bathrooms = e.detail.value;
-		dispatch('formDataUpdated', defaultFormData);
-	};
-
-	const handleTypeSelected = (e: CustomEvent<{ label: string; value: string }>) => {
-		defaultFormData.type = e.detail.value;
-		dispatch('formDataUpdated', defaultFormData);
-	};
-
-	const handleFrequencySelected = (e: CustomEvent<{ label: string; value: 1 | 7 | 30 }>) => {
-		defaultFormData.frequency = e.detail.value;
-		dispatch('formDataUpdated', defaultFormData);
-	};
-
-	const handlePriceSelected = (e: CustomEvent<{ label: string; value: number }>) => {
-		defaultFormData.price_max = e.detail.value;
-		dispatch('formDataUpdated', defaultFormData);
+	const handleNumberSelect = (
+		key: 'bedrooms' | 'bathrooms' | 'frequency' | 'price_max',
+		value: string | number | null | undefined
+	) => {
+		if (value != null || typeof value !== 'number') return;
+		defaultFormData[key] = value;
+		handleFormDataUpdated(defaultFormData);
 	};
 
 	const handleInputChange = () => {
-		dispatch('formDataUpdated', defaultFormData);
+		handleFormDataUpdated(defaultFormData);
 	};
 </script>
 
@@ -130,49 +124,49 @@
 			options={propertyRegionOptions}
 			label="Region"
 			selected={defaultFormData.region}
-			on:selected={handleRegionSelected}
+			handleSelect={(option) => handleRegionSelected(option?.value)}
 		/>
 		<!-- Areas -->
 		<AreaSelect
 			areaSelectLabelColor="text-black"
 			options={regionAreas}
 			selected={defaultFormData.areas}
-			on:area-selected={handleAreaSelected}
+			handleSelect={(option) => handleAreaSelected(option)}
 		/>
 		<!-- Bathrooms -->
 		<Select
 			options={bedAndBathroomOptions}
 			label="Bathrooms"
 			selected={defaultFormData.bathrooms}
-			on:selected={handleBathroomsSelected}
+			handleSelect={(option) => handleNumberSelect('bathrooms', option?.value)}
 		/>
 		<!-- Bedrooms -->
 		<Select
 			options={bedAndBathroomOptions}
 			label="Bedrooms"
 			selected={defaultFormData.bedrooms}
-			on:selected={handleBedroomsSelected}
+			handleSelect={(option) => handleNumberSelect('bedrooms', option?.value)}
 		/>
 		<!-- Types -->
 		<Select
 			options={propertyTypeOptions}
 			label="Type"
 			selected={defaultFormData.type}
-			on:selected={handleTypeSelected}
+			handleSelect={(option) => handleTypeSelect(option?.value)}
 		/>
 		<!-- Frequency -->
 		<Select
 			options={emailFrequencyOptions}
 			label="How often would you like to receive alerts?"
 			selected={defaultFormData.frequency}
-			on:selected={handleFrequencySelected}
+			handleSelect={(option) => handleNumberSelect('frequency', option?.value)}
 		/>
 		<!-- Max price -->
 		<Select
 			options={maxPriceOptions}
 			label="Max price"
 			selected={defaultFormData.price_max}
-			on:selected={handlePriceSelected}
+			handleSelect={(option) => handleNumberSelect('price_max', option?.value)}
 		/>
 	</div>
 </div>

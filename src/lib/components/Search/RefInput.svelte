@@ -5,13 +5,14 @@
 	import { debounce } from '$lib/utils';
 	import { page } from '$app/stores';
 
-	let inputValue = '';
+	let inputValue = $state('');
+	const refParam = $derived($page.url.searchParams.get('ref'));
 
-	$: {
-		// Update input value when URL changes
-		const refParam = $page.url.searchParams.get('ref');
-		inputValue = refParam ?? '';
-	}
+	$effect(() => {
+		if (refParam) {
+			inputValue = refParam;
+		}
+	});
 
 	const handleInputChange = (event: Event) => {
 		const target = event.target as HTMLInputElement;
@@ -26,7 +27,7 @@
 		goto(`?${params.toString()}`, { keepFocus: true });
 	};
 
-	const debouncedInputChange = debounce(handleInputChange, 500);
+	const debouncedInputChange = debounce(handleInputChange, 200);
 </script>
 
 <InputWithLabel label="Identifier">

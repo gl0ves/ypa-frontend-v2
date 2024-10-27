@@ -3,46 +3,50 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import { type Options, type Option } from '$lib/data/options';
+	import { type Selected } from 'bits-ui';
+	type HandleSelectValue = Selected<string | number | null> | undefined;
 
-	export let bedOrBath: 'bedrooms' | 'bathrooms';
+	const { bedOrBath, options }: { bedOrBath: 'bedrooms' | 'bathrooms'; options: Options } =
+		$props();
 
-	const options = [
-		{ label: 'Any amount', value: 0 },
-		{ label: '1+', value: 1 },
-		{ label: '2+', value: 2 },
-		{ label: '3+', value: 3 },
-		{ label: '4+', value: 4 },
-		{ label: '5+', value: 5 }
-	];
+	const defaultValue = { value: 0, label: 'Any amount' };
 
-	$: params = $page.url.searchParams;
-	$: param = params.get(bedOrBath) || '0';
-	$: selectedOption = options.find((option) => option.value.toString() === param);
+	const { bedAndBathroomOptions } = options;
 
-	const handleOptionSelect = (option: number | undefined) => {
-		const updatedParams = new URLSearchParams(params);
-		if (option === undefined) return;
-		if (option === 0) updatedParams.delete(bedOrBath);
-		if (option >= 1) updatedParams.set(bedOrBath, option.toString());
+	const param = $derived($page.url.searchParams.get(bedOrBath) || '0');
+	let selectedOption = $state(
+		bedAndBathroomOptions.find((option: Option) => option.value?.toString() === param) ||
+			defaultValue
+	);
+
+	$effect(() => {
+		if (param === '0') selectedOption = defaultValue;
+	});
+
+	const handleOptionSelect = (option: HandleSelectValue) => {
+		if (!option) return;
+		const value = option.value;
+		if (typeof value === 'undefined' || typeof value != 'number') return;
+		const updatedParams = new URLSearchParams($page.url.searchParams);
+		if (value === 0) updatedParams.delete(bedOrBath);
+		if (value >= 1) updatedParams.set(bedOrBath, value.toString());
 		goto(`?${updatedParams.toString()}`);
 	};
 </script>
 
-<InputWithLabel bind:label={bedOrBath}>
-	<Select.Root
-		selected={selectedOption}
-		onSelectedChange={(option) => handleOptionSelect(option?.value)}
-	>
+<InputWithLabel label={bedOrBath}>
+	<Select.Root selected={selectedOption} onSelectedChange={handleOptionSelect}>
 		<Select.Trigger class="w-[250px]">
 			<Select.Value />
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
-				{#each options as option}
+				{#each bedAndBathroomOptions as option}
 					<Select.Item value={option.value} label={option.label} />
 				{/each}
 			</Select.Group>
 		</Select.Content>
-		<Select.Input bind:name={bedOrBath} />
+		<Select.Input name={bedOrBath} />
 	</Select.Root>
 </InputWithLabel>

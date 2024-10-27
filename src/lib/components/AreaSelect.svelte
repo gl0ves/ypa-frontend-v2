@@ -3,36 +3,36 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils.js';
-	import { createEventDispatcher } from 'svelte';
 	import IconCheck from '~icons/mdi/check';
 	import IconCaret from '~icons/mdi/caret-down';
 	import InputWithLabel from '$lib/components/ui/input-with-label/InputWithLabel.svelte';
 
-	export let options: string[] = [];
-	export let selected: string[] = [];
-	export let areaSelectLabelColor: 'text-white' | 'text-black' = 'text-white';
+	let {
+		options = [],
+		selected = [],
+		areaSelectLabelColor = 'text-white',
+		handleSelect
+	}: {
+		options: string[];
+		selected: string[];
+		areaSelectLabelColor?: 'text-white' | 'text-black';
+		handleSelect: (value: string) => void;
+	} = $props();
 
 	const parseSelected = (area: string) => {
 		return { label: area, value: area };
 	};
-
-	$: parsedOptions = options.map(parseSelected);
-	$: parsedSelected = selected.map(parseSelected);
-
-	const dispatch = createEventDispatcher();
-	const handleAreaSelected = (selected: string) => {
-		if (!selected) return;
-		dispatch('area-selected', selected);
-	};
-
-	let open = false;
 
 	const truncateLabel = (label: string, maxLength = 25) => {
 		if (!label) return 'Select areas...';
 		return label.length > maxLength ? label.slice(0, maxLength) + '...' : label;
 	};
 
-	$: combinedLabel = truncateLabel([...selected].join(', '));
+	const parsedOptions = $derived(options.map(parseSelected));
+	const parsedSelected = $derived(selected.map(parseSelected));
+	const combinedLabel = $derived(truncateLabel([...selected].join(', ')));
+
+	let open = $state(false);
 </script>
 
 <Popover.Root bind:open>
@@ -61,7 +61,7 @@
 			<Command.Empty>No areas found.</Command.Empty>
 			<Command.Group class="max-h-[300px] overflow-y-scroll">
 				{#each parsedOptions as option}
-					<Command.Item value={option.value} onSelect={(value) => handleAreaSelected(value)}>
+					<Command.Item value={option.value} onSelect={(value) => handleSelect(value)}>
 						<IconCheck
 							class={cn(
 								'mr-2 h-4 w-4',

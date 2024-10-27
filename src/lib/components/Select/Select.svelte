@@ -4,22 +4,27 @@
 	import { createEventDispatcher } from 'svelte';
 	import InputWithLabel from '$lib/components/ui/input-with-label/InputWithLabel.svelte';
 	const dispatch = createEventDispatcher();
+	type HandleSelectValue = Selected<string | number | null> | undefined;
 
-	export let selected: string | number | null;
-	export let options: { label: string; value: string | number | null }[];
-	export let label: string;
+	let {
+		selected,
+		options,
+		label,
+		handleSelect
+	}: {
+		selected: string | number | null;
+		options: { label: string; value: string | number | null }[];
+		label: string;
+		handleSelect: (value: HandleSelectValue) => void;
+	} = $props();
 
-	let selectedOption = options.find(
-		(option) => option.label === selected || option.value === selected
+	let selectedOption = $state(
+		options.find((option) => option.label === selected || option.value === selected)
 	);
-
-	const handleSelectedChanged = (value: Selected<string | number | null> | undefined) => {
-		dispatch('selected', value);
-	};
 </script>
 
 <InputWithLabel textColor="text-black" {label}>
-	<Select.Root onSelectedChange={handleSelectedChanged} bind:selected={selectedOption}>
+	<Select.Root onSelectedChange={handleSelect} bind:selected={selectedOption}>
 		<Select.Trigger>
 			<Select.Value />
 		</Select.Trigger>
