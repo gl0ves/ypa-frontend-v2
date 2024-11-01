@@ -7,11 +7,7 @@
 	import IconCopy from '~icons/mdi/content-copy';
 	import IconHouse from '~icons/mdi/house';
 	import IconLocation from '~icons/mdi/location';
-
 	import type { Listing } from '$lib/ypaTypes';
-
-	// TODO Import some type
-	// import { type ... }
 
 	import Separator from '../ui/separator/separator.svelte';
 	import Button from '../ui/button/button.svelte';
@@ -20,14 +16,22 @@
 
 	import { formatPrice } from '$lib/utils';
 
-	const { listing }: { listing: Listing } = $props();
+	import { type PropertyRegionOption } from '$lib/data/options';
+
+	const {
+		listing,
+		propertyRegionOptions
+	}: { listing: Listing; propertyRegionOptions: PropertyRegionOption[] } = $props();
+
+	const listingRegion = $derived(
+		() => propertyRegionOptions.find((option) => option.label === listing.region)?.value
+	);
 
 	// TODO: Add env variable for the domain
-	const baseUrl = 'localhost:5173';
-	const listingUrl = `/${listing.region}/properties/${listing.ref}`;
+	const listingUrl = $derived(() => `/${listingRegion()}/properties/${listing.ref}`);
 
 	const goToListing = () => {
-		goto(listingUrl);
+		goto(listingUrl());
 	};
 </script>
 

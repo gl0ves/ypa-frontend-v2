@@ -14,6 +14,21 @@ type Listing = {
 	price: number;
 };
 
+type ListingDetails = {
+	ref: string;
+	features: string[];
+	area: string;
+	region: string;
+	bedrooms: number;
+	bathrooms: number;
+	type: string;
+	images: { originals: string[]; thumbnails: string[] };
+	sentences: { en: string[]; de: string[]; es: string[]; nl: string[] };
+	latitude: string | null;
+	longitude: string | null;
+	price: number;
+};
+
 type AlertFormData = {
 	identifier: string | null;
 	first_name: string | null;
@@ -28,4 +43,4 @@ type AlertFormData = {
 	verified: boolean;
 };
 
-export type { Listing, AlertFormData };
+export type { Listing, AlertFormData, ListingDetails };

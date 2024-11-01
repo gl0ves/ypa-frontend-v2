@@ -1,21 +1,27 @@
 <script lang="ts">
-	import type { Listing } from '$lib/ypaTypes';
+	import type { ListingDetails } from '$lib/ypaTypes';
 	import type { EmblaCarouselType } from 'embla-carousel';
 	import EmblaCarousel from 'embla-carousel-svelte';
-	export let propValue: Listing;
+
+	const { listing }: { listing: ListingDetails } = $props();
+	const { originals, thumbnails } = listing.images;
 
 	let selectedIndex = 0;
 	let emblaApi: EmblaCarouselType;
 	let thumbsApi: EmblaCarouselType;
 
+	const OPTIONS = {
+		align: 'center',
+		loop: true
+	};
+
 	function onInit(event: CustomEvent): void {
 		emblaApi = event.detail;
-		emblaApi.on('scroll', setIndex);
+		emblaApi.on('select', setIndex);
 	}
 
 	function onThumbsInit(event: CustomEvent) {
 		thumbsApi = event.detail;
-		thumbsApi.on('scroll', setIndex);
 	}
 
 	function scrollTo(index: number) {
@@ -30,11 +36,13 @@
 </script>
 
 <div class="embla">
-	<div use:EmblaCarousel on:emblaInit={onInit} on:scroll={setIndex} class="embla__viewport">
+	<div use:EmblaCarousel on:emblaInit={onInit} class="embla__viewport">
 		<div class="embla__container">
-			{#each propValue.images as image, i}
-				<div class="embla__slide">
-					<img class="embla__slide__img" src={image} alt="Real estate" />
+			{#each originals as image, i}
+				<div class="embla__slide" class:embla__slide--selected={i === selectedIndex}>
+					<button class="embla-thumbs__slide__button" type="button" on:click={() => scrollTo(i)}>
+						<img class="embla__slide__img" src={image} alt="Real estate" />
+					</button>
 				</div>
 			{/each}
 		</div>
@@ -44,7 +52,7 @@
 <div class="embla-thumbs">
 	<div use:EmblaCarousel on:emblaInit={onThumbsInit} class="embla-thumbs__viewport">
 		<div class="embla-thumbs__container">
-			{#each propValue.thumbnails as image, i}
+			{#each thumbnails as image, i}
 				<div class="embla-thumbs__slide" class:embla-thumbs__slide--selected={i === selectedIndex}>
 					<button class="embla-thumbs__slide__button" type="button" on:click={() => scrollTo(i)}>
 						<img class="embla-thumbs__slide__img" src={image} alt="Real estate thumbnail" />
@@ -55,11 +63,12 @@
 	</div>
 </div>
 
-<style>
+<style lang="scss">
 	.embla {
-		--slide-spacing: 0rem;
-		--slide-size: 100%;
-		--slide-height: 19rem;
+		--slide-spacing: 0.5rem;
+		--slide-size: 65%;
+		--slide-height: 400px;
+		padding: 1rem;
 	}
 	.embla__viewport {
 		overflow: hidden;
@@ -75,6 +84,10 @@
 		min-width: 0;
 		padding-left: var(--slide-spacing);
 		position: relative;
+		transition: opacity 0.2s ease-in-out;
+	}
+	.embla__slide--selected {
+		opacity: 1;
 	}
 	.embla__slide__img {
 		display: block;
@@ -83,9 +96,10 @@
 		object-fit: cover;
 	}
 	.embla-thumbs {
-		--thumbs-slide-spacing: 0.2rem;
+		--thumbs-slide-spacing: 0.5rem;
 		--thumbs-slide-height: 5rem;
 		margin-top: var(--thumbs-slide-spacing);
+		padding: 0 1rem;
 	}
 	.embla-thumbs__viewport {
 		overflow: hidden;
@@ -96,7 +110,7 @@
 		margin-left: calc(var(--thumbs-slide-spacing) * -1);
 	}
 	.embla-thumbs__slide {
-		flex: 0 0 40%;
+		flex: 0 0 28%;
 		min-width: 0;
 		padding-left: var(--thumbs-slide-spacing);
 		position: relative;
@@ -118,8 +132,6 @@
 		padding: 0;
 		margin: 0;
 		width: 100%;
-		opacity: 0.2;
-		transition: opacity 0.2s;
 	}
 	.embla-thumbs__slide--selected .embla-thumbs__slide__button {
 		opacity: 1;
