@@ -13,11 +13,11 @@
 	type SelectValue = string | number | null | undefined;
 
 	const {
-		formData,
+		formData = null,
 		options,
 		handleFormDataUpdated
 	}: {
-		formData: AlertFormData;
+		formData?: AlertFormData;
 		options: Options;
 		handleFormDataUpdated: (data: AlertFormData) => void;
 	} = $props();
@@ -60,8 +60,6 @@
 	const showEmail = $page.params.identifier ? false : true;
 
 	let regionAreas: string[] = $state([]);
-
-	console.log(defaultFormData);
 
 	onMount(() => {
 		if (defaultFormData.region) fetchAreas(defaultFormData.region);

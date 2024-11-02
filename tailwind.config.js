@@ -1,6 +1,5 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
-/** @type {import('tailwindcss').Config} */
 const config = {
 	darkMode: ['class'],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
@@ -27,6 +26,14 @@ const config = {
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
 					foreground: 'hsl(var(--secondary-foreground) / <alpha-value>)'
+				},
+				tertiary: {
+					DEFAULT: 'hsl(var(--tertiary) / <alpha-value>)',
+					foreground: 'hsl(var(--tertiary-foreground) / <alpha-value>)'
+				},
+				attention: {
+					DEFAULT: 'hsl(var(--attention) / <alpha-value>)',
+					foreground: 'hsl(var(--attention-foreground) / <alpha-value>)'
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive) / <alpha-value>)',
@@ -64,7 +71,12 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				sans: ['Ubuntu', ...fontFamily.sans]
+			},
+			fontSize: {
+				lg: '30px',
+				md: '24px',
+				sm: '16px'
 			}
 		}
 	}

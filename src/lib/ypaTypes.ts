@@ -41,6 +41,6 @@ type AlertFormData = {
 	type: string | null;
 	frequency: 1 | 7 | 30;
 	verified: boolean;
-};
+} | null;
 
 export type { Listing, AlertFormData, ListingDetails };

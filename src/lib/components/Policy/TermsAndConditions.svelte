@@ -1,18 +1,18 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { onMount } from 'svelte';
-
-	let showDialog = false;
-
-	onMount(() => {
-		// Any initialization if needed
-	});
+	import { type Snippet } from 'svelte';
+	const { children }: { children: Snippet } = $props();
+	const fallback = () => {
+		return 'Terms and Conditions';
+	};
 </script>
 
 <Dialog.Root portal="body">
 	<Dialog.Trigger>
-		<span class="text-blue-500"><slot>Terms and conditions</slot></span>
+		<span class="text-blue-500">
+			{@render (children ?? fallback)()}
+		</span>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-[80vh] overflow-y-auto">
 		<Dialog.Header>

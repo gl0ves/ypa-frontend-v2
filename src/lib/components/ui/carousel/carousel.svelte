@@ -6,9 +6,11 @@
 	const { listing }: { listing: ListingDetails } = $props();
 	const { originals, thumbnails } = listing.images;
 
-	let selectedIndex = 0;
+	let selectedIndex = $state(0);
 	let emblaApi: EmblaCarouselType;
 	let thumbsApi: EmblaCarouselType;
+
+	$inspect({ selectedIndex });
 
 	const OPTIONS = {
 		align: 'center',
@@ -39,7 +41,7 @@
 	<div use:EmblaCarousel on:emblaInit={onInit} class="embla__viewport">
 		<div class="embla__container">
 			{#each originals as image, i}
-				<div class="embla__slide" class:embla__slide--selected={i === selectedIndex}>
+				<div class="embla__slide">
 					<button class="embla-thumbs__slide__button" type="button" on:click={() => scrollTo(i)}>
 						<img class="embla__slide__img" src={image} alt="Real estate" />
 					</button>
@@ -66,9 +68,7 @@
 <style lang="scss">
 	.embla {
 		--slide-spacing: 0.5rem;
-		--slide-size: 65%;
 		--slide-height: 400px;
-		padding: 1rem;
 	}
 	.embla__viewport {
 		overflow: hidden;
@@ -80,26 +80,22 @@
 		margin-left: calc(var(--slide-spacing) * -1);
 	}
 	.embla__slide {
-		flex: 0 0 var(--slide-size);
+		flex: 0 0 auto;
 		min-width: 0;
 		padding-left: var(--slide-spacing);
 		position: relative;
 		transition: opacity 0.2s ease-in-out;
 	}
-	.embla__slide--selected {
-		opacity: 1;
-	}
 	.embla__slide__img {
 		display: block;
-		height: var(--slide-height);
-		width: 100%;
+		max-height: var(--slide-height);
+		width: auto;
 		object-fit: cover;
 	}
 	.embla-thumbs {
 		--thumbs-slide-spacing: 0.5rem;
-		--thumbs-slide-height: 5rem;
-		margin-top: var(--thumbs-slide-spacing);
-		padding: 0 1rem;
+		--thumbs-slide-size: 7rem;
+		margin-top: 0.1rem;
 	}
 	.embla-thumbs__viewport {
 		overflow: hidden;
@@ -110,11 +106,17 @@
 		margin-left: calc(var(--thumbs-slide-spacing) * -1);
 	}
 	.embla-thumbs__slide {
-		flex: 0 0 28%;
+		flex: 0 0 50%;
 		min-width: 0;
 		padding-left: var(--thumbs-slide-spacing);
 		position: relative;
+		opacity: 0.5;
+		transition: opacity 0.2s ease-in-out;
+		&.embla-thumbs__slide--selected {
+			opacity: 1;
+		}
 	}
+
 	@media (min-width: 576px) {
 		.embla-thumbs__slide {
 			flex: 0 0 18%;
@@ -132,13 +134,14 @@
 		padding: 0;
 		margin: 0;
 		width: 100%;
+		height: var(--thumbs-slide-size);
 	}
 	.embla-thumbs__slide--selected .embla-thumbs__slide__button {
 		opacity: 1;
 	}
 	.embla-thumbs__slide__img {
 		display: block;
-		height: var(--thumbs-slide-height);
+		height: var(--thumbs-slide-size);
 		width: 100%;
 		object-fit: cover;
 	}

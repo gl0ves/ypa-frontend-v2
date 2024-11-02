@@ -49,9 +49,6 @@
 		// Navigate using the updated parameters
 		goto(`?${params.toString()}`);
 	};
-
-	$inspect(paramAreas);
-	$inspect(region);
 </script>
 
 <div class="min-w-full bg-hero bg-cover bg-center p-4 md:p-12 mb-8 relative">
