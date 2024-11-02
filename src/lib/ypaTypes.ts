@@ -27,6 +27,8 @@ type ListingDetails = {
 	latitude: string | null;
 	longitude: string | null;
 	price: number;
+	descriptions: { en: string[]; de: string[]; es: string[]; nl: string[] };
+	related_listings: Listing[];
 };
 
 type AlertFormData = {

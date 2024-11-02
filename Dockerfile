@@ -1,14 +1,17 @@
-# Use the official Node.js 20 image as the base image
 FROM node:23
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app/
+WORKDIR /usr/src/app
 
-# Copy the rest of the application code to the working directory
-COPY . .
+COPY package*.json ./
 
-# Expose the port that the application will run on
+RUN chown -R node:node /usr/src/app
+
+USER node
+
+RUN npm install
+
+COPY --chown=node:node . .
+
 EXPOSE 5173
 
-# Set the command to run the application
 CMD ["npm", "run", "dev", "--host"]

@@ -12,27 +12,30 @@
 	import IconCheck from '~icons/mdi/check-circle';
 	import PropertyAlertForm from '$lib/components/PropertyAlertForm/PropertyAlertForm.svelte';
 	import type { Options } from '$lib/data/options';
+	import WhatsAppButton from '../WhatsAppButton/WhatsAppButton.svelte';
+	import ListingCard from '../ListingCard/ListingCard.svelte';
 	const { listing, options }: { listing: ListingDetails; options: Options } = $props();
+	const { propertyRegionOptions } = options;
 </script>
 
-<div class="flex justify-between pt-4 pb-2">
+<div class="flex justify-between pt-4 mb-2">
 	<YpaText weight="semibold" size="md">{listing.ref}</YpaText>
 	<div class="flex justify-end">
 		<ShareButtons />
 	</div>
 </div>
 <Separator />
-<div class="flex justify-between pt-4 pb-2">
+<div class="flex justify-between pt-4 mb-2">
 	<YpaText weight="bold" size="lg"
 		>{listing.bedrooms} bedroom {listing.type} in {listing.area} - {listing.ref}</YpaText
 	>
 	<YpaText weight="bold" size="lg">{listing.price.toLocaleString()}€</YpaText>
 </div>
-<div class="pb-4">
+<div class="mb-6">
 	<Carousel {listing} />
 </div>
-<div class="flex-col pb-2 max-w-[500px]">
-	<div class="pb-2">
+<div class="flex-col mb-2 max-w-[700px]">
+	<div class="mb-6">
 		<YpaText weight="semibold" size="md">{listing.type}</YpaText>
 		<Separator />
 	</div>
@@ -43,7 +46,7 @@
 		</div>
 		<div class="flex items-center mr-2">
 			<IconLocation class="text-primary mr-1" />
-			<YpaText weight="semibold" size="sm">Area: {listing.region}</YpaText>
+			<YpaText weight="semibold" size="sm">Area: {listing.area}</YpaText>
 		</div>
 		<div class="flex items-center mr-2">
 			<IconBed class="text-primary  mr-1" />
@@ -54,11 +57,11 @@
 			<YpaText weight="semibold" size="sm">Bathrooms: {listing.bathrooms}</YpaText>
 		</div>
 	</div>
-	<div class="pb-2">
+	<div class="mb-6">
 		<YpaText weight="semibold" size="md">Features</YpaText>
 		<Separator />
 	</div>
-	<div class="">
+	<div class="mb-6 flex flex-wrap">
 		{#each listing.features as feature}
 			<div class="flex items-center mr-2 capitalize">
 				<IconCheck class="text-tertiary	  mr-1" />
@@ -66,5 +69,80 @@
 			</div>
 		{/each}
 	</div>
-	<PropertyAlertForm {options} />
+	<div class="mb-6 flex gap-2 w-[100%]">
+		<PropertyAlertForm {options} />
+		<WhatsAppButton />
+	</div>
+	<div class="flex flex-col mb-6">
+		{#if listing.descriptions.en.length}
+			<div class="mb-4">
+				<div class="mb-4">
+					<YpaText weight="semibold" size="md">Description</YpaText>
+					<Separator />
+				</div>
+				<YpaText weight="semibold" size="sm">
+					{#each listing.descriptions.en as sentence, idx}
+						<p>{sentence}</p>
+						{#if idx % 3 === 0}
+							<br />
+						{/if}
+					{/each}
+				</YpaText>
+			</div>
+		{/if}
+		{#if listing.descriptions.de.length}
+			<div class="mb-4">
+				<div class="mb-4">
+					<YpaText weight="semibold" size="md">Beschreibung</YpaText>
+					<Separator />
+				</div>
+				<YpaText weight="semibold" size="sm">
+					{#each listing.descriptions.de as sentence, idx}
+						<p>{sentence}</p>
+						{#if idx % 3 === 0}
+							<br />
+						{/if}
+					{/each}
+				</YpaText>
+			</div>
+		{/if}
+		{#if listing.descriptions.es.length}
+			<div class="mb-4">
+				<div class="mb-4">
+					<YpaText weight="semibold" size="md">Descripción</YpaText>
+					<Separator />
+				</div>
+				<YpaText weight="semibold" size="sm">
+					{#each listing.descriptions.es as sentence, idx}
+						<p>{sentence}</p>
+						{#if idx % 3 === 0}
+							<br />
+						{/if}
+					{/each}
+				</YpaText>
+			</div>
+		{/if}
+		{#if listing.descriptions.nl.length}
+			<div class="mb-4">
+				<div class="mb-4">
+					<YpaText weight="semibold" size="md">Beschrijving</YpaText>
+					<Separator />
+				</div>
+				<YpaText weight="semibold" size="sm">
+					{#each listing.descriptions.nl as sentence, idx}
+						<p>{sentence}</p>
+						{#if idx % 3 === 0}
+							<br />
+						{/if}
+					{/each}
+				</YpaText>
+			</div>
+		{/if}
+	</div>
+	MAP GOES HERE
+</div>
+<div class="flex justify-between gap-4 mb-6">
+	{#each listing.related_listings as related}
+		<ListingCard listing={related} {propertyRegionOptions} />
+	{/each}
 </div>

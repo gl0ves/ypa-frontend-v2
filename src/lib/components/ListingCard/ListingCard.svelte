@@ -34,11 +34,11 @@
 
 <div class="w-96 bg-white shadow rounded-lg overflow-hidden">
 	<div class="relative h-48 w-full">
-		<button onclick={() => goToListing()}>
+		<button onclick={() => goToListing()} class="absolute inset-0">
 			<img
 				src={listing.image}
 				alt="Listing thumbnail"
-				class="absolute h-full w-full object-cover cursor-pointer"
+				class="h-full w-full object-cover cursor-pointer"
 			/>
 		</button>
 		<div class="absolute bottom-0 left-0 bg-secondary text-white font-semibold p-2">

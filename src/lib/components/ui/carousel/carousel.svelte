@@ -4,7 +4,7 @@
 	import EmblaCarousel from 'embla-carousel-svelte';
 
 	const { listing }: { listing: ListingDetails } = $props();
-	const { originals, thumbnails } = listing.images;
+	const { originals, thumbnails } = $derived(listing.images);
 
 	let selectedIndex = $state(0);
 	let emblaApi: EmblaCarouselType;
@@ -38,11 +38,11 @@
 </script>
 
 <div class="embla">
-	<div use:EmblaCarousel on:emblaInit={onInit} class="embla__viewport">
+	<div use:EmblaCarousel onemblaInit={onInit} class="embla__viewport">
 		<div class="embla__container">
 			{#each originals as image, i}
 				<div class="embla__slide">
-					<button class="embla-thumbs__slide__button" type="button" on:click={() => scrollTo(i)}>
+					<button class="embla-thumbs__slide__button" type="button" onclick={() => scrollTo(i)}>
 						<img class="embla__slide__img" src={image} alt="Real estate" />
 					</button>
 				</div>
@@ -52,11 +52,11 @@
 </div>
 
 <div class="embla-thumbs">
-	<div use:EmblaCarousel on:emblaInit={onThumbsInit} class="embla-thumbs__viewport">
+	<div use:EmblaCarousel onemblaInit={onThumbsInit} class="embla-thumbs__viewport">
 		<div class="embla-thumbs__container">
 			{#each thumbnails as image, i}
 				<div class="embla-thumbs__slide" class:embla-thumbs__slide--selected={i === selectedIndex}>
-					<button class="embla-thumbs__slide__button" type="button" on:click={() => scrollTo(i)}>
+					<button class="embla-thumbs__slide__button" type="button" onclick={() => scrollTo(i)}>
 						<img class="embla-thumbs__slide__img" src={image} alt="Real estate thumbnail" />
 					</button>
 				</div>

@@ -40,7 +40,7 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}
+	<Dialog.Trigger class={buttonVariants({ variant: 'attention' })}
 		>CREATE PROPERTY ALERT</Dialog.Trigger
 	>
 	<form id="alert-form" method="POST">

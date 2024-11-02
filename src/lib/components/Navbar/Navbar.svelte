@@ -7,13 +7,18 @@
 	import IconMenu from '~icons/mdi/menu';
 	import IconChevronDown from '~icons/mdi/chevron-down';
 	import { goto } from '$app/navigation';
+	import { Item } from '../ui/accordion';
 
 	let open = $state(false);
 </script>
 
 <Menubar.Root class="sticky top-0 z-50 lg:flex hidden">
-	{#each navItems as item}
-		<Menubar.Menu>
+	<Menubar.Menu>
+		<Menubar.Item>
+			<img src="https://cdn.yourpropertyabroad.com/static/logo.png" alt="Logo" class="h-12" />
+		</Menubar.Item>
+		<Menubar.Separator />
+		{#each navItems as item}
 			{#if item.subNavItems}
 				<Menubar.Trigger>{item.name}</Menubar.Trigger>
 				<Menubar.Content>
@@ -24,8 +29,8 @@
 			{:else}
 				<Menubar.Item on:click={() => goto(item.href)}>{item.name}</Menubar.Item>
 			{/if}
-		</Menubar.Menu>
-	{/each}
+		{/each}
+	</Menubar.Menu>
 </Menubar.Root>
 
 <div class="lg:hidden">
