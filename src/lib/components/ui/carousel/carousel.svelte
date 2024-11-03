@@ -10,13 +10,6 @@
 	let emblaApi: EmblaCarouselType;
 	let thumbsApi: EmblaCarouselType;
 
-	$inspect({ selectedIndex });
-
-	const OPTIONS = {
-		align: 'center',
-		loop: true
-	};
-
 	function onInit(event: CustomEvent): void {
 		emblaApi = event.detail;
 		emblaApi.on('select', setIndex);

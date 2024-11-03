@@ -4,7 +4,6 @@
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import ShareButtons from '$lib/components/ShareButtons/ShareButtons.svelte';
-	// Import Icons: Map, Bed, Pin
 	import IconBed from '~icons/mdi/bed';
 	import IconShower from '~icons/mdi/shower';
 	import IconLocation from '~icons/mdi/location';
@@ -14,8 +13,19 @@
 	import type { Options } from '$lib/data/options';
 	import WhatsAppButton from '../WhatsAppButton/WhatsAppButton.svelte';
 	import ListingCard from '../ListingCard/ListingCard.svelte';
+	import Map from '../Map/Map.svelte';
+	import Description from './Description.svelte';
 	const { listing, options }: { listing: ListingDetails; options: Options } = $props();
 	const { propertyRegionOptions } = options;
+
+	const longitude = $derived(() => {
+		if (!listing.longitude) return;
+		return parseFloat(listing.longitude);
+	});
+	const latitude = $derived(() => {
+		if (!listing.latitude) return;
+		return parseFloat(listing.latitude);
+	});
 </script>
 
 <div class="flex justify-between pt-4 mb-2">
@@ -74,72 +84,15 @@
 		<WhatsAppButton />
 	</div>
 	<div class="flex flex-col mb-6">
-		{#if listing.descriptions.en.length}
-			<div class="mb-4">
-				<div class="mb-4">
-					<YpaText weight="semibold" size="md">Description</YpaText>
-					<Separator />
-				</div>
-				<YpaText weight="semibold" size="sm">
-					{#each listing.descriptions.en as sentence, idx}
-						<p>{sentence}</p>
-						{#if idx % 3 === 0}
-							<br />
-						{/if}
-					{/each}
-				</YpaText>
-			</div>
-		{/if}
-		{#if listing.descriptions.de.length}
-			<div class="mb-4">
-				<div class="mb-4">
-					<YpaText weight="semibold" size="md">Beschreibung</YpaText>
-					<Separator />
-				</div>
-				<YpaText weight="semibold" size="sm">
-					{#each listing.descriptions.de as sentence, idx}
-						<p>{sentence}</p>
-						{#if idx % 3 === 0}
-							<br />
-						{/if}
-					{/each}
-				</YpaText>
-			</div>
-		{/if}
-		{#if listing.descriptions.es.length}
-			<div class="mb-4">
-				<div class="mb-4">
-					<YpaText weight="semibold" size="md">Descripción</YpaText>
-					<Separator />
-				</div>
-				<YpaText weight="semibold" size="sm">
-					{#each listing.descriptions.es as sentence, idx}
-						<p>{sentence}</p>
-						{#if idx % 3 === 0}
-							<br />
-						{/if}
-					{/each}
-				</YpaText>
-			</div>
-		{/if}
-		{#if listing.descriptions.nl.length}
-			<div class="mb-4">
-				<div class="mb-4">
-					<YpaText weight="semibold" size="md">Beschrijving</YpaText>
-					<Separator />
-				</div>
-				<YpaText weight="semibold" size="sm">
-					{#each listing.descriptions.nl as sentence, idx}
-						<p>{sentence}</p>
-						{#if idx % 3 === 0}
-							<br />
-						{/if}
-					{/each}
-				</YpaText>
-			</div>
-		{/if}
+		<Description descriptions={listing.descriptions} />
 	</div>
-	MAP GOES HERE
+</div>
+<div class="mb-6">
+	{#if listing.latitude && listing.longitude}
+		<YpaText weight="semibold" size="md">Location</YpaText>
+		<Separator />
+		<Map longitude={longitude()} latitude={latitude()} />
+	{/if}
 </div>
 <div class="flex justify-between gap-4 mb-6">
 	{#each listing.related_listings as related}
