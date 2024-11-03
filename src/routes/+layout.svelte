@@ -5,7 +5,12 @@
 	const { children }: { children: Snippet } = $props();
 </script>
 
+<svelte:head>
+	<link rel="icon" type="ico" href="https://cdn.yourpropertyabroad.com/static/favicon.ico" />
+</svelte:head>
+
 <Navbar />
+
 <div class="w-full">
 	{@render children?.()}
 </div>
