@@ -4,8 +4,9 @@
 	import TermsAndConditions from '../Policy/TermsAndConditions.svelte';
 	import PropertyAlertFormContent from './PropertyAlertFormContent.svelte';
 	import { savePropertyAlert } from '$lib/api';
-	import { type AlertFormData } from '$lib/ypaTypes';
-	import { type Options } from '$lib/data/options';
+	import { type AlertFormData, type ListingDetails } from '$lib/ypaTypes';
+	import { propertyRegionOptions, type Options } from '$lib/data/options';
+	import { onMount } from 'svelte';
 
 	let formSubmitted = $state(false);
 	let formSubmissionFailed = $state(false);
@@ -22,7 +23,20 @@
 		frequency: 1,
 		verified: false
 	});
-	const { options }: { options: Options } = $props();
+	const { options, listing }: { options: Options; listing: ListingDetails } = $props();
+
+	onMount(() => {
+		if (listing && formData) {
+			formData = {
+				...formData,
+				region: listing.region,
+				areas: [listing.area],
+				bedrooms: listing.bedrooms,
+				bathrooms: listing.bathrooms,
+				type: listing.type
+			};
+		}
+	});
 
 	const submitPropertyAlert = async () => {
 		const response = await savePropertyAlert(formData);
@@ -34,6 +48,7 @@
 	};
 
 	const handleFormDataUpdated = (data: AlertFormData) => {
+		console.log('Updating form data');
 		if (!data) return;
 		formData = { ...formData, ...data };
 	};
@@ -63,6 +78,7 @@
 			{#if !formSubmitted}
 				<PropertyAlertFormContent
 					{options}
+					{formData}
 					handleFormDataUpdated={(data) => handleFormDataUpdated(data)}
 				/>
 				<Dialog.Description>

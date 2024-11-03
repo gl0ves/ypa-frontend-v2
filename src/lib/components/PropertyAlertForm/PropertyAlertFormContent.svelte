@@ -67,7 +67,11 @@
 
 	const fetchAreas = async (region: string | null) => {
 		if (!region) regionAreas = [];
-		const res = await fetch(`/api/areas?region=${region}`);
+		console.log(region);
+		let parsedRegion = propertyRegionOptions.find(
+			(option) => option.value === region || option.label === region
+		)?.value;
+		const res = await fetch(`/api/areas?region=${parsedRegion}`);
 		const { results } = await res.json();
 		regionAreas = results;
 	};

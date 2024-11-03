@@ -80,7 +80,7 @@
 		{/each}
 	</div>
 	<div class="mb-6 flex gap-2 w-[100%]">
-		<PropertyAlertForm {options} />
+		<PropertyAlertForm {listing} {options} />
 		<WhatsAppButton />
 	</div>
 	<div class="flex flex-col mb-6">
