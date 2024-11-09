@@ -5,16 +5,18 @@
 		children,
 		label,
 		textColor = 'text-white',
-		textSize = 'text-sm'
+		textSize = 'text-sm',
+		width
 	}: {
 		children: Snippet;
 		label: string;
 		textColor?: 'text-white' | 'text-black';
 		textSize?: 'text-sm' | 'text-lg';
+		width?: string;
 	} = $props();
 </script>
 
-<div>
+<div class={width}>
 	<Label class={`font-semibold capitalize ${textSize} ${textColor}`} for="input">{label}</Label>
 	<div id="input">{@render children()}</div>
 </div>

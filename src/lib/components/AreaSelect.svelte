@@ -5,7 +5,7 @@
 	import { cn } from '$lib/utils.js';
 	import IconCheck from '~icons/mdi/check';
 	import IconCaret from '~icons/mdi/caret-down';
-	import InputWithLabel from '$lib/components/ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '$lib/components/ui/form-label/FormLabel.svelte';
 
 	let {
 		options = [],
@@ -37,14 +37,14 @@
 
 <Popover.Root bind:open>
 	<Popover.Trigger asChild let:builder>
-		<InputWithLabel label="Areas" textColor={areaSelectLabelColor}>
+		<FormLabel label="Areas" textColor={areaSelectLabelColor}>
 			<Button
 				builders={[builder]}
 				variant="outline"
 				disabled={!options.length}
 				role="combobox"
 				aria-expanded={open}
-				class="w-[100%] max-w-[100%] justify-between overflow-hidden truncate"
+				class="w-[100%] max-w-[100%] justify-between overflow-hidden font-normal truncate"
 			>
 				{#if !options.length}
 					Please select a region
@@ -53,7 +53,7 @@
 				{/if}
 				<IconCaret class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 			</Button>
-		</InputWithLabel>
+		</FormLabel>
 	</Popover.Trigger>
 	<Popover.Content class="max-w-[361px] w-[90%] p-0">
 		<Command.Root>

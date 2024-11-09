@@ -15,6 +15,7 @@
 	import ListingCard from '../ListingCard/ListingCard.svelte';
 	import Map from '../Map/Map.svelte';
 	import Description from './Description.svelte';
+	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	const { listing, options }: { listing: ListingDetails; options: Options } = $props();
 	const { propertyRegionOptions } = options;
 
@@ -27,6 +28,8 @@
 		return parseFloat(listing.latitude);
 	});
 </script>
+
+<!-- TODO: Flex col on small screens -->
 
 <div class="flex justify-between pt-4 mb-2">
 	<YpaText weight="semibold" size="md">{listing.ref}</YpaText>
@@ -44,47 +47,54 @@
 <div class="mb-6">
 	<Carousel {listing} />
 </div>
-<div class="flex-col mb-2 max-w-[700px]">
-	<div class="mb-6">
-		<YpaText weight="semibold" size="md">{listing.type}</YpaText>
-		<Separator />
-	</div>
-	<div class="flex flex-wrap pb-6">
-		<div class="flex items-center mr-2">
-			<IconMap class="text-primary  mr-1" />
-			<YpaText weight="semibold" size="sm">Region: {listing.region}</YpaText>
+<div class="flex w-full flex-col lg:flex-row justify-between">
+	<div class="flex-col mb-2 mr-10 lg:max-w-[700px] w-full">
+		<div class="mb-6">
+			<YpaText weight="semibold" size="md">{listing.type}</YpaText>
+			<Separator />
 		</div>
-		<div class="flex items-center mr-2">
-			<IconLocation class="text-primary mr-1" />
-			<YpaText weight="semibold" size="sm">Area: {listing.area}</YpaText>
-		</div>
-		<div class="flex items-center mr-2">
-			<IconBed class="text-primary  mr-1" />
-			<YpaText weight="semibold" size="sm">Bedrooms: {listing.bedrooms}</YpaText>
-		</div>
-		<div class="flex items-center mr-2">
-			<IconShower class="text-primary  mr-1" />
-			<YpaText weight="semibold" size="sm">Bathrooms: {listing.bathrooms}</YpaText>
-		</div>
-	</div>
-	<div class="mb-6">
-		<YpaText weight="semibold" size="md">Features</YpaText>
-		<Separator />
-	</div>
-	<div class="mb-6 flex flex-wrap">
-		{#each listing.features as feature}
-			<div class="flex items-center mr-2 capitalize">
-				<IconCheck class="text-tertiary	  mr-1" />
-				<YpaText weight="semibold" size="sm">{feature}</YpaText>
+		<div class="flex flex-wrap pb-6">
+			<div class="flex items-center mr-2">
+				<IconMap class="text-primary  mr-1" />
+				<YpaText weight="semibold" size="sm">Region: {listing.region}</YpaText>
 			</div>
-		{/each}
+			<div class="flex items-center mr-2">
+				<IconLocation class="text-primary mr-1" />
+				<YpaText weight="semibold" size="sm">Area: {listing.area}</YpaText>
+			</div>
+			<div class="flex items-center mr-2">
+				<IconBed class="text-primary  mr-1" />
+				<YpaText weight="semibold" size="sm">Bedrooms: {listing.bedrooms}</YpaText>
+			</div>
+			<div class="flex items-center mr-2">
+				<IconShower class="text-primary  mr-1" />
+				<YpaText weight="semibold" size="sm">Bathrooms: {listing.bathrooms}</YpaText>
+			</div>
+		</div>
+		{#if listing.features.length}
+			<div class="mb-6">
+				<YpaText weight="semibold" size="md">Features</YpaText>
+				<Separator />
+			</div>
+		{/if}
+		<div class="mb-6 flex flex-wrap">
+			{#each listing.features as feature}
+				<div class="flex items-center mr-2 capitalize">
+					<IconCheck class="text-tertiary	  mr-1" />
+					<YpaText weight="semibold" size="sm">{feature}</YpaText>
+				</div>
+			{/each}
+		</div>
+		<div class="mb-6 flex flex-col lg:flex-row gap-2 w-[100%]">
+			<PropertyAlertForm {listing} {options} />
+			<WhatsAppButton />
+		</div>
+		<div class="flex flex-col mb-6">
+			<Description descriptions={listing.descriptions} />
+		</div>
 	</div>
-	<div class="mb-6 flex gap-2 w-[100%]">
-		<PropertyAlertForm {listing} {options} />
-		<WhatsAppButton />
-	</div>
-	<div class="flex flex-col mb-6">
-		<Description descriptions={listing.descriptions} />
+	<div class="flex min-w-[300px] h-full justify-center lg:justify-end">
+		<EnquiryForm />
 	</div>
 </div>
 <div class="mb-6">
@@ -94,7 +104,11 @@
 		<Map longitude={longitude()} latitude={latitude()} />
 	{/if}
 </div>
-<div class="flex justify-between gap-4 mb-6">
+<div class="mb-3">
+	<YpaText weight="semibold" size="md">Related Listings</YpaText>
+	<Separator />
+</div>
+<div class="flex flex-col w-full items-center gap-4 mb-6 lg:flex-row lg:justify-between">
 	{#each listing.related_listings as related}
 		<ListingCard listing={related} {propertyRegionOptions} />
 	{/each}

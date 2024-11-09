@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Slider } from '$lib/components/ui/slider';
-	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
@@ -38,10 +38,10 @@
 </script>
 
 <div class="text-left w-[600px] min-w-[200px]">
-	<InputWithLabel label="Price">
+	<FormLabel label="Price">
 		<Slider value={sliderValues} min={MIN} max={MAX} step={STEP} onValueChange={updateValues} />
-	</InputWithLabel>
-	<div class="flex justify-between text-lg text-white">
+	</FormLabel>
+	<div class="flex justify-between text-md text-white">
 		<span>€{new Intl.NumberFormat('en-US').format(sliderValues[0])}</span>
 		<span>
 			€{new Intl.NumberFormat('en-US').format(sliderValues[1])}

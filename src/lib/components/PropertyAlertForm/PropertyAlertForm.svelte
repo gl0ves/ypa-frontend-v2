@@ -23,7 +23,7 @@
 		frequency: 1,
 		verified: false
 	});
-	const { options, listing }: { options: Options; listing: ListingDetails } = $props();
+	const { options, listing }: { options: Options; listing?: ListingDetails } = $props();
 
 	onMount(() => {
 		if (listing && formData) {

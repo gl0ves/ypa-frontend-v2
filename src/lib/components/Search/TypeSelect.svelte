@@ -2,7 +2,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '../ui/form-label/FormLabel.svelte';
 
 	const options = [
 		{ label: 'Any type', value: '' },
@@ -30,7 +30,7 @@
 	};
 </script>
 
-<InputWithLabel label="Type">
+<FormLabel label="Type">
 	<Select.Root
 		selected={selectedOption}
 		onSelectedChange={(option) => handleOptionSelect(option?.value)}
@@ -47,4 +47,4 @@
 		</Select.Content>
 		<Select.Input name="type" />
 	</Select.Root>
-</InputWithLabel>
+</FormLabel>

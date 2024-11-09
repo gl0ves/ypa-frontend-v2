@@ -1,6 +1,6 @@
 <script lang="ts">
 	import AreaSelect from '../AreaSelect.svelte';
-	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import Input from '../ui/input/input.svelte';
 	import Select from '$lib/components/Select/Select.svelte';
 	import { onMount } from 'svelte';
@@ -115,23 +115,23 @@
 
 <div class="grid gap-4 z-100000">
 	<div class="grid items-center gap-4">
-		<InputWithLabel textColor="text-black" label="First Name">
+		<FormLabel textColor="text-black" label="First Name">
 			<Input
 				required
 				placeholder="What is your first name?"
 				on:input={handleInputChange}
 				bind:value={defaultFormData.first_name}
 			/>
-		</InputWithLabel>
+		</FormLabel>
 		{#if showEmail}
-			<InputWithLabel textColor="text-black" label="Email">
+			<FormLabel textColor="text-black" label="Email">
 				<Input
 					required
 					placeholder="Where should we send the alerts?"
 					on:input={handleInputChange}
 					bind:value={defaultFormData.email}
 				/>
-			</InputWithLabel>
+			</FormLabel>
 		{/if}
 		<!-- Regions -->
 		<Select

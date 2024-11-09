@@ -2,7 +2,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { type Options, type Option } from '$lib/data/options';
 	import { type Selected } from 'bits-ui';
 	type HandleSelectValue = Selected<string | number | null> | undefined;
@@ -35,7 +35,7 @@
 	};
 </script>
 
-<InputWithLabel label={bedOrBath}>
+<FormLabel label={bedOrBath}>
 	<Select.Root selected={selectedOption} onSelectedChange={handleOptionSelect}>
 		<Select.Trigger class="w-[250px]">
 			<Select.Value />
@@ -49,4 +49,4 @@
 		</Select.Content>
 		<Select.Input name={bedOrBath} />
 	</Select.Root>
-</InputWithLabel>
+</FormLabel>

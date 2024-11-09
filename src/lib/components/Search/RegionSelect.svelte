@@ -2,7 +2,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { type PropertyRegionOption, type Options } from '$lib/data/options';
 
 	const { options, clearAreaState }: { options: Options; clearAreaState: () => void } = $props();
@@ -39,7 +39,7 @@
 	};
 </script>
 
-<InputWithLabel label="Regions">
+<FormLabel label="Regions">
 	<Select.Root
 		selected={selectedRegion}
 		onSelectedChange={(region) => handleRegionSelected(region?.value || '')}
@@ -56,4 +56,4 @@
 		</Select.Content>
 		<Select.Input name="region" />
 	</Select.Root>
-</InputWithLabel>
+</FormLabel>

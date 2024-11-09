@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Input } from '$lib/components/ui/input';
-	import InputWithLabel from '../ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { debounce } from '$lib/utils';
 	import { page } from '$app/stores';
 
@@ -30,7 +30,7 @@
 	const debouncedInputChange = debounce(handleInputChange, 200);
 </script>
 
-<InputWithLabel label="Identifier">
+<FormLabel label="Identifier">
 	<Input
 		value={inputValue}
 		on:input={debouncedInputChange}
@@ -38,4 +38,4 @@
 		type="text"
 		placeholder="Search"
 	/>
-</InputWithLabel>
+</FormLabel>

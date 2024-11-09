@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { type Selected } from 'bits-ui';
-	import InputWithLabel from '$lib/components/ui/input-with-label/InputWithLabel.svelte';
+	import FormLabel from '$lib/components/ui/form-label/FormLabel.svelte';
 
 	type HandleSelectValue = Selected<string | number | null> | undefined;
 
@@ -22,7 +22,7 @@
 	);
 </script>
 
-<InputWithLabel textColor="text-black" {label}>
+<FormLabel textColor="text-black" {label}>
 	<Select.Root onSelectedChange={handleSelect} bind:selected={selectedOption}>
 		<Select.Trigger>
 			<Select.Value />
@@ -36,4 +36,4 @@
 		</Select.Content>
 		<Select.Input name={label.toLowerCase()} />
 	</Select.Root>
-</InputWithLabel>
+</FormLabel>

@@ -224,11 +224,11 @@
 	{/if}
 
 	<div class="map-wrap">
-		<div class="map" bind:this={mapContainer} />
+		<div class="map" bind:this={mapContainer}></div>
 		<button
 			class="map-overlay"
 			class:active={isMapInteractive}
-			on:click={toggleMapInteraction}
+			onclick={toggleMapInteraction}
 			type="button"
 			aria-label={isMapInteractive ? 'Disable map interaction' : 'Enable map interaction'}
 		>
@@ -244,8 +244,6 @@
 		position: relative;
 		width: 100%;
 		height: 500px;
-		max-width: 1185px;
-		margin: 1em;
 	}
 
 	.map-wrap {

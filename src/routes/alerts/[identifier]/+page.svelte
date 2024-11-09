@@ -18,6 +18,7 @@
 	// TODO: Add a deleted / verified / updated state
 
 	onMount(() => {
+		if (!formData) return;
 		if (!formData.verified) {
 			formData.verified = true;
 		}
@@ -25,10 +26,12 @@
 	});
 
 	const handleFormDataUpdated = (data: AlertFormData) => {
+		if (!data) return;
 		formData = { ...formData, ...data };
 	};
 
 	const update = async () => {
+		if (!formData) return;
 		formData.identifier = identifier;
 		const response = await savePropertyAlert(formData);
 		const data = await response.json();
@@ -70,7 +73,7 @@
 			handleFormDataUpdated={(data) => handleFormDataUpdated(data)}
 		/>
 		<div class="grid gap-2 pt-5">
-			<Button disabled={!formData.first_name} on:click={update} type="submit">SAVE</Button>
+			<Button disabled={!formData?.first_name} on:click={update} type="submit">SAVE</Button>
 			<Button variant="destructive" on:click={() => handleDeletePropertyAlert()} type="submit"
 				>DELETE ALERT</Button
 			>
