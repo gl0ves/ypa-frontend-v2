@@ -10,7 +10,4 @@
 </svelte:head>
 
 <Navbar />
-
-<div class="w-full">
-	{@render children?.()}
-</div>
+{@render children?.()}

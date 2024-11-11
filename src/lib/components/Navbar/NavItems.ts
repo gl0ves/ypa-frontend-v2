@@ -27,7 +27,7 @@ const navItems = [
 		]
 	},
 
-	{ name: 'AGENTS', href: '/agents' },
+	// { name: 'AGENTS', href: '/agents' },
 	{ name: 'BLOG', href: '/blog' },
 	{ name: 'ABOUT', href: '/about' }
 ];

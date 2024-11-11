@@ -6,27 +6,16 @@
 	import CheckboxWithLabel from './CheckboxWithLabel.svelte';
 	import Button from './ui/button/button.svelte';
 
+	let companyName = $state('');
 	let firstname = $state('');
 	let lastname = $state('');
+	let cityAndRegion = $state('');
+	let website = $state('');
 	let email = $state('');
 	let phone = $state('');
 	let message = $state('');
-	let region = $state('');
 	let reference = $state('');
-	let newsletter = $state(false);
-	let currency = $state(false);
-	let mortgage = $state(false);
 	let submitted = $state(false);
-
-	const everythingIsFilledIn = $derived(() => {
-		return (
-			firstname.length > 0 &&
-			lastname.length > 0 &&
-			email.length > 0 &&
-			phone.length > 0 &&
-			message.length > 0
-		);
-	});
 
 	const submitFormData = async () => {
 		const formData = {
@@ -41,12 +30,6 @@
 					name: 'last_name',
 					value: lastname,
 					type: 'SYSTEM',
-					field_type: 'TEXT'
-				},
-				{
-					name: 'country_area',
-					value: region,
-					type: 'CUSTOM',
 					field_type: 'TEXT'
 				},
 				{
@@ -89,9 +72,7 @@
 			email: email,
 			tags: [] as string[]
 		};
-		if (newsletter) formData.tags.push('Newsletter');
-		if (currency) formData.tags.push('Currency');
-		if (mortgage) formData.tags.push('Mortgage');
+
 		const response = await fetch('/api/forms', {
 			method: 'POST',
 			headers: {
@@ -102,16 +83,6 @@
 		if (response.ok) {
 			submitted = true;
 		}
-	};
-
-	const handleNewsletterChecked = (val: boolean) => {
-		newsletter = val;
-	};
-	const handleCurrencyChecked = (val: boolean) => {
-		currency = val;
-	};
-	const handleMortgageChecked = (val: boolean) => {
-		mortgage = val;
 	};
 </script>
 
@@ -128,57 +99,74 @@
 		</div>
 	{:else}
 		<div class="mb-4 px-2">
-			<YpaText weight="semibold" size="md">Interested? Let us know!</YpaText>
+			<YpaText weight="semibold" size="md">
+				Advertise Your Listings on YourPropertyAbroad.com!</YpaText
+			>
+			<p class="text-sm text-gray-500 mt-2">
+				Interested in listing your properties with us? Fill in the form below to get more
+				information. Note: only for real estate agents. If you are a private seller, contact us via
+				Whatsapp or email.
+			</p>
 		</div>
 		<div class="flex flex-col items-stretch gap-4">
 			<div class="w-full space-y-3">
 				<div>
+					<FormLabel width="w-full" textColor="text-black" label="Company name">
+						<Input required bind:value={companyName} placeholder="Company name" class="w-full" />
+					</FormLabel>
+				</div>
+				<div>
 					<FormLabel width="w-full" textColor="text-black" label="First Name">
-						<Input bind:value={firstname} placeholder="First Name" class="w-full" />
+						<Input required bind:value={firstname} placeholder="First Name" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
 					<FormLabel width="w-full" textColor="text-black" label="Last Name">
-						<Input bind:value={lastname} placeholder="Last Name" class="w-full" />
+						<Input required bind:value={lastname} placeholder="Last Name" class="w-full" />
+					</FormLabel>
+				</div>
+				<div>
+					<FormLabel width="w-full" textColor="text-black" label="Website">
+						<Input required bind:value={website} placeholder="Website" class="w-full" />
+					</FormLabel>
+				</div>
+				<div>
+					<FormLabel
+						width="w-full"
+						textColor="text-black"
+						label="In what city and region are you based?"
+					>
+						<Input
+							required
+							bind:value={cityAndRegion}
+							placeholder="Amsterdam, Netherlands"
+							class="w-full"
+						/>
 					</FormLabel>
 				</div>
 				<div>
 					<FormLabel width="w-full" textColor="text-black" label="Email">
-						<Input bind:value={email} placeholder="Email" class="w-full" />
+						<Input required bind:value={email} placeholder="Email" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
-					<FormLabel width="w-full" textColor="text-black" label="Phone">
-						<Input bind:value={phone} placeholder="Phone" class="w-full" />
+					<FormLabel width="w-full" textColor="text-black" label="Phone number incl. country code">
+						<Input required bind:value={phone} placeholder="+31 6 18 47 24 80" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
-					<FormLabel width="w-full" textColor="text-black" label="Message">
-						<Textarea bind:value={message} placeholder="Message" class="w-full min-h-[100px]" />
+					<FormLabel width="w-full" textColor="text-black" label="Additional notes">
+						<Textarea
+							bind:value={message}
+							required={false}
+							placeholder="Message"
+							class="w-full min-h-[100px]"
+						/>
 					</FormLabel>
 				</div>
-			</div>
-			<div class="space-y-3 px-2">
-				<CheckboxWithLabel
-					handleChecked={handleNewsletterChecked}
-					label="I agree to receive the newsletter from YourPropertyAbroad"
-				/>
-				<CheckboxWithLabel
-					handleChecked={handleCurrencyChecked}
-					label="I would also like to receive information on currency exchange (optional)"
-				/>
-				<CheckboxWithLabel
-					handleChecked={handleMortgageChecked}
-					label="I would also like information on Spanish mortgages"
-				/>
 			</div>
 			<div class="px-2 mt-2">
-				<Button
-					disabled={!everythingIsFilledIn}
-					onclick={submitFormData}
-					variant="default"
-					class="w-full">Submit</Button
-				>
+				<Button onclick={submitFormData} variant="default" class="w-full">Submit</Button>
 			</div>
 		</div>
 	{/if}
