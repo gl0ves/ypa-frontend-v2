@@ -10,11 +10,17 @@
 	let { count }: { count: number } = $props();
 
 	const perPage = 18;
-	const currentPage = $derived(parseInt($page.url.searchParams.get('page') || '1', 10));
-	const totalPages = $derived(Math.max(1, Math.ceil(count / perPage)));
+	let currentPage = $state(parseInt($page.url.searchParams.get('page') || '1', 10));
+	$effect(() => {
+		if (!!$page.url.searchParams.get('page'))
+			currentPage = parseInt($page.url.searchParams.get('page') || '1', 10);
+	});
+
+	const totalPages = Math.max(1, Math.ceil(count / perPage));
 
 	const navigate = async (page: number) => {
 		params.set('page', page.toString());
+		currentPage = page;
 		return goto(`?${params.toString()}`, { keepFocus: true });
 	};
 

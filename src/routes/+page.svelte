@@ -7,6 +7,6 @@
 
 <Search {data} />
 
-<Layout maxWidth={1216}>
+<Layout maxWidth="lg">
 	<ListingPage {data} />
 </Layout>

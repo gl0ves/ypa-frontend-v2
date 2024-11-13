@@ -1,10 +1,19 @@
 <script lang="ts">
 	import { type Snippet } from 'svelte';
-	const { maxWidth = 1000, children }: { maxWidth: number; children: Snippet } = $props();
+
+	type Size = 'sm' | 'md' | 'lg';
+
+	const { maxWidth, children }: { maxWidth: Size; children: Snippet } = $props();
+
+	const maxWidthClasses = {
+		lg: 'max-w-7xl',
+		md: 'max-w-5xl',
+		sm: 'max-w-3xl'
+	};
 </script>
 
-<div class="flex justify-center overflow-hidden">
-	<div class={`w-full max-w-[${maxWidth}px] px-4`}>
+<div class="w-full flex justify-center">
+	<div class={maxWidthClasses[maxWidth]}>
 		{@render children?.()}
 	</div>
 </div>
