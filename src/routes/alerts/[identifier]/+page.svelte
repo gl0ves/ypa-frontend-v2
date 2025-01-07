@@ -1,16 +1,16 @@
 <script lang="ts">
 	import PropertyAlertFormContent from '$lib/components/PropertyAlertForm/PropertyAlertFormContent.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { type AlertFormData } from '$lib/ypaTypes';
 	import { deletePropertyAlert, savePropertyAlert } from '$lib/api';
 	import { onMount } from 'svelte';
 	import { type Options } from '$lib/data/options';
 
-	const identifier = $page.params.identifier;
+	const identifier = page.params.identifier;
 
-	let formData: AlertFormData = $state($page.data.alert);
-	let options: Options = $page.data.options;
+	let formData: AlertFormData = $state(page.data.alert);
+	let options: Options = page.data.options;
 	let formSubmitted = $state(false);
 	let formSubmissionFailed = $state(false);
 	let alertVerified = $state(false);

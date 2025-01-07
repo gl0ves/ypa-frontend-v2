@@ -2,7 +2,7 @@
 	import { Slider } from '$lib/components/ui/slider';
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	const MIN = 0;
 	const MAX = 1000000;
@@ -11,8 +11,8 @@
 	let sliderValues: [number, number];
 
 	$: {
-		const minPrice = Number($page.url.searchParams.get('min_price')) || MIN;
-		const maxPrice = Number($page.url.searchParams.get('max_price')) || MAX;
+		const minPrice = Number(page.url.searchParams.get('min_price')) || MIN;
+		const maxPrice = Number(page.url.searchParams.get('max_price')) || MAX;
 		sliderValues = [minPrice, maxPrice];
 	}
 
@@ -23,7 +23,7 @@
 
 		debounceTimeout = setTimeout(() => {
 			const [min, max] = values;
-			const params = new URLSearchParams($page.url.searchParams);
+			const params = new URLSearchParams(page.url.searchParams);
 
 			params.delete('page');
 			if (min === MIN) params.delete('min_price');

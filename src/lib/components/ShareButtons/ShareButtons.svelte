@@ -3,9 +3,9 @@
 	import IconWhatsApp from '~icons/mdi/whatsapp';
 	import IconEmail from '~icons/mdi/email-outline';
 	import IconCopy from '~icons/mdi/content-copy';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	const { listingUrl = $page.url }: { listingUrl?: URL } = $props();
+	const { listingUrl = page.url }: { listingUrl?: URL } = $props();
 </script>
 
 <a

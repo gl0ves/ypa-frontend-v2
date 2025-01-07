@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { type Options, type Option } from '$lib/data/options';
 
@@ -12,7 +12,7 @@
 
 	const { bedAndBathroomOptions } = options;
 
-	const param = $derived($page.url.searchParams.get(bedOrBath) || '0');
+	const param = $derived(page.url.searchParams.get(bedOrBath) || '0');
 	let selectedOption = $derived(() => {
 		if (param === '0') return defaultValue;
 		return (
@@ -24,7 +24,7 @@
 	const handleOptionSelect = (option: string) => {
 		if (!option) return;
 		if (typeof option === 'undefined') return;
-		const updatedParams = new URLSearchParams($page.url.searchParams);
+		const updatedParams = new URLSearchParams(page.url.searchParams);
 		const parsedValue = parseInt(option);
 		if (parsedValue === 0) updatedParams.delete(bedOrBath);
 		if (parsedValue >= 1) updatedParams.set(bedOrBath, option);

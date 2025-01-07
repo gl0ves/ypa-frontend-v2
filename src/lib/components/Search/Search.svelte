@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores'; // Import the page store for accessing route parameters
+	import { page } from '$app/state'; // Import the page store for accessing route parameters
 	import RegionSelect from './RegionSelect.svelte';
 	import AreaSelect from '../AreaSelect.svelte';
 	import BedAndBathroomSelect from './BedAndBathroomSelect.svelte';
@@ -11,9 +11,9 @@
 	import { goto } from '$app/navigation';
 	import { type Options } from '$lib/data/options';
 
-	let showRegionSelect = $state($page.params.region === undefined);
-	let paramAreas = $state($page.url.searchParams.getAll('areas'));
-	let region = $state($page.url.searchParams.get('region'));
+	let showRegionSelect = $state(page.params.region === undefined);
+	let paramAreas = $state(page.url.searchParams.getAll('areas'));
+	let region = $state(page.url.searchParams.get('region'));
 
 	const { data }: { data: { options: Options; listingsCount: number; areas: string[] } } = $props();
 	const { options } = data;
@@ -59,8 +59,8 @@
 			</h1>
 			<h2 class="uppercase font-semibold text-xl text-white">
 				Properties,{' '}
-				{#if $page.url.searchParams.get('region')}
-					{$page.url.searchParams.get('region')}
+				{#if page.url.searchParams.get('region')}
+					{page.url.searchParams.get('region')}
 				{:else}
 					All regions
 				{/if}

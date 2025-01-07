@@ -8,7 +8,7 @@
 	import { type AlertFormData } from '$lib/ypaTypes';
 	import { type Options } from '$lib/data/options';
 
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	const {
 		formData,
 		options,
@@ -27,7 +27,7 @@
 		maxPriceOptions
 	} = options;
 
-	const searchParams = $state($page.url.searchParams);
+	const searchParams = $state(page.url.searchParams);
 	const parsedPriceMax = parseInt(searchParams.get('max_price') ?? '0');
 	const priceOptions = maxPriceOptions
 		.map((option) => option.value)
@@ -52,7 +52,7 @@
 		verified: false
 	});
 
-	const showEmail = $page.params.identifier ? false : true;
+	const showEmail = page.params.identifier ? false : true;
 
 	let regionAreas: string[] = $state([]);
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { type Options, type PropertyRegionOption } from '$lib/data/options';
 
@@ -9,7 +9,7 @@
 
 	const { propertyRegionOptions } = options;
 
-	const searchParams = $derived($page.url.searchParams);
+	const searchParams = $derived(page.url.searchParams);
 	const regionParam = $derived(searchParams.get('region'));
 	let selectedRegion = $state(
 		propertyRegionOptions.find((region) => region.value === regionParam) || {
@@ -27,7 +27,7 @@
 
 	const handleRegionSelected = (region: string | number) => {
 		if (typeof region !== 'string') return;
-		const params = new URLSearchParams($page.url.searchParams);
+		const params = new URLSearchParams(page.url.searchParams);
 
 		params.delete('page');
 		params.delete('region');
