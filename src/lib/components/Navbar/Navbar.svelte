@@ -44,11 +44,13 @@
 				{#each navItems as item}
 					<div class="mb-4">
 						{#if item.href}
-							<Button
-								class="text-lg font-medium leading-none"
-								variant="link"
-								onclick={() => goto(item.href)}>{item.name}</Button
-							>
+							<div>
+								<Button
+									class="text-lg font-medium leading-none"
+									variant="link"
+									onclick={() => goto(item.href)}>{item.name}</Button
+								>
+							</div>
 							<Separator class="mb-2" />
 						{:else}
 							<h4 class="flex flex-row text-lg ml-4 font-medium leading-none">
@@ -59,11 +61,13 @@
 						{#if item.subNavItems}
 							<div>
 								{#each item.subNavItems as subItem}
-									<Button
-										class="text-muted-foreground"
-										variant="link"
-										onclick={() => goto(subItem.href)}>{subItem.name}</Button
-									>
+									<div>
+										<Button
+											class="text-muted-foreground"
+											variant="link"
+											onclick={() => goto(subItem.href)}>{subItem.name}</Button
+										>
+									</div>
 								{/each}
 							</div>
 						{/if}

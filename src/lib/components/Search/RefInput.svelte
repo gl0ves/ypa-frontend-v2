@@ -33,7 +33,7 @@
 <FormLabel label="Identifier">
 	<Input
 		value={inputValue}
-		on:input={debouncedInputChange}
+		oninput={debouncedInputChange}
 		class="w-[250px]"
 		type="text"
 		placeholder="Search"

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ListingDetails } from '$lib/ypaTypes';
-	import Carousel from '$lib/components/ui/carousel/carousel.svelte';
+	import Carousel from '$lib/components/ui/ypa-carousel/carousel.svelte';
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import ShareButtons from '$lib/components/ShareButtons/ShareButtons.svelte';
