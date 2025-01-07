@@ -28,16 +28,12 @@
 	{/each}
 </Menubar.Root>
 
-<div class="lg:hidden">
+<div class="lg:hidden flex justify-end">
 	<Drawer.Root bind:open direction="bottom">
 		<Drawer.Trigger>
-			<Menubar.Root>
-				<Menubar.Menu>
-					<Menubar.Trigger>
-						<IconMenu class="text-lg"></IconMenu>
-					</Menubar.Trigger>
-				</Menubar.Menu>
-			</Menubar.Root>
+			<div class="full p-2 justify-end flex">
+				<IconMenu class="text-lg"></IconMenu>
+			</div>
 		</Drawer.Trigger>
 		<Drawer.Content>
 			<div class="m-6">

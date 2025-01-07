@@ -8,7 +8,6 @@
 <svelte:head>
 	<link rel="icon" type="ico" href="https://cdn.yourpropertyabroad.com/static/favicon.ico" />
 </svelte:head>
-<div class="">
-	<Navbar />
-	{@render children?.()}
-</div>
+
+<Navbar />
+{@render children?.()}
