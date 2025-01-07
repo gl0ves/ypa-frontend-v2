@@ -27,7 +27,6 @@
 	};
 
 	const handleAreaSelected = (value: string) => {
-		console.log('triggered area selector');
 		if (paramAreas.includes(value)) {
 			paramAreas = paramAreas.filter((area) => area !== value);
 		} else {
@@ -93,7 +92,7 @@
 				<Slider />
 			</div>
 			<div class="flex justify-center gap-8">
-				<Button on:click={(e) => resetSearch(e)}>RESET</Button>
+				<Button onclick={(e) => resetSearch(e)}>RESET</Button>
 				<PropertyAlertyForm {options} />
 			</div>
 		</div>

@@ -21,9 +21,10 @@ const navItems = [
 		name: 'OTHER SERVICES ',
 		href: '',
 		subNavItems: [
-			{ name: 'CURRENCY', href: '/currency' },
-			{ name: 'MORTGAGE', href: '/mortgage' },
-			{ name: 'LEGAL', href: '/legal' }
+			{ name: 'CURRENCY', href: '/other-services/currency' },
+			{ name: 'MORTGAGE', href: '/other-services/mortgage' },
+			{ name: 'LEGAL', href: '/other-services/legal' },
+			{ name: 'SPANISH COURSE', href: '/other-services/spanish-course' }
 		]
 	},
 

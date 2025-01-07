@@ -13,7 +13,7 @@
 </script>
 
 <div class="w-full flex justify-center">
-	<div class={maxWidthClasses[maxWidth]}>
+	<div class={`${maxWidthClasses[maxWidth]}`}>
 		{@render children?.()}
 	</div>
 </div>

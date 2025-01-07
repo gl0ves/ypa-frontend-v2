@@ -4,6 +4,6 @@
 	const { data } = $props();
 </script>
 
-<Layout maxWidth={1216}>
+<Layout maxWidth="lg">
 	<Listing listing={data.listing} options={data.options} />
 </Layout>

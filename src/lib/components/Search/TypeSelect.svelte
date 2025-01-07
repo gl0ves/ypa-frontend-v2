@@ -14,12 +14,16 @@
 		{ label: 'Penthouse', value: 'Penthouse' }
 	];
 
-	$: param = $page.url.searchParams.get('type') || 'Any type';
+	const param = $derived(() => $page.url.searchParams.get('type') || 'Any type');
 
-	$: selectedOption = options.find((option) => option.value === param) || {
-		value: '',
-		label: 'Any type'
-	};
+	const selectedOption = $derived(() => {
+		return (
+			options.find((option) => option.value === param()) || {
+				value: '',
+				label: 'Any type'
+			}
+		);
+	});
 
 	const handleOptionSelect = (option: string | undefined) => {
 		if (option === undefined) return;
@@ -28,15 +32,20 @@
 		params.set('type', option.toString());
 		goto(`?${params.toString()}`);
 	};
+
+	const triggerContent = $derived(() => {
+		return selectedOption().label;
+	});
 </script>
 
 <FormLabel label="Type">
 	<Select.Root
-		selected={selectedOption}
-		onSelectedChange={(option) => handleOptionSelect(option?.value)}
+		type="single"
+		value={selectedOption().value}
+		onValueChange={(value) => handleOptionSelect(value)}
 	>
 		<Select.Trigger class="w-[250px]">
-			<Select.Value />
+			{triggerContent()}
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
@@ -45,6 +54,5 @@
 				{/each}
 			</Select.Group>
 		</Select.Content>
-		<Select.Input name="type" />
 	</Select.Root>
 </FormLabel>

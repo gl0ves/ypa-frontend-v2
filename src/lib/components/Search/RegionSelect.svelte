@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
-	import { type PropertyRegionOption, type Options } from '$lib/data/options';
+	import { type Options, type PropertyRegionOption } from '$lib/data/options';
 
 	const { options, clearAreaState }: { options: Options; clearAreaState: () => void } = $props();
 
@@ -11,10 +11,18 @@
 
 	const searchParams = $derived($page.url.searchParams);
 	const regionParam = $derived(searchParams.get('region'));
-	let selectedRegion = $state(propertyRegionOptions.find((region) => region.value === regionParam));
+	let selectedRegion = $state(
+		propertyRegionOptions.find((region) => region.value === regionParam) || {
+			value: null,
+			label: 'Any region'
+		}
+	);
 
 	$effect(() => {
-		selectedRegion = propertyRegionOptions.find((region) => region.value === regionParam);
+		selectedRegion = propertyRegionOptions.find((region) => region.value === regionParam) || {
+			value: null,
+			label: 'Any region'
+		};
 	});
 
 	const handleRegionSelected = (region: string | number) => {
@@ -41,11 +49,12 @@
 
 <FormLabel label="Regions">
 	<Select.Root
-		selected={selectedRegion}
-		onSelectedChange={(region) => handleRegionSelected(region?.value || '')}
+		type="single"
+		value={selectedRegion.value}
+		onValueChange={(value: string) => handleRegionSelected(value)}
 	>
 		<Select.Trigger class="w-[250px]">
-			<Select.Value placeholder="Select a region" />
+			{'Select a region'}
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
@@ -54,6 +63,5 @@
 				{/each}
 			</Select.Group>
 		</Select.Content>
-		<Select.Input name="region" />
 	</Select.Root>
 </FormLabel>

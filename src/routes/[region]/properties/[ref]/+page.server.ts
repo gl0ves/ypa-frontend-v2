@@ -11,6 +11,7 @@ export const load = async ({ fetch, params }) => {
 	const { ref } = params;
 	const response = await fetch(`/backend/v2/listings/${ref}/`);
 	const data: ListingDetails = await response.json();
+
 	return {
 		listing: data,
 		options: {

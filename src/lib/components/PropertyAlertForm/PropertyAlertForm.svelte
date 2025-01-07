@@ -5,24 +5,12 @@
 	import PropertyAlertFormContent from './PropertyAlertFormContent.svelte';
 	import { savePropertyAlert } from '$lib/api';
 	import { type AlertFormData, type ListingDetails } from '$lib/ypaTypes';
-	import { propertyRegionOptions, type Options } from '$lib/data/options';
+	import { type Options } from '$lib/data/options';
 	import { onMount } from 'svelte';
 
 	let formSubmitted = $state(false);
 	let formSubmissionFailed = $state(false);
-	let formData: AlertFormData = $state({
-		identifier: null,
-		first_name: null,
-		email: null,
-		region: null,
-		areas: [],
-		bedrooms: null,
-		bathrooms: null,
-		price_max: null,
-		type: null,
-		frequency: 1,
-		verified: false
-	});
+	let formData: AlertFormData | null = $state(null);
 	const { options, listing }: { options: Options; listing?: ListingDetails } = $props();
 
 	onMount(() => {
@@ -39,6 +27,7 @@
 	});
 
 	const submitPropertyAlert = async () => {
+		if (!formData) return;
 		const response = await savePropertyAlert(formData);
 		if (response.status == 200) {
 			formSubmitted = true;
@@ -48,7 +37,7 @@
 	};
 
 	const handleFormDataUpdated = (data: AlertFormData) => {
-		console.log('Updating form data');
+		console.log('Updating form data:', { ...data });
 		if (!data) return;
 		formData = { ...formData, ...data };
 	};
@@ -90,7 +79,7 @@
 				<Dialog.Footer>
 					<Button
 						disabled={!formData?.first_name || !formData?.email}
-						on:click={submitPropertyAlert}
+						onclick={submitPropertyAlert}
 						type="submit">CREATE</Button
 					>
 				</Dialog.Footer>

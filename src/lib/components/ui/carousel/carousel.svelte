@@ -1,141 +1,92 @@
 <script lang="ts">
-	import type { ListingDetails } from '$lib/ypaTypes';
-	import type { EmblaCarouselType } from 'embla-carousel';
-	import EmblaCarousel from 'embla-carousel-svelte';
+	import {
+		type CarouselAPI,
+		type CarouselProps,
+		type EmblaContext,
+		setEmblaContext,
+	} from "./context.js";
+	import { cn } from "$lib/utils.js";
 
-	const { listing }: { listing: ListingDetails } = $props();
-	const { originals, thumbnails } = $derived(listing.images);
+	let {
+		opts = {},
+		plugins = [],
+		setApi = () => {},
+		orientation = "horizontal",
+		class: className,
+		children,
+		...restProps
+	}: CarouselProps = $props();
 
-	let selectedIndex = $state(0);
-	let emblaApi: EmblaCarouselType;
-	let thumbsApi: EmblaCarouselType;
+	let carouselState = $state<EmblaContext>({
+		api: undefined,
+		scrollPrev,
+		scrollNext,
+		orientation,
+		canScrollNext: false,
+		canScrollPrev: false,
+		handleKeyDown,
+		options: opts,
+		plugins,
+		onInit,
+		scrollSnaps: [],
+		selectedIndex: 0,
+		scrollTo,
+	});
 
-	function onInit(event: CustomEvent): void {
-		emblaApi = event.detail;
-		emblaApi.on('select', setIndex);
+	setEmblaContext(carouselState);
+
+	function scrollPrev() {
+		carouselState.api?.scrollPrev();
+	}
+	function scrollNext() {
+		carouselState.api?.scrollNext();
+	}
+	function scrollTo(index: number, jump?: boolean) {
+		carouselState.api?.scrollTo(index, jump);
 	}
 
-	function onThumbsInit(event: CustomEvent) {
-		thumbsApi = event.detail;
+	function onSelect(api: CarouselAPI) {
+		if (!api) return;
+		carouselState.canScrollPrev = api.canScrollPrev();
+		carouselState.canScrollNext = api.canScrollNext();
+		carouselState.selectedIndex = api.selectedScrollSnap();
 	}
 
-	function scrollTo(index: number) {
-		selectedIndex = index;
-		emblaApi.scrollTo(index);
-		thumbsApi.scrollTo(index);
+	$effect(() => {
+		if (carouselState.api) {
+			onSelect(carouselState.api);
+			carouselState.api.on("select", onSelect);
+			carouselState.api.on("reInit", onSelect);
+		}
+	});
+
+	function handleKeyDown(e: KeyboardEvent) {
+		if (e.key === "ArrowLeft") {
+			e.preventDefault();
+			scrollPrev();
+		} else if (e.key === "ArrowRight") {
+			e.preventDefault();
+			scrollNext();
+		}
 	}
 
-	function setIndex() {
-		selectedIndex = emblaApi.selectedScrollSnap();
+	$effect(() => {
+		setApi(carouselState.api);
+	});
+
+	function onInit(event: CustomEvent<CarouselAPI>) {
+		carouselState.api = event.detail;
+
+		carouselState.scrollSnaps = carouselState.api.scrollSnapList();
 	}
+
+	$effect(() => {
+		return () => {
+			carouselState.api?.off("select", onSelect);
+		};
+	});
 </script>
 
-<div class="embla">
-	<div use:EmblaCarousel onemblaInit={onInit} class="embla__viewport">
-		<div class="embla__container">
-			{#each originals as image, i}
-				<div class="embla__slide">
-					<button class="embla-thumbs__slide__button" type="button" onclick={() => scrollTo(i)}>
-						<img class="embla__slide__img" src={image} alt="Real estate" />
-					</button>
-				</div>
-			{/each}
-		</div>
-	</div>
+<div class={cn("relative", className)} role="region" aria-roledescription="carousel" {...restProps}>
+	{@render children?.()}
 </div>
-
-<div class="embla-thumbs">
-	<div use:EmblaCarousel onemblaInit={onThumbsInit} class="embla-thumbs__viewport">
-		<div class="embla-thumbs__container">
-			{#each thumbnails as image, i}
-				<div class="embla-thumbs__slide" class:embla-thumbs__slide--selected={i === selectedIndex}>
-					<button class="embla-thumbs__slide__button" type="button" onclick={() => scrollTo(i)}>
-						<img class="embla-thumbs__slide__img" src={image} alt="Real estate thumbnail" />
-					</button>
-				</div>
-			{/each}
-		</div>
-	</div>
-</div>
-
-<style lang="scss">
-	.embla {
-		--slide-spacing: 0.5rem;
-		--slide-height: 400px;
-	}
-	.embla__viewport {
-		overflow: hidden;
-	}
-	.embla__container {
-		backface-visibility: hidden;
-		display: flex;
-		touch-action: pan-y;
-		margin-left: calc(var(--slide-spacing) * -1);
-	}
-	.embla__slide {
-		flex: 0 0 auto;
-		min-width: 0;
-		padding-left: var(--slide-spacing);
-		position: relative;
-		transition: opacity 0.2s ease-in-out;
-	}
-	.embla__slide__img {
-		display: block;
-		max-height: var(--slide-height);
-		width: auto;
-		object-fit: cover;
-	}
-	.embla-thumbs {
-		--thumbs-slide-spacing: 0.5rem;
-		--thumbs-slide-size: 7rem;
-		margin-top: 0.1rem;
-	}
-	.embla-thumbs__viewport {
-		overflow: hidden;
-	}
-	.embla-thumbs__container {
-		display: flex;
-		flex-direction: row;
-		margin-left: calc(var(--thumbs-slide-spacing) * -1);
-	}
-	.embla-thumbs__slide {
-		flex: 0 0 50%;
-		min-width: 0;
-		padding-left: var(--thumbs-slide-spacing);
-		position: relative;
-		opacity: 0.5;
-		transition: opacity 0.2s ease-in-out;
-		&.embla-thumbs__slide--selected {
-			opacity: 1;
-		}
-	}
-
-	@media (min-width: 576px) {
-		.embla-thumbs__slide {
-			flex: 0 0 18%;
-		}
-	}
-	.embla-thumbs__slide__button {
-		appearance: none;
-		-webkit-appearance: none;
-		background-color: transparent;
-		touch-action: manipulation;
-		display: block;
-		text-decoration: none;
-		cursor: pointer;
-		border: 0;
-		padding: 0;
-		margin: 0;
-		width: 100%;
-		height: var(--thumbs-slide-size);
-	}
-	.embla-thumbs__slide--selected .embla-thumbs__slide__button {
-		opacity: 1;
-	}
-	.embla-thumbs__slide__img {
-		display: block;
-		height: var(--thumbs-slide-size);
-		width: 100%;
-		object-fit: cover;
-	}
-</style>

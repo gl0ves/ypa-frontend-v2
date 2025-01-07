@@ -6,18 +6,15 @@
 	import { onMount } from 'svelte';
 
 	import { type AlertFormData } from '$lib/ypaTypes';
-	import { type Options, type MaxPriceOptions } from '$lib/data/options';
+	import { type Options } from '$lib/data/options';
 
 	import { page } from '$app/stores';
-
-	type SelectValue = string | number | null | undefined;
-
 	const {
-		formData = null,
+		formData,
 		options,
 		handleFormDataUpdated
 	}: {
-		formData?: AlertFormData;
+		formData?: AlertFormData | null;
 		options: Options;
 		handleFormDataUpdated: (data: AlertFormData) => void;
 	} = $props();
@@ -34,28 +31,26 @@
 	const parsedPriceMax = parseInt(searchParams.get('max_price') ?? '0');
 	const priceOptions = maxPriceOptions
 		.map((option) => option.value)
-		.filter((value): value is number => value !== null);
+		.filter((value) => value !== null);
 
 	let closestPrice = null;
 	if (parsedPriceMax !== 0 && priceOptions.length > 0) {
-		closestPrice = priceOptions.find((price) => price >= parsedPriceMax) || null;
+		closestPrice = priceOptions.find((price) => parseInt(price) >= parsedPriceMax) || null;
 	}
 
-	let defaultFormData: AlertFormData = $state(
-		formData || {
-			identifier: null,
-			first_name: null,
-			email: null,
-			region: searchParams.get('region'),
-			areas: searchParams.getAll('areas') ?? [],
-			bedrooms: parseInt(searchParams.get('bedrooms') ?? '0'),
-			bathrooms: parseInt(searchParams.get('bathrooms') ?? '0'),
-			price_max: closestPrice,
-			type: searchParams.get('type'),
-			frequency: 7,
-			verified: false
-		}
-	);
+	let defaultFormData: AlertFormData = $state({
+		identifier: null,
+		first_name: null,
+		email: null,
+		region: searchParams.get('region'),
+		areas: searchParams.getAll('areas') ?? [],
+		bedrooms: searchParams.get('bedrooms') ?? '0',
+		bathrooms: searchParams.get('bathrooms') ?? '0',
+		price_max: closestPrice,
+		type: searchParams.get('type'),
+		frequency: '7',
+		verified: false
+	});
 
 	const showEmail = $page.params.identifier ? false : true;
 
@@ -63,11 +58,13 @@
 
 	onMount(() => {
 		if (defaultFormData.region) fetchAreas(defaultFormData.region);
+		if (formData != null) {
+			defaultFormData = { ...defaultFormData, ...formData };
+		}
 	});
 
 	const fetchAreas = async (region: string | null) => {
 		if (!region) regionAreas = [];
-		console.log(region);
 		let parsedRegion = propertyRegionOptions.find(
 			(option) => option.value === region || option.label === region
 		)?.value;
@@ -85,25 +82,28 @@
 		handleFormDataUpdated(defaultFormData);
 	};
 
-	const handleRegionSelected = (value: SelectValue) => {
-		if (value === undefined || typeof value === 'number') return;
+	const handleRegionSelected = (value: string | null) => {
 		defaultFormData.region = value;
 		defaultFormData.areas = [];
 		if (defaultFormData.region) fetchAreas(value);
 		handleFormDataUpdated(defaultFormData);
 	};
 
-	const handleTypeSelect = (value: string | number | null | undefined) => {
-		if (value != null || typeof value !== 'string') return;
+	const handleTypeSelect = (value: string | null) => {
 		defaultFormData.type = value;
 		handleFormDataUpdated(defaultFormData);
 	};
 
+	const handleFrequencySelect = (value: string | null) => {
+		if (!value) return;
+		defaultFormData.frequency = value;
+		handleFormDataUpdated(defaultFormData);
+	};
+
 	const handleNumberSelect = (
-		key: 'bedrooms' | 'bathrooms' | 'frequency' | 'price_max',
-		value: string | number | null | undefined
+		key: 'bedrooms' | 'bathrooms' | 'price_max',
+		value: string | null
 	) => {
-		if (value != null || typeof value !== 'number') return;
 		defaultFormData[key] = value;
 		handleFormDataUpdated(defaultFormData);
 	};
@@ -119,7 +119,7 @@
 			<Input
 				required
 				placeholder="What is your first name?"
-				on:input={handleInputChange}
+				oninput={handleInputChange}
 				bind:value={defaultFormData.first_name}
 			/>
 		</FormLabel>
@@ -128,7 +128,7 @@
 				<Input
 					required
 					placeholder="Where should we send the alerts?"
-					on:input={handleInputChange}
+					oninput={handleInputChange}
 					bind:value={defaultFormData.email}
 				/>
 			</FormLabel>
@@ -138,7 +138,7 @@
 			options={propertyRegionOptions}
 			label="Region"
 			selected={defaultFormData.region}
-			handleSelect={(option) => handleRegionSelected(option?.value)}
+			handleSelect={(option) => handleRegionSelected(option)}
 		/>
 		<!-- Areas -->
 		<AreaSelect
@@ -152,35 +152,35 @@
 			options={bedAndBathroomOptions}
 			label="Bathrooms"
 			selected={defaultFormData.bathrooms}
-			handleSelect={(option) => handleNumberSelect('bathrooms', option?.value)}
+			handleSelect={(option) => handleNumberSelect('bathrooms', option)}
 		/>
 		<!-- Bedrooms -->
 		<Select
 			options={bedAndBathroomOptions}
 			label="Bedrooms"
 			selected={defaultFormData.bedrooms}
-			handleSelect={(option) => handleNumberSelect('bedrooms', option?.value)}
+			handleSelect={(option) => handleNumberSelect('bedrooms', option)}
 		/>
 		<!-- Types -->
 		<Select
 			options={propertyTypeOptions}
 			label="Type"
 			selected={defaultFormData.type}
-			handleSelect={(option) => handleTypeSelect(option?.value)}
+			handleSelect={(option) => handleTypeSelect(option)}
 		/>
 		<!-- Frequency -->
 		<Select
 			options={emailFrequencyOptions}
 			label="How often would you like to receive alerts?"
 			selected={defaultFormData.frequency}
-			handleSelect={(option) => handleNumberSelect('frequency', option?.value)}
+			handleSelect={(option) => handleFrequencySelect(option)}
 		/>
 		<!-- Max price -->
 		<Select
 			options={maxPriceOptions}
 			label="Max price"
 			selected={defaultFormData.price_max}
-			handleSelect={(option) => handleNumberSelect('price_max', option?.value)}
+			handleSelect={(option) => handleNumberSelect('price_max', option)}
 		/>
 	</div>
 </div>

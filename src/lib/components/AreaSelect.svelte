@@ -1,10 +1,10 @@
 <script lang="ts">
+	import Check from 'lucide-svelte/icons/check';
+	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils.js';
-	import IconCheck from '~icons/mdi/check';
-	import IconCaret from '~icons/mdi/caret-down';
 	import FormLabel from '$lib/components/ui/form-label/FormLabel.svelte';
 
 	let {
@@ -36,42 +36,47 @@
 </script>
 
 <Popover.Root bind:open>
-	<Popover.Trigger asChild let:builder>
-		<FormLabel label="Areas" textColor={areaSelectLabelColor}>
-			<Button
-				builders={[builder]}
-				variant="outline"
-				disabled={!options.length}
-				role="combobox"
-				aria-expanded={open}
-				class="w-[100%] max-w-[100%] justify-between overflow-hidden font-normal truncate"
-			>
-				{#if !options.length}
-					Please select a region
-				{:else}
-					{combinedLabel}
-				{/if}
-				<IconCaret class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-			</Button>
-		</FormLabel>
-	</Popover.Trigger>
+	<FormLabel label="Areas" textColor={areaSelectLabelColor}>
+		<Popover.Trigger>
+			{#snippet child({ props })}
+				<Button
+					variant="outline"
+					class="w-full max-w-[100%] justify-between overflow-hidden font-normal truncate"
+					{...props}
+					role="combobox"
+					aria-expanded={open}
+					disabled={!options.length}
+				>
+					{!options.length ? 'Please select a region' : combinedLabel || 'Select areas...'}
+					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+				</Button>
+			{/snippet}
+		</Popover.Trigger>
+	</FormLabel>
 	<Popover.Content class="max-w-[361px] w-[90%] p-0">
 		<Command.Root>
 			<Command.Input placeholder="Search area..." class="h-9" />
-			<Command.Empty>No areas found.</Command.Empty>
-			<Command.Group class="max-h-[300px] overflow-y-scroll">
-				{#each parsedOptions as option}
-					<Command.Item value={option.value} onSelect={(value) => handleSelect(value)}>
-						<IconCheck
-							class={cn(
-								'mr-2 h-4 w-4',
-								!parsedSelected.map((a) => a.value).includes(option.value) && 'text-transparent'
-							)}
-						/>
-						{option.label}
-					</Command.Item>
-				{/each}
-			</Command.Group>
+			<Command.List>
+				<Command.Empty>No areas found.</Command.Empty>
+				<Command.Group class="max-h-[300px] overflow-y-scroll">
+					{#each parsedOptions as option}
+						<Command.Item
+							value={option.value}
+							onSelect={() => {
+								handleSelect(option.value);
+							}}
+						>
+							<Check
+								class={cn(
+									'mr-2 h-4 w-4',
+									!parsedSelected.map((a) => a.value).includes(option.value) && 'text-transparent'
+								)}
+							/>
+							{option.label}
+						</Command.Item>
+					{/each}
+				</Command.Group>
+			</Command.List>
 		</Command.Root>
 	</Popover.Content>
 </Popover.Root>

@@ -11,18 +11,18 @@
 	let open = $state(false);
 </script>
 
-<Menubar.Root class="sticky top-0 z-50 lg:flex hidden">
+<Menubar.Root class="sticky top-0 z-50 lg:flex justify-end hidden h-20">
 	{#each navItems as item}
 		<Menubar.Menu>
 			{#if item.subNavItems}
 				<Menubar.Trigger>{item.name}</Menubar.Trigger>
 				<Menubar.Content>
 					{#each item.subNavItems as subItem}
-						<Menubar.Item on:click={() => goto(subItem.href)}>{subItem.name}</Menubar.Item>
+						<Menubar.Item onclick={() => goto(subItem.href)}>{subItem.name}</Menubar.Item>
 					{/each}
 				</Menubar.Content>
 			{:else}
-				<Menubar.Item on:click={() => goto(item.href)}>{item.name}</Menubar.Item>
+				<Menubar.Trigger onclick={() => goto(item.href)}>{item.name}</Menubar.Trigger>
 			{/if}
 		</Menubar.Menu>
 	{/each}
@@ -30,14 +30,12 @@
 
 <div class="lg:hidden">
 	<Drawer.Root bind:open direction="bottom">
-		<Drawer.Trigger asChild let:builder>
+		<Drawer.Trigger>
 			<Menubar.Root>
 				<Menubar.Menu>
-					<Menubar.Item>
-						<Button variant="link" builders={[builder]}
-							><IconMenu class="text-lg"></IconMenu></Button
-						>
-					</Menubar.Item>
+					<Menubar.Trigger>
+						<IconMenu class="text-lg"></IconMenu>
+					</Menubar.Trigger>
 				</Menubar.Menu>
 			</Menubar.Root>
 		</Drawer.Trigger>
@@ -49,7 +47,7 @@
 							<Button
 								class="text-lg font-medium leading-none"
 								variant="link"
-								on:click={() => goto(item.href)}>{item.name}</Button
+								onclick={() => goto(item.href)}>{item.name}</Button
 							>
 							<Separator class="mb-2" />
 						{:else}
@@ -64,7 +62,7 @@
 									<Button
 										class="text-muted-foreground"
 										variant="link"
-										on:click={() => goto(subItem.href)}>{subItem.name}</Button
+										onclick={() => goto(subItem.href)}>{subItem.name}</Button
 									>
 								{/each}
 							</div>
@@ -74,8 +72,8 @@
 			</div>
 			<div class="m-6"></div>
 			<Drawer.Footer class="pt-2">
-				<Drawer.Close asChild let:builder>
-					<Button variant="outline" builders={[builder]}>Close</Button>
+				<Drawer.Close>
+					<Button variant="outline">Close</Button>
 				</Drawer.Close>
 			</Drawer.Footer>
 		</Drawer.Content>

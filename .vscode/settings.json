@@ -1,5 +1,5 @@
 {
 	"prettier.configPath": ".prettierrc",
 	"CodeGPT.apiKey": "OpenAI",
-	"workbench.colorTheme": "Default Dark Modern"
+	"workbench.colorTheme": "Default Light Modern"
 }

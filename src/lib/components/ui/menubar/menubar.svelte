@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { Menubar as MenubarPrimitive } from 'bits-ui';
-	import { cn } from '$lib/utils.js';
+	import { Menubar as MenubarPrimitive } from "bits-ui";
+	import { cn } from "$lib/utils.js";
 
-	type $$Props = MenubarPrimitive.Props;
-
-	let className: $$Props['class'] = undefined;
-	let classes = 'flex h-20 items-center space-x-1 border-b bg-background p-1 justify-end';
-	export { className as class };
+	let {
+		ref = $bindable(null),
+		class: className,
+		...restProps
+	}: MenubarPrimitive.RootProps = $props();
 </script>
 
-<MenubarPrimitive.Root class={cn(classes, className)} {...$$restProps}>
-	<slot />
-</MenubarPrimitive.Root>
+<MenubarPrimitive.Root
+	bind:ref
+	class={cn("bg-background flex h-10 items-center space-x-1 rounded-md border p-1", className)}
+	{...restProps}
+/>

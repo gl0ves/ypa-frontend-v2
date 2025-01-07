@@ -70,7 +70,7 @@
 		</div>
 		<Separator class="mt-6" />
 		<div class="flex mt-4 justify-between">
-			<Button class="font-semibold" on:click={() => goToListing()}>VIEW</Button>
+			<Button class="font-semibold" onclick={() => goToListing()}>VIEW</Button>
 			<div class="flex space-x-2 justify-end">
 				<ShareButtons listingUrl={shareUrl()} />
 			</div>

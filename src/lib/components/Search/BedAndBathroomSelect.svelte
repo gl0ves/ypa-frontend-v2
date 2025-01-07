@@ -4,41 +4,46 @@
 	import { page } from '$app/stores';
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { type Options, type Option } from '$lib/data/options';
-	import { type Selected } from 'bits-ui';
-	type HandleSelectValue = Selected<string | number | null> | undefined;
 
 	const { bedOrBath, options }: { bedOrBath: 'bedrooms' | 'bathrooms'; options: Options } =
 		$props();
 
-	const defaultValue = { value: 0, label: 'Any amount' };
+	const defaultValue = { value: '0', label: 'Any amount' };
 
 	const { bedAndBathroomOptions } = options;
 
 	const param = $derived($page.url.searchParams.get(bedOrBath) || '0');
-	let selectedOption = $state(
-		bedAndBathroomOptions.find((option: Option) => option.value?.toString() === param) ||
+	let selectedOption = $derived(() => {
+		if (param === '0') return defaultValue;
+		return (
+			bedAndBathroomOptions.find((option: Option) => option.value?.toString() === param) ||
 			defaultValue
-	);
-
-	$effect(() => {
-		if (param === '0') selectedOption = defaultValue;
+		);
 	});
 
-	const handleOptionSelect = (option: HandleSelectValue) => {
+	const handleOptionSelect = (option: string) => {
 		if (!option) return;
-		const value = option.value;
-		if (typeof value === 'undefined' || typeof value != 'number') return;
+		if (typeof option === 'undefined') return;
 		const updatedParams = new URLSearchParams($page.url.searchParams);
-		if (value === 0) updatedParams.delete(bedOrBath);
-		if (value >= 1) updatedParams.set(bedOrBath, value.toString());
+		const parsedValue = parseInt(option);
+		if (parsedValue === 0) updatedParams.delete(bedOrBath);
+		if (parsedValue >= 1) updatedParams.set(bedOrBath, option);
 		goto(`?${updatedParams.toString()}`);
 	};
+
+	const triggerContent = $derived(() => {
+		return selectedOption().label || 'Any amount';
+	});
 </script>
 
 <FormLabel label={bedOrBath}>
-	<Select.Root selected={selectedOption} onSelectedChange={handleOptionSelect}>
+	<Select.Root
+		type="single"
+		value={selectedOption().value}
+		onValueChange={(value) => handleOptionSelect(value)}
+	>
 		<Select.Trigger class="w-[250px]">
-			<Select.Value />
+			{triggerContent()}
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
@@ -47,6 +52,5 @@
 				{/each}
 			</Select.Group>
 		</Select.Content>
-		<Select.Input name={bedOrBath} />
 	</Select.Root>
 </FormLabel>

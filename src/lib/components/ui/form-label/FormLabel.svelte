@@ -17,6 +17,8 @@
 </script>
 
 <div class={width}>
-	<Label class={`font-semibold capitalize ${textSize} ${textColor}`} for="input">{label}</Label>
+	<Label class={`font-semibold capitalize text-left ${textSize} ${textColor}`} for="input"
+		>{label}</Label
+	>
 	<div id="input">{@render children()}</div>
 </div>

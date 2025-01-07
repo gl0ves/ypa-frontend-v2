@@ -2,10 +2,12 @@
 	import Layout from '$lib/components/ui/layout/Layout.svelte';
 	import YpaTitle from '$lib/components/ui/text/YpaTitle.svelte';
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
+	import YpaPagination from '$lib/components/Pagination/YpaPagination.svelte';
+	import { PUBLIC_CDN_URL } from '$env/static/public';
 </script>
 
-<Layout maxWidth={768}>
-	<div class="container">
+<Layout maxWidth="sm">
+	<div class="container pt-10">
 		<div class="mb-2">
 			<YpaTitle>Your Property Abroad: Spanish Real Estate Portal</YpaTitle>
 		</div>
@@ -60,6 +62,36 @@
 					or the contact form on the property information pages.
 				</YpaText>
 			</li>
+			<li class="mb-4">
+				<YpaText size="sm" weight="semibold"
+					>4. I need a mortgage, currency exchange or legal advice.
+				</YpaText>
+				<YpaText size="sm">Tap “Other Services” in the menu above to enquire.</YpaText>
+			</li>
+			<div class="mb-2">
+				<YpaText size="sm" weight="semibold"
+					>Make sure to search our website and contact us via Whatsapp, phone or email if you have
+					any questions.
+				</YpaText>
+			</div>
+			<div class="mb-2 underline">
+				<a href="/">
+					<YpaText size="sm" weight="semibold">START YOUR SEARCH HERE</YpaText>
+				</a>
+			</div>
+			<div class="mb-2">
+				<YpaText size="sm"
+					>See what property buyers have to say about us on
+					<span class="underline">
+						<a href="https://www.trustpilot.com/review/www.yourpropertyabroad.com">Trustpilot.com</a
+						>
+					</span>
+				</YpaText>
+			</div>
+			<img
+				src={`${PUBLIC_CDN_URL}/static/about-banner.png`}
+				alt="Find a property in Spain with Your Property Abroad"
+			/>
 		</ol>
 	</div>
 </Layout>
