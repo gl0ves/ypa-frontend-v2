@@ -5,15 +5,18 @@
 	import { goto } from '$app/navigation';
 	const { tags }: { tags: string[] } = $props();
 
-	const pressedTags = $derived(() => {
-		return page.url.searchParams.getAll('tags');
+	const pressedTag = $derived(() => {
+		return page.url.searchParams.get('tag');
 	});
 
 	const navigate = (tag: string) => {
 		const params = new URLSearchParams(page.url.searchParams);
-		const tags = new Set(params.get('tags')?.split(',') || []);
-		tags.has(tag) ? tags.delete(tag) : tags.add(tag);
-		tags.size ? params.set('tags', Array.from(tags).join(',')) : params.delete('tags');
+		const currentTag = params.get('tag');
+		if (currentTag === tag) {
+			params.delete('tag');
+		} else {
+			params.set('tag', tag);
+		}
 		goto(`?${params.toString()}`);
 	};
 </script>
@@ -23,7 +26,7 @@
 	{#each tags as tag}
 		<Toggle
 			onPressedChange={() => navigate(tag)}
-			pressed={pressedTags().includes(tag)}
+			pressed={tag == pressedTag()}
 			variant="outline"
 			aria-label="Toggle italic"
 		>

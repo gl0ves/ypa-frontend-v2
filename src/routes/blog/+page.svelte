@@ -7,8 +7,10 @@
 </script>
 
 <Layout maxWidth="lg">
-	<TagSelector tags={data.tags} />
-	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+	<div class="pt-4">
+		<TagSelector tags={data.tags} />
+	</div>
+	<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 		{#each data.posts as post}
 			<div class="mb-2">
 				<BlogPostCard {post} />
