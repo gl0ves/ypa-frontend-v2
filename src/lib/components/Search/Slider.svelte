@@ -3,18 +3,21 @@
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
 	const MIN = 0;
 	const MAX = 1000000;
 	const STEP = 25000;
 
-	let sliderValues: [number, number];
+	const minPrice = $derived(() => parseInt(page.url.searchParams.get('min_price') || '0'));
+	const maxPrice = $derived(() => parseInt(page.url.searchParams.get('max_price') || '1000000'));
 
-	$: {
-		const minPrice = Number(page.url.searchParams.get('min_price')) || MIN;
-		const maxPrice = Number(page.url.searchParams.get('max_price')) || MAX;
-		sliderValues = [minPrice, maxPrice];
-	}
+	const sliderValue = $state([MIN, MAX]);
+
+	onMount(() => {
+		sliderValue[0] = minPrice();
+		sliderValue[1] = maxPrice();
+	});
 
 	let debounceTimeout: number;
 
@@ -39,13 +42,13 @@
 
 <div class="text-left w-[600px] min-w-[200px]">
 	<FormLabel label="Price">
-		<Slider value={sliderValues} min={MIN} max={MAX} step={STEP} onValueChange={updateValues} />
+		<Slider value={sliderValue} min={MIN} max={MAX} step={STEP} onValueChange={updateValues} />
 	</FormLabel>
 	<div class="flex justify-between text-md text-white">
-		<span>€{new Intl.NumberFormat('en-US').format(sliderValues[0])}</span>
+		<span>€{new Intl.NumberFormat('en-US').format(minPrice())}</span>
 		<span>
-			€{new Intl.NumberFormat('en-US').format(sliderValues[1])}
-			{sliderValues[1] >= MAX ? '+' : ''}
+			€{new Intl.NumberFormat('en-US').format(maxPrice())}
+			{maxPrice() >= MAX ? '+' : ''}
 		</span>
 	</div>
 </div>

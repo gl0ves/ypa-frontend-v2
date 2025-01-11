@@ -34,6 +34,6 @@
 	};
 </script>
 
-<div class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]} mb-2`}>
+<div class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]}`}>
 	{@render children()}
 </div>

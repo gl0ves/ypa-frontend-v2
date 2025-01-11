@@ -55,4 +55,37 @@ type BlogPost = {
 	published_when: string;
 };
 
-export type { Listing, AlertFormData, ListingDetails, BlogPost };
+type Block = {
+	type: string;
+	data: {
+		text?: string;
+		level?: number;
+		style?: string;
+		items?: string[];
+		file?: {
+			url: string;
+			alt: string;
+			href?: string;
+		};
+	};
+};
+
+type BlogData = {
+	title: string;
+	cover: string;
+	content: {
+		time: number;
+		blocks: Block[];
+		version: string;
+	};
+	slug: string;
+	id: number;
+	tags: string;
+	author: string;
+	published_when: string;
+	description: string;
+	category: string;
+	related_listings: any[];
+};
+
+export type { Listing, AlertFormData, ListingDetails, BlogPost, BlogData, Block };

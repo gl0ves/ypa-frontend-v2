@@ -16,6 +16,7 @@
 	import Map from '../Map/Map.svelte';
 	import Description from './Description.svelte';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
+	import RelatedListings from '../RelatedListings.svelte';
 	const { listing, options }: { listing: ListingDetails; options: Options } = $props();
 	const { propertyRegionOptions } = options;
 
@@ -53,7 +54,7 @@
 			<YpaText weight="semibold" size="md">{listing.type}</YpaText>
 			<Separator />
 		</div>
-		<div class="flex flex-wrap pb-6">
+		<div class="flex-col flex-wrap pb-6">
 			<div class="flex items-center mr-2">
 				<IconMap class="text-primary  mr-1" />
 				<YpaText weight="semibold" size="sm">Region: {listing.region}</YpaText>
@@ -104,12 +105,4 @@
 		<Map longitude={longitude()} latitude={latitude()} />
 	{/if}
 </div>
-<div class="mb-3">
-	<YpaText weight="semibold" size="md">Related Listings</YpaText>
-	<Separator />
-</div>
-<div class="flex flex-col w-full items-center gap-4 mb-6 lg:flex-row lg:justify-between">
-	{#each listing.related_listings as related}
-		<ListingCard listing={related} {propertyRegionOptions} />
-	{/each}
-</div>
+<RelatedListings relatedListings={listing.related_listings} {propertyRegionOptions} />
