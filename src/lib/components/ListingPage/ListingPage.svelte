@@ -17,5 +17,7 @@
 			We couldnt find any properties matching your criteria, please try again.
 		</h2>
 	{/if}
-	<YpaPagination count={data.listingsCount} />
+	<div class="mt-2">
+		<YpaPagination count={data.listingsCount} />
+	</div>
 </div>

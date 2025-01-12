@@ -2,7 +2,6 @@
 	import Layout from '$lib/components/ui/layout/Layout.svelte';
 	import YpaTitle from '$lib/components/ui/text/YpaTitle.svelte';
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
-	import YpaPagination from '$lib/components/Pagination/YpaPagination.svelte';
 	import { PUBLIC_CDN_URL } from '$env/static/public';
 </script>
 

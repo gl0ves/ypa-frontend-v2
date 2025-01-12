@@ -1,22 +1,31 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import YpaText from '$lib/components/ui/text/YpaText.svelte';
 	import { type Snippet } from 'svelte';
-	const { children }: { children: Snippet } = $props();
+	const { children, color = 'blue' }: { children: Snippet; color?: 'blue' | 'white' } = $props();
 	const fallback = () => {
 		return 'Terms and Conditions';
 	};
+
+	const colorClasses = {
+		blue: 'text-blue',
+		white: 'text-white'
+	};
 </script>
 
-<Dialog.Root portal="body">
-	<Dialog.Trigger>
-		<span class="text-blue-500">
+<Dialog.Root>
+	<Dialog.Trigger class="text-left">
+		<span class={`${colorClasses[color]} cursor-pointer`}>
 			{@render (children ?? fallback)()}
 		</span>
 	</Dialog.Trigger>
 	<Dialog.Content class="max-h-[80vh] overflow-y-auto">
 		<Dialog.Header>
-			<Dialog.Title>Terms and Conditions</Dialog.Title>
+			<Dialog.Title
+				><YpaText size="md" weight="semibold" color="primary">Terms and Condition</YpaText
+				></Dialog.Title
+			>
 		</Dialog.Header>
 		<div>
 			<p class="mb-2">

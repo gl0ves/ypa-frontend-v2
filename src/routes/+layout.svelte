@@ -2,6 +2,7 @@
 	import '../app.css';
 	import Navbar from '$lib/components/Navbar/Navbar.svelte';
 	import type { Snippet } from 'svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	const { children }: { children: Snippet } = $props();
 </script>
 
@@ -11,3 +12,4 @@
 
 <Navbar />
 {@render children?.()}
+<Footer />
