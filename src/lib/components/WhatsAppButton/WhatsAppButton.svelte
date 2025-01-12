@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import { goto } from '$app/navigation';
 
 	const handleClick = () => {
 		const currentUrl = window.location.href;
