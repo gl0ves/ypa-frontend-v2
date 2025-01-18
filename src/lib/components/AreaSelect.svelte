@@ -41,7 +41,7 @@
 			{#snippet child({ props })}
 				<Button
 					variant="outline"
-					class="w-full max-w-[100%] justify-between overflow-hidden font-normal truncate"
+					class="w-full justify-between overflow-hidden font-normal truncate"
 					{...props}
 					role="combobox"
 					aria-expanded={open}

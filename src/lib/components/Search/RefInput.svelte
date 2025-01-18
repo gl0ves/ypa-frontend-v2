@@ -34,7 +34,7 @@
 	<Input
 		value={inputValue}
 		oninput={debouncedInputChange}
-		class="w-[250px]"
+		class="w-full"
 		type="text"
 		placeholder="Search"
 	/>

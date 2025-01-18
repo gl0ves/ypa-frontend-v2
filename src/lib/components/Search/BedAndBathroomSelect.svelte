@@ -42,7 +42,7 @@
 		value={selectedOption().value}
 		onValueChange={(value) => handleOptionSelect(value)}
 	>
-		<Select.Trigger class="w-[250px]">
+		<Select.Trigger class="w-full">
 			{triggerContent()}
 		</Select.Trigger>
 		<Select.Content>

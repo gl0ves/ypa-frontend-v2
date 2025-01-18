@@ -8,7 +8,7 @@
 	let { propertyRegionOptions } = data.options;
 </script>
 
-<div class="flex justify-center flex-wrap gap-4">
+<div class="flex justify-between flex-wrap gap-4">
 	{#each data.listings as listing}
 		<ListingCard {listing} {propertyRegionOptions} />
 	{/each}

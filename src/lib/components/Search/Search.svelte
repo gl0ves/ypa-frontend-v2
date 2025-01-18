@@ -11,9 +11,10 @@
 	import { goto } from '$app/navigation';
 	import { type Options } from '$lib/data/options';
 
-	let showRegionSelect = $state(page.params.region === undefined);
+	let showRegionSelect = $derived(() => {
+		return !page.params.region;
+	});
 	let paramAreas = $state(page.url.searchParams.getAll('areas'));
-	let region = $state(page.url.searchParams.get('region'));
 
 	const { data }: { data: { options: Options; listingsCount: number; areas: string[] } } = $props();
 	const { options } = data;
@@ -25,6 +26,8 @@
 	const clearAreaState = () => {
 		paramAreas = [];
 	};
+
+	$inspect(showRegionSelect());
 
 	const handleAreaSelected = (value: string) => {
 		if (paramAreas.includes(value)) {
@@ -69,23 +72,20 @@
 				{data.listingsCount} results
 			</h2>
 
-			<div class="flex-wrap text-left flex justify-center gap-8 pb-6 mb-6 pt-6 rounded-lg">
-				{#if showRegionSelect}
+			<div
+				class="grid grid-cols-1 text-left lg:grid-cols-3 md:grid-cols-2 gap-8 pb-6 mb-6 pt-6 rounded-lg"
+			>
+				{#if showRegionSelect()}
 					<RegionSelect {clearAreaState} {options} />
 				{/if}
 
-				<div class="w-[250px]">
-					<AreaSelect
-						options={data.areas}
-						selected={paramAreas}
-						handleSelect={handleAreaSelected}
-					/>
-				</div>
+				<AreaSelect options={data.areas} selected={paramAreas} handleSelect={handleAreaSelected} />
+
+				<TypeSelect />
 
 				<BedAndBathroomSelect {options} bedOrBath="bedrooms" />
 				<BedAndBathroomSelect {options} bedOrBath="bathrooms" />
 
-				<TypeSelect />
 				<RefInput />
 			</div>
 			<div class="flex flex-wrap justify-center">
