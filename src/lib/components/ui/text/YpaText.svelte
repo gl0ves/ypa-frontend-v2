@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	type Size = 'sm' | 'md' | 'lg';
-	type Color = 'primary' | 'secondary' | 'white';
+	type Color = 'primary' | 'secondary' | 'white' | 'muted';
 	type Weight = 'normal' | 'semibold' | 'bold';
 
 	const {
@@ -25,7 +25,8 @@
 	const colorClasses = {
 		primary: 'text-primary',
 		secondary: 'text-secondary',
-		white: 'text-white'
+		white: 'text-white',
+		muted: 'text-gray-600'
 	};
 
 	const weightClasses = {
