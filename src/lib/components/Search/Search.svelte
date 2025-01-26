@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/state'; // Import the page store for accessing route parameters
+	import { page } from '$app/state';
 	import RegionSelect from './RegionSelect.svelte';
 	import AreaSelect from '../AreaSelect.svelte';
 	import BedAndBathroomSelect from './BedAndBathroomSelect.svelte';
