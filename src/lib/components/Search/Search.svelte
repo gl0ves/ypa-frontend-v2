@@ -36,19 +36,16 @@
 			paramAreas = [...paramAreas, value];
 		}
 
-		// Create a new URLSearchParams object from the current search parameters
 		const params = new URLSearchParams(window.location.search);
 
 		params.delete('page');
 		params.delete('areas');
 
-		// Update the 'areas' parameter with the joined list of selected area values
 		paramAreas.forEach((area) => {
 			if (typeof area !== 'string') return;
 			params.append('areas', area);
 		});
 
-		// Navigate using the updated parameters
 		goto(`?${params.toString()}`);
 	};
 </script>
