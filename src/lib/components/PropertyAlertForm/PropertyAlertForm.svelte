@@ -11,7 +11,7 @@
 	let formSubmitted = $state(false);
 	let formSubmissionFailed = $state(false);
 	let formData: AlertFormData | null = $state(null);
-	const { options, listing }: { options: Options; listing?: ListingDetails } = $props();
+	let { options, listing }: { options: Options; listing?: ListingDetails } = $props();
 
 	onMount(() => {
 		if (listing && formData) {

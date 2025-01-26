@@ -5,7 +5,7 @@
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { type Options, type PropertyRegionOption } from '$lib/data/options';
 
-	const { options, clearAreaState }: { options: Options; clearAreaState: () => void } = $props();
+	let { options, clearAreaState }: { options: Options; clearAreaState: () => void } = $props();
 
 	const { propertyRegionOptions } = options;
 
@@ -50,7 +50,7 @@
 <FormLabel label="Regions">
 	<Select.Root
 		type="single"
-		value={selectedRegion.value}
+		value={selectedRegion.value || undefined}
 		onValueChange={(value: string) => handleRegionSelected(value)}
 	>
 		<Select.Trigger class="w-full">
@@ -59,7 +59,7 @@
 		<Select.Content>
 			<Select.Group>
 				{#each propertyRegionOptions as region}
-					<Select.Item value={region.value} label={region.label}>{region.label}</Select.Item>
+					<Select.Item value={region.value || ''} label={region.label}>{region.label}</Select.Item>
 				{/each}
 			</Select.Group>
 		</Select.Content>

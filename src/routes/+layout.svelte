@@ -3,7 +3,7 @@
 	import Navbar from '$lib/components/Navbar/Navbar.svelte';
 	import type { Snippet } from 'svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	const { children }: { children: Snippet } = $props();
+	let { children }: { children: Snippet } = $props();
 </script>
 
 <svelte:head>

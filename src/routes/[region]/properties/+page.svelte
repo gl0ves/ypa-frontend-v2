@@ -3,7 +3,7 @@
 	import RegionPrelude from '$lib/components/RegionPrelude.svelte';
 	import Search from '$lib/components/Search/Search.svelte';
 	import Layout from '$lib/components/ui/layout/Layout.svelte';
-	const { data } = $props();
+	let { data } = $props();
 </script>
 
 <Search {data} />

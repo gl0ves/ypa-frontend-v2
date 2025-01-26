@@ -3,7 +3,7 @@
 	import YpaText from './ui/text/YpaText.svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	const { tags }: { tags: string[] } = $props();
+	let { tags }: { tags: string[] } = $props();
 
 	const pressedTag = $derived(() => {
 		return page.url.searchParams.get('tag');

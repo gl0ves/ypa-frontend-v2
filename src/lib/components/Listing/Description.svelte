@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion';
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
-	const {
+	let {
 		descriptions
 	}: {
 		descriptions: {

@@ -2,7 +2,7 @@
 	import type { ListingDetails } from '$lib/ypaTypes';
 	import type { EmblaCarouselType } from 'embla-carousel';
 	import EmblaCarousel from 'embla-carousel-svelte';
-	const { listing }: { listing: ListingDetails } = $props();
+	let { listing }: { listing: ListingDetails } = $props();
 	const { originals, thumbnails } = $derived(listing.images);
 	let selectedIndex = $state(0);
 	let emblaApi: EmblaCarouselType;

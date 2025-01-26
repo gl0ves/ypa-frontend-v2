@@ -4,7 +4,7 @@
 	import { type Block } from '$lib/ypaTypes.js';
 	import RelatedListings from '$lib/components/RelatedListings.svelte';
 
-	const { data } = $props();
+	let { data } = $props();
 
 	const getIf = (item: Block, type: string) => item.type === type;
 	const getIfLevel = (item: Block, level: number) => item.data.level === level;

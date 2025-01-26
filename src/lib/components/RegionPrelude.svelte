@@ -1,7 +1,7 @@
 <script lang="ts">
 	import YpaText from './ui/text/YpaText.svelte';
 
-	const { region } = $props();
+	let { region } = $props();
 </script>
 
 <div class="pt-2 pb-8">

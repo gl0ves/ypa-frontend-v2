@@ -5,7 +5,7 @@
 	import YpaText from './ui/text/YpaText.svelte';
 	import Separator from './ui/separator/separator.svelte';
 
-	const {
+	let {
 		relatedListings,
 		propertyRegionOptions
 	}: { relatedListings: Listing[]; propertyRegionOptions: PropertyRegionOption[] } = $props();

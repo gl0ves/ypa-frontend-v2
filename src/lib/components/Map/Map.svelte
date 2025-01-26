@@ -29,7 +29,7 @@
 		Ibiza: ['39.020012', '1.482148']
 	};
 
-	const {
+	let {
 		region,
 		longitude,
 		latitude,

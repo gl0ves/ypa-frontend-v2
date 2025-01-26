@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { BlogPost } from '$lib/ypaTypes';
 	import { goto } from '$app/navigation';
-	const { post }: { post: BlogPost } = $props();
+	let { post }: { post: BlogPost } = $props();
 </script>
 
 <div class="w-96 h-64 bg-white shadow rounded-lg overflow-hidden relative">

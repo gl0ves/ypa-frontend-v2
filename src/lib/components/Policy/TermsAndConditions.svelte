@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
 	import { type Snippet } from 'svelte';
-	const { children, color = 'blue' }: { children: Snippet; color?: 'blue' | 'white' } = $props();
+	let { children, color = 'blue' }: { children: Snippet; color?: 'blue' | 'white' } = $props();
 	const fallback = () => {
 		return 'Terms and Conditions';
 	};

@@ -3,7 +3,7 @@
 
 	type Size = 'sm' | 'md' | 'lg';
 
-	const { maxWidth = 'sm', children }: { maxWidth: Size; children: Snippet } = $props();
+	let { maxWidth = 'sm', children }: { maxWidth: Size; children: Snippet } = $props();
 
 	const maxWidthClasses = {
 		lg: 'max-w-7xl',

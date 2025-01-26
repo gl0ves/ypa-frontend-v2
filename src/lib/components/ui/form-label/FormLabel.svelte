@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Label } from '$lib/components/ui/label/index.js';
 	import type { Snippet } from 'svelte';
-	const {
+	let {
 		children,
 		label,
 		textColor = 'text-white',

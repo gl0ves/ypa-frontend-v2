@@ -5,7 +5,7 @@
 	import IconCopy from '~icons/mdi/content-copy';
 	import { page } from '$app/state';
 
-	const { listingUrl = page.url }: { listingUrl?: URL } = $props();
+	let { listingUrl = page.url }: { listingUrl?: URL } = $props();
 </script>
 
 <a

@@ -3,7 +3,7 @@
 	import BlogPostCard from '$lib/components/BlogPostCard.svelte';
 	import TagSelector from '$lib/components/TagSelector.svelte';
 
-	const { data } = $props();
+	let { data } = $props();
 </script>
 
 <Layout maxWidth="lg">

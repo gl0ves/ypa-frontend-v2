@@ -5,8 +5,7 @@
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { type Options, type Option } from '$lib/data/options';
 
-	const { bedOrBath, options }: { bedOrBath: 'bedrooms' | 'bathrooms'; options: Options } =
-		$props();
+	let { bedOrBath, options }: { bedOrBath: 'bedrooms' | 'bathrooms'; options: Options } = $props();
 
 	const defaultValue = { value: '0', label: 'Any amount' };
 

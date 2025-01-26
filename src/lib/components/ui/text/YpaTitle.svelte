@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte';
 	type Color = 'primary' | 'secondary';
 
-	const {
+	let {
 		children,
 		color = 'primary'
 	}: {

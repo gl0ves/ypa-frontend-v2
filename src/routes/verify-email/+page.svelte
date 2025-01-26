@@ -3,7 +3,7 @@
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
 	import Layout from '$lib/components/ui/layout/Layout.svelte';
 
-	const { email } = $props();
+	let { email } = $props();
 </script>
 
 <Layout maxWidth="sm">

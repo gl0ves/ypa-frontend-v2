@@ -12,12 +12,11 @@
 	import PropertyAlertForm from '$lib/components/PropertyAlertForm/PropertyAlertForm.svelte';
 	import type { Options } from '$lib/data/options';
 	import WhatsAppButton from '../WhatsAppButton/WhatsAppButton.svelte';
-	import ListingCard from '../ListingCard/ListingCard.svelte';
 	import Map from '../Map/Map.svelte';
 	import Description from './Description.svelte';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import RelatedListings from '../RelatedListings.svelte';
-	const { listing, options }: { listing: ListingDetails; options: Options } = $props();
+	let { listing, options }: { listing: ListingDetails; options: Options } = $props();
 	const { propertyRegionOptions } = options;
 
 	const longitude = $derived(() => {

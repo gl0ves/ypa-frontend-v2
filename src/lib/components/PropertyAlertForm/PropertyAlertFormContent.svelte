@@ -9,7 +9,7 @@
 	import { type Options } from '$lib/data/options';
 
 	import { page } from '$app/state';
-	const {
+	let {
 		formData,
 		options,
 		handleFormDataUpdated

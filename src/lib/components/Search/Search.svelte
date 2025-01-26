@@ -16,7 +16,7 @@
 	});
 	let paramAreas = $state(page.url.searchParams.getAll('areas'));
 
-	const { data }: { data: { options: Options; listingsCount: number; areas: string[] } } = $props();
+	let { data }: { data: { options: Options; listingsCount: number; areas: string[] } } = $props();
 	const { options } = data;
 
 	const resetSearch = (_e: Event) => {

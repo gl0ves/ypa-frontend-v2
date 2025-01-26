@@ -12,7 +12,7 @@
 	import { type PropertyRegionOption } from '$lib/data/options';
 	import { PUBLIC_DOMAIN } from '$env/static/public';
 
-	const {
+	let {
 		listing,
 		propertyRegionOptions
 	}: { listing: Listing; propertyRegionOptions: PropertyRegionOption[] } = $props();

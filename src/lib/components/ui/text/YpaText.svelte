@@ -4,7 +4,7 @@
 	type Color = 'primary' | 'secondary' | 'white' | 'muted';
 	type Weight = 'normal' | 'semibold' | 'bold';
 
-	const {
+	let {
 		children,
 		size = 'md',
 		color = 'primary',

@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import YpaText from '../ui/text/YpaText.svelte';
 
-	const { color = 'blue' }: { color?: 'blue' | 'white' } = $props();
+	let { color = 'blue' }: { color?: 'blue' | 'white' } = $props();
 
 	const colorClasses = {
 		blue: 'text-blue',
