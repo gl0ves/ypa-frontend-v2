@@ -3,7 +3,7 @@
 
 	type Size = 'sm' | 'md' | 'lg';
 
-	const { maxWidth, children }: { maxWidth: Size; children: Snippet } = $props();
+	const { maxWidth = 'sm', children }: { maxWidth: Size; children: Snippet } = $props();
 
 	const maxWidthClasses = {
 		lg: 'max-w-7xl',
@@ -13,7 +13,7 @@
 </script>
 
 <div class="w-full flex justify-center">
-	<div class={`${maxWidthClasses[maxWidth]}`}>
+	<div class={`${maxWidthClasses[maxWidth]} min-h-[900px] px-4 py-8`}>
 		{@render children?.()}
 	</div>
 </div>
