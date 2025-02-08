@@ -19,7 +19,7 @@ export const load = async ({ url }) => {
 };
 
 export const actions = {
-	default: async ({ request, fetch }) => {
+	default: async ({ request, fetch, cookies }) => {
 		const data = await request.formData();
 		const form = await superValidate(data, zod(loginFormSchema));
 		if (!form.valid) {
@@ -42,16 +42,19 @@ export const actions = {
 
 		const responseData = await response.json();
 
-		console.log(responseData);
-
-		if (response.status === 400) {
-			for (const [key, value] of Object.entries(responseData)) {
-				if (Array.isArray(value) && value.length > 0) {
-					setError(form, key, value[0]);
-				}
-			}
+		if (response.status === 401) {
+			setError(form, 'password', 'Invalid email or password');
 			return fail(400, { form });
 		}
-		return redirect(300, '/status=success');
+
+		// Set session cookie
+		cookies.set('session', responseData.session_token, {
+			httpOnly: true,
+			path: '/',
+			// TODO: Implement remember me
+			maxAge: 60 * 60 * 24 * 7
+		});
+
+		return redirect(300, '/');
 	}
 } satisfies Actions;

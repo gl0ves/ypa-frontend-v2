@@ -16,7 +16,7 @@
 
 <Card.Root class="min-w-[360px] lg:w-[400px] ">
 	<Card.Header>
-		<Card.Title><YpaText size="md" weight="semibold">Sign up</YpaText></Card.Title>
+		<Card.Title><YpaText size="md" weight="semibold">Log in</YpaText></Card.Title>
 		<Card.Description>
 			Don't have an account? <a class="text-primary underline" href="/register">Sign up</a>
 		</Card.Description>

@@ -34,14 +34,10 @@ export const actions = {
 			body: JSON.stringify(requestData)
 		});
 
-		const responseData = await response.json();
-
 		if (response.status === 400) {
-			for (const [key, value] of Object.entries(responseData)) {
-				if (Array.isArray(value) && value.length > 0) {
-					setError(form, key, value[0]);
-				}
-			}
+			const responseData = await response.json();
+			if (responseData?.password?.length) setError(form, 'password', responseData.password[0]);
+			if (responseData?.email?.length) setError(form, 'email', responseData.email[0]);
 			return fail(400, { form });
 		}
 		return redirect(300, '/register?status=success');
