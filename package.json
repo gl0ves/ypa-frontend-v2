@@ -44,6 +44,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@tiptap/core": "^2.11.5",
+		"@tiptap/pm": "^2.11.5",
+		"@tiptap/starter-kit": "^2.11.5",
 		"clsx": "^2.1.1",
 		"mapbox-gl": "^3.7.0",
 		"tailwind-merge": "^2.5.4",
