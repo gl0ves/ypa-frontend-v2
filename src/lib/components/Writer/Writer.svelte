@@ -48,6 +48,7 @@
 			extensions: [
 				Document,
 				Image,
+				Dropcursor,
 				Link.configure({
 					openOnClick: false,
 					autolink: true,
