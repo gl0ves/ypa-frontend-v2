@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
-	import { Paragraph } from '@tiptap/extension-paragraph';
-	import { Heading } from '@tiptap/extension-heading';
+	import Paragraph from '@tiptap/extension-paragraph';
+	import OrderedList from '@tiptap/extension-ordered-list';
+	import Link from '@tiptap/extension-link';
+	import Image from '@tiptap/extension-image';
+	import Dropcursor from '@tiptap/extension-dropcursor';
+	import Heading from '@tiptap/extension-heading';
 	import BulletList from '@tiptap/extension-bullet-list';
 	import Document from '@tiptap/extension-document';
 	import ListItem from '@tiptap/extension-list-item';
-	import { Text } from '@tiptap/extension-text';
+	import Text from '@tiptap/extension-text';
 
 	// Create a custom heading extension that extends the base Heading
 	const CustomHeading = Heading.extend({
@@ -43,6 +47,21 @@
 			element: element,
 			extensions: [
 				Document,
+				Image,
+				Link.configure({
+					openOnClick: false,
+					autolink: true,
+					defaultProtocol: 'https',
+					protocols: ['https'],
+					HTMLAttributes: {
+						class: 'text-blue-800 underline'
+					}
+				}),
+				OrderedList.configure({
+					HTMLAttributes: {
+						class: 'list-decimal pl-5'
+					}
+				}),
 				BulletList.configure({
 					HTMLAttributes: {
 						class: 'list-disc pl-5'
@@ -112,6 +131,12 @@
 				class={editor.isActive('bulletList') ? 'bg-slate-300' : ''}
 			>
 				Toggle bullet list
+			</button>
+			<button
+				on:click={() => editor.chain().focus().toggleOrderedList().run()}
+				class={editor.isActive('orderedList') ? 'bg-slate-300' : ''}
+			>
+				Toggle ordered list
 			</button>
 		{/if}
 	</div>
