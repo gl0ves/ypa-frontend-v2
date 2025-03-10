@@ -51,5 +51,34 @@ const deletePropertyAlert = async (identifier: string, all: boolean) => {
 	return response;
 };
 
+type UploadResponse = {
+	url: string;
+};
+
+const upload = async (src: string): Promise<UploadResponse> => {
+	const res = await fetch(src);
+	const blob = await res.blob();
+
+	const formData = new FormData();
+	formData.append('file', blob);
+
+	const response = await fetch('/api/upload', {
+		method: 'POST',
+		body: formData
+	});
+
+	const data = await response.json();
+
+	return data;
+};
+
+export const save = async (slug: string) => {
+	const response = await fetch(`/api/blog/${slug}`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' }
+	});
+	return response;
+};
+
 // NOTE: The routes defined here are the ones that are in the routes/api folder
-export { fetchListings, fetchAreas, fetchAlert, savePropertyAlert, deletePropertyAlert };
+export { fetchListings, fetchAreas, fetchAlert, savePropertyAlert, deletePropertyAlert, upload };
