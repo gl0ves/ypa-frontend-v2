@@ -1,0 +1,16 @@
+---
+description: Rules for writing svelte
+globs: *.svelte
+alwaysApply: false
+---
+## This is a Svelte 5 project, always use the new runes syntax:
+```
+<!-- State -->
+$state("")
+<!-- Computed -->
+$derived(() => {})
+<!-- Effects -->
+$effect(() => {})
+<!-- For props -->
+const { myProp } = $props()
+```

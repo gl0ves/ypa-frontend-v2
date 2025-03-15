@@ -13,7 +13,7 @@
 	<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 		{#each data.posts as post}
 			<div class="mb-2">
-				<BlogPostCard {post} />
+				<BlogPostCard {post} url={`/blog/${post.slug}`} />
 			</div>
 		{/each}
 	</div>

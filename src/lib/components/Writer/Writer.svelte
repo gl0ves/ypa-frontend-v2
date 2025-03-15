@@ -11,13 +11,13 @@
 	import Document from '@tiptap/extension-document';
 	import ListItem from '@tiptap/extension-list-item';
 	import Text from '@tiptap/extension-text';
-
+	import { type BlogData } from '$lib/ypaTypes.js';
 	import { type NodeViewRenderer } from '@tiptap/core';
 
 	import { upload, save } from '$lib/api';
 	import Input from '../ui/input/input.svelte';
 
-	let props: { slug: string; title: string } = $props();
+	const { data }: { data: BlogData } = $props();
 
 	const CustomImage = Image.extend({
 		addNodeView() {
@@ -87,7 +87,6 @@
 
 	let element: HTMLDivElement;
 	let editor: Editor | undefined = $state();
-	let editorStateVersion = $state(0);
 
 	const editorStyle =
 		'prose prose-slate max-w-none prose-headings:font-display prose-h1:text-4xl prose-h1:font-bold prose-h2:text-3xl prose-h2:font-semibold prose-h3:text-2xl prose-h3:font-medium prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline prose-a:font-medium prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:my-6 prose-ol:my-6 prose-li:my-2 prose-img:rounded-lg prose-img:shadow-md min-h-[700px]';
@@ -146,10 +145,9 @@
 				}),
 				Text
 			],
-			content: '<p>Hello World! 🌍️ </p>',
+			content: data.content.blocks,
 			onTransaction: ({ editor: newEditor }) => {
 				// force re-render so editor.isActive works as expected
-				editor = undefined;
 				editor = newEditor;
 			}
 		});
@@ -180,10 +178,10 @@
 
 <div class="flex max-w-[800px] mx-auto flex-col pt-8">
 	<div class="pb-4">
-		<Input placeholder="Title" value={props.title} />
+		<Input placeholder="Title" value={data.title} />
 	</div>
 	<div class="pb-4">
-		<Input placeholder="my-blog-slug" value={props.slug} />
+		<Input placeholder="my-blog-slug" value={data.slug} />
 	</div>
 	<div class="flex pb-8 gap-2">
 		{#if editor}

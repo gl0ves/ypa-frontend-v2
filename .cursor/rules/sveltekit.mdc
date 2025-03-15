@@ -1,0 +1,7 @@
+---
+description: Sveltekit instructions
+globs: +page.server.ts
+alwaysApply: false
+---
+## This project uses a sveltekit backend for SSR but the data comes from a django rest framework backend
+The [hooks.server.ts](mdc:ypassr/src/hooks.server.ts) points requests to `/backend/` to the django backend running in a docker container
