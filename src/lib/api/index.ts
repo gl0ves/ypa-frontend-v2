@@ -1,5 +1,10 @@
 import type { Load } from '@sveltejs/kit';
-import { type AlertFormData, type Listing } from '$lib/ypaTypes';
+import {
+	type AlertFormData,
+	type BlogData,
+	type Listing,
+	type BlogUpdateData
+} from '$lib/ypaTypes';
 
 // Define the type for the fetch function parameter using the Fetch function from the Load context
 type FetchFunction = Parameters<Load>[0]['fetch'];
@@ -72,13 +77,56 @@ const upload = async (src: string): Promise<UploadResponse> => {
 	return data;
 };
 
-export const save = async (slug: string) => {
-	const response = await fetch(`/api/blog/${slug}`, {
+const saveBlogPost = async (id: string, data: { html: string; title: string }) => {
+	const response = await fetch(`/api/writer/${id}`, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' }
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ content: data.html, title: data.title })
 	});
 	return response;
 };
 
+type CreateBlogPostData = {
+	title: string;
+	category: string;
+};
+
+const createBlogPost = async (data: CreateBlogPostData) => {
+	const response = await fetch('/api/writer/create', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	});
+
+	const responseData = await response.json();
+	return responseData as BlogData;
+};
+
+const updateBlogPost = async (id: string, data: BlogUpdateData) => {
+	if (!data.title) throw new Error('Title is required');
+	if (!data.slug) throw new Error('Slug is required');
+	if (data.slug) data.slug = data.slug.replace(/\s+/g, '-');
+	const response = await fetch(`/api/writer/${id}`, {
+		method: 'PATCH',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(data)
+	});
+
+	const responseData = await response.json();
+	return responseData as BlogData;
+};
+
 // NOTE: The routes defined here are the ones that are in the routes/api folder
-export { fetchListings, fetchAreas, fetchAlert, savePropertyAlert, deletePropertyAlert, upload };
+export {
+	fetchListings,
+	fetchAreas,
+	fetchAlert,
+	savePropertyAlert,
+	deletePropertyAlert,
+	upload,
+	saveBlogPost,
+	createBlogPost,
+	updateBlogPost
+};

@@ -5,7 +5,6 @@ import { propertyRegionOptions } from '$lib/data/options';
 export const load = async ({ fetch, params }) => {
 	const blogResponse = await fetch(`/backend/blog/${params.slug}`);
 	const blogData: BlogData = await blogResponse.json();
-	console.log('blogData', blogData);
 
 	return {
 		blog: blogData,

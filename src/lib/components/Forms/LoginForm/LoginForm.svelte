@@ -7,7 +7,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
 
-	let { data }: { data: { form: SuperValidated<Infer<LoginFormSchema>> } } = $props();
+	let { data }: { data: { form: SuperValidated<Infer<LoginFormSchema>>, returnTo?: string } } = $props();
 	const form = superForm(data.form, {
 		validators: zodClient(loginFormSchema)
 	});
@@ -23,6 +23,9 @@
 	</Card.Header>
 	<Card.Content>
 		<form method="POST" use:enhance>
+			{#if data.returnTo}
+				<input type="hidden" name="returnTo" value={data.returnTo} />
+			{/if}
 			<Form.Field class="pb-2" {form} name="email">
 				<Form.Control>
 					{#snippet children({ props })}

@@ -7,6 +7,7 @@ import { redirect } from '@sveltejs/kit';
 /** @type {import('./$types').PageLoad} */
 export const load = async ({ url }) => {
 	const email = url.searchParams.get('email');
+	const returnTo = url.searchParams.get('returnTo');
 	const form = await superValidate(zod(loginFormSchema));
 
 	if (email) {
@@ -14,7 +15,8 @@ export const load = async ({ url }) => {
 	}
 
 	return {
-		form: form
+		form: form,
+		returnTo
 	};
 };
 
@@ -22,12 +24,14 @@ export const actions = {
 	default: async ({ request, fetch, cookies }) => {
 		const data = await request.formData();
 		const form = await superValidate(data, zod(loginFormSchema));
+		const returnTo = data.get('returnTo')?.toString();
+
 		if (!form.valid) {
 			return fail(400, {
 				form
 			});
 		}
-		console.log(form.data);
+
 		const requestData = {
 			email: form.data.email,
 			password: form.data.password
@@ -55,6 +59,6 @@ export const actions = {
 			maxAge: 60 * 60 * 24 * 7
 		});
 
-		return redirect(300, '/');
+		return redirect(302, returnTo || '/');
 	}
 } satisfies Actions;

@@ -1,4 +1,9 @@
 ---
+description: 
+globs: 
+alwaysApply: false
+---
+---
 description: Rules for writing svelte
 globs: *.svelte
 alwaysApply: false
@@ -6,11 +11,16 @@ alwaysApply: false
 ## This is a Svelte 5 project, always use the new runes syntax:
 ```
 <!-- State -->
-$state("")
+let foo = $state("")
 <!-- Computed -->
-$derived(() => {})
-<!-- Effects -->
+const bar = $derived(() => {})
+<!-- Effects, similar to useEffect but anything inside will trigger reactivity -->
 $effect(() => {})
 <!-- For props -->
 const { myProp } = $props()
 ```
+## In svelte 5 no ":"
+on:click is now onclick
+
+## Emits
+Svelte 5 uses hooks, a function is passed to the component

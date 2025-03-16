@@ -55,29 +55,10 @@ type BlogPost = {
 	published_when: string;
 };
 
-type Block = {
-	type: string;
-	data: {
-		text?: string;
-		level?: number;
-		style?: string;
-		items?: string[];
-		file?: {
-			url: string;
-			alt: string;
-			href?: string;
-		};
-	};
-};
-
 type BlogData = {
 	title: string;
 	cover: string;
-	content: {
-		time: number;
-		blocks: Block[];
-		version: string;
-	};
+	html: string;
 	slug: string;
 	id: number;
 	tags: string;
@@ -88,4 +69,13 @@ type BlogData = {
 	related_listings: any[];
 };
 
-export type { Listing, AlertFormData, ListingDetails, BlogPost, BlogData, Block };
+type BlogUpdateData = {
+	html?: string;
+	title?: string;
+	slug?: string;
+	description?: string;
+	action?: 'publish';
+	category?: 'blog' | 'buyers_information' | 'directory';
+};
+
+export type { Listing, AlertFormData, ListingDetails, BlogPost, BlogData, BlogUpdateData };

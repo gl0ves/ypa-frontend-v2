@@ -37,7 +37,6 @@
 	};
 
 	const handleFormDataUpdated = (data: AlertFormData) => {
-		console.log('Updating form data:', { ...data });
 		if (!data) return;
 		formData = { ...formData, ...data };
 	};

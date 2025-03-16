@@ -4,98 +4,120 @@
 	import Paragraph from '@tiptap/extension-paragraph';
 	import OrderedList from '@tiptap/extension-ordered-list';
 	import Link from '@tiptap/extension-link';
-	import Image from '@tiptap/extension-image';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import Dropcursor from '@tiptap/extension-dropcursor';
-	import Heading from '@tiptap/extension-heading';
+	import FormLabel from '$lib/components/ui/form-label/FormLabel.svelte';
+
 	import BulletList from '@tiptap/extension-bullet-list';
 	import Document from '@tiptap/extension-document';
 	import ListItem from '@tiptap/extension-list-item';
 	import Text from '@tiptap/extension-text';
 	import { type BlogData } from '$lib/ypaTypes.js';
-	import { type NodeViewRenderer } from '@tiptap/core';
-
-	import { upload, save } from '$lib/api';
-	import Input from '../ui/input/input.svelte';
+	import { CustomImage, CustomHeading } from './customTiptapExtensions';
+	import { updateBlogPost } from '$lib/api';
 
 	const { data }: { data: BlogData } = $props();
 
-	const CustomImage = Image.extend({
-		addNodeView() {
-			return ((props) => {
-				const { node, getPos, editor } = props;
-				const dom = document.createElement('img');
-
-				// Set initial attributes
-				Object.entries(props.node.attrs).forEach(([key, value]) => {
-					dom.setAttribute(key, value as string);
-				});
-
-				// Handle local images (blob URLs or base64)
-				if (
-					node.attrs.src &&
-					(node.attrs.src.startsWith('blob:') || node.attrs.src.startsWith('data:'))
-				) {
-					const url = upload(node.attrs.src);
-
-					if (typeof getPos === 'function') {
-						editor.commands.command(({ tr }) => {
-							tr.setNodeMarkup(getPos(), undefined, {
-								...node.attrs,
-								src: url
-							});
-							return true;
-						});
-					}
-				}
-
-				return {
-					dom,
-					update: (updatedNode) => {
-						Object.entries(updatedNode.attrs).forEach(([key, value]) => {
-							dom.setAttribute(key, value as string);
-						});
-						return true;
-					}
-				};
-			}) as NodeViewRenderer;
-		}
-	});
-
-	const CustomHeading = Heading.extend({
-		renderHTML({ node, HTMLAttributes }) {
-			const hasLevel = this.options.levels.includes(node.attrs.level);
-			const level = hasLevel ? node.attrs.level : this.options.levels[0];
-
-			const levelClasses = {
-				1: 'text-5xl text-gray-900',
-				2: 'text-4xl text-gray-800',
-				3: 'text-3xl text-gray-800'
-			};
-
-			const classes = `${this.options.HTMLAttributes.class || ''} ${levelClasses[node.attrs.level as 1 | 2 | 3] || ''}`;
-
-			return [
-				`h${level}`,
-				{
-					...HTMLAttributes,
-					class: classes.trim()
-				},
-				0
-			];
-		}
-	});
-
 	let element: HTMLDivElement;
 	let editor: Editor | undefined = $state();
+	let activeStates = $state({
+		heading: { level: 0 },
+		paragraph: false,
+		bulletList: false,
+		orderedList: false
+	});
+
+	let saveTimeout: ReturnType<typeof setTimeout>;
 
 	const editorStyle =
-		'prose prose-slate max-w-none prose-headings:font-display prose-h1:text-4xl prose-h1:font-bold prose-h2:text-3xl prose-h2:font-semibold prose-h3:text-2xl prose-h3:font-medium prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline prose-a:font-medium prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:my-6 prose-ol:my-6 prose-li:my-2 prose-img:rounded-lg prose-img:shadow-md min-h-[700px]';
+		'prose prose-slate prose-headings:font-display prose-h1:text-4xl prose-h1:font-bold prose-h2:text-3xl prose-h2:font-semibold prose-h3:text-2xl prose-h3:font-medium prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline prose-a:font-medium prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:my-6 prose-ol:my-6 prose-li:my-2 prose-img:shadow-md min-h-[700px]';
+
+	let html = $state(data.html || '');
+	let slug = $state(data.slug);
+	let title = $state(data.title);
+	let description = $state(data.description);
+	let category = $state(data.category || 'blog');
+
+	const handleSaveButton = async () => {
+		console.log('click');
+		await updateBlogPost(data.id.toString(), {
+			title,
+			slug,
+			description,
+			category: category as 'blog' | 'buyers_information' | 'directory'
+		});
+	};
+
+	const debouncedHandleHTMLSave = () => {
+		clearTimeout(saveTimeout);
+		saveTimeout = setTimeout(async () => {
+			try {
+				await updateBlogPost(data.id.toString(), {
+					html,
+					title,
+					slug,
+					description,
+					category: category as 'blog' | 'buyers_information' | 'directory'
+				});
+			} catch (error) {
+				console.error('Error saving HTML:', error);
+			}
+		}, 1000);
+	};
+
+	const handleImageUpload = async (file: File, isCover = false) => {
+		const formData = new FormData();
+		formData.append('image', file);
+		formData.append('id', data.id.toString());
+		if (isCover) {
+			formData.append('cover', 'true');
+		}
+
+		try {
+			const response = await fetch('/api/upload', {
+				method: 'POST',
+				body: formData
+			});
+
+			const responseData = await response.json();
+			return isCover ? true : responseData?.file?.url;
+		} catch (error) {
+			console.error('Image upload error:', error);
+			throw error;
+		}
+	};
+
+	const handlePaste = async (e: ClipboardEvent) => {
+		const items = e.clipboardData?.items;
+		if (!items) return;
+
+		for (const item of items) {
+			if (item.type.indexOf('image') === 0) {
+				const file = item.getAsFile();
+				if (file) {
+					try {
+						const imageUrl = await handleImageUpload(file);
+						if (imageUrl) {
+							editor?.chain().focus().setImage({ src: imageUrl }).run();
+						}
+					} catch (error) {
+						console.error('Failed to upload pasted image:', error);
+					}
+				}
+			}
+		}
+	};
 
 	onMount(() => {
 		editor = new Editor({
 			editorProps: {
 				attributes: {
 					class: editorStyle
+				},
+				handlePaste: (view, event) => {
+					handlePaste(event);
+					return false;
 				}
 			},
 			element: element,
@@ -145,10 +167,25 @@
 				}),
 				Text
 			],
-			content: data.content.blocks,
+			content: html,
 			onTransaction: ({ editor: newEditor }) => {
-				// force re-render so editor.isActive works as expected
 				editor = newEditor;
+				html = newEditor.getHTML();
+				activeStates = {
+					heading: {
+						level: newEditor.isActive('heading', { level: 1 })
+							? 1
+							: newEditor.isActive('heading', { level: 2 })
+								? 2
+								: newEditor.isActive('heading', { level: 3 })
+									? 3
+									: 0
+					},
+					paragraph: newEditor.isActive('paragraph'),
+					bulletList: newEditor.isActive('bulletList'),
+					orderedList: newEditor.isActive('orderedList')
+				};
+				debouncedHandleHTMLSave();
 			}
 		});
 	});
@@ -157,31 +194,49 @@
 		if (editor) {
 			editor.destroy();
 		}
+		clearTimeout(saveTimeout);
 	});
 
 	const toggleHeading = (level: 1 | 2 | 3) => {
 		editor?.chain().focus().toggleHeading({ level: level }).run();
-		console.log(editor?.isActive('heading', { level: level }));
 	};
 
 	const isButtonActive = $derived((type: string, options?: Record<string, any>) => {
-		return editor?.isActive(type, options) ?? false;
+		if (type === 'heading' && options?.level) {
+			return activeStates.heading.level === options.level;
+		}
+		return activeStates[type as keyof typeof activeStates] ?? false;
 	});
 
 	const getButtonClass = $derived((type: string, options?: Record<string, any>) => {
 		const baseClass = 'px-3 py-1.5 rounded font-medium text-sm transition-colors';
 		const isActive = isButtonActive(type, options);
-		console.log(isActive);
 		return `${baseClass} ${isActive ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-100'}`;
 	});
 </script>
 
-<div class="flex max-w-[800px] mx-auto flex-col pt-8">
-	<div class="pb-4">
-		<Input placeholder="Title" value={data.title} />
-	</div>
-	<div class="pb-4">
-		<Input placeholder="my-blog-slug" value={data.slug} />
+<div class="flex flex-col pt-8">
+	<div class="flex items-center gap-4 pb-8 border-b border-gray-200">
+		<div class="flex-1">
+			<FormLabel textColor="text-black" label="Slug">
+				<Input
+					bind:value={slug}
+					class="w-full bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-400"
+				/>
+			</FormLabel>
+		</div>
+		<div class="flex-1">
+			<FormLabel textColor="text-black" label="Title">
+				<Input
+					bind:value={title}
+					class="w-full bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-400"
+				/>
+			</FormLabel>
+		</div>
+		<Button
+			onclick={() => handleSaveButton()}
+			class="px-6 py-2 bg-gray-900 text-white hover:bg-gray-800 transition-colors">Save</Button
+		>
 	</div>
 	<div class="flex pb-8 gap-2">
 		{#if editor}
@@ -196,53 +251,71 @@
 			</button>
 			<button
 				onclick={() => editor?.chain().focus().setParagraph().run()}
-				class={`px-3 py-1.5 rounded font-medium text-sm transition-colors ${
-					editor.isActive('paragraph')
-						? 'bg-gray-900 text-white'
-						: 'text-gray-600 hover:bg-gray-100'
-				}`}
+				class={getButtonClass('paragraph')}
 			>
 				P
 			</button>
 			<button
 				onclick={() => editor?.chain().focus().toggleBulletList().run()}
-				class={`px-3 py-1.5 rounded font-medium text-sm transition-colors ${
-					editor.isActive('bulletList')
-						? 'bg-gray-900 text-white'
-						: 'text-gray-600 hover:bg-gray-100'
-				}`}
+				class={getButtonClass('bulletList')}
 			>
 				Toggle bullet list
 			</button>
 			<button
 				onclick={() => editor?.chain().focus().toggleOrderedList().run()}
-				class={`px-3 py-1.5 rounded font-medium text-sm transition-colors ${
-					editor.isActive('orderedList')
-						? 'bg-gray-900 text-white'
-						: 'text-gray-600 hover:bg-gray-100'
-				}`}
+				class={getButtonClass('orderedList')}
 			>
 				Toggle ordered list
 			</button>
 			<button
-				onclick={() => {
+				onclick={async () => {
 					const input = document.createElement('input');
 					input.type = 'file';
 					input.accept = 'image/*';
-					input.onchange = (e) => {
+					input.onchange = async (e) => {
 						const file = (e.target as HTMLInputElement).files?.[0];
 						if (file) {
-							const url = URL.createObjectURL(file);
-							editor?.chain().focus().setImage({ src: url }).run();
+							try {
+								const imageUrl = await handleImageUpload(file);
+								if (imageUrl) {
+									editor?.chain().focus().setImage({ src: imageUrl }).run();
+								}
+							} catch (error) {
+								console.error('Failed to upload image:', error);
+							}
 						}
 					};
 					input.click();
 				}}
+				class={getButtonClass('image')}
 			>
 				Add Image
+			</button>
+			<button
+				onclick={async () => {
+					const input = document.createElement('input');
+					input.type = 'file';
+					input.accept = 'image/*';
+					input.onchange = async (e) => {
+						const file = (e.target as HTMLInputElement).files?.[0];
+						if (file) {
+							try {
+								await handleImageUpload(file, true);
+							} catch (error) {
+								console.error('Failed to upload cover image:', error);
+							}
+						}
+					};
+					input.click();
+				}}
+				class="px-3 py-1.5 rounded font-medium text-sm transition-colors text-gray-600 hover:bg-gray-100"
+			>
+				Set Cover Image
 			</button>
 		{/if}
 	</div>
 
-	<div class="min-h-[700px]" bind:this={element}></div>
+	<div class="border border-gray-200">
+		<div class="px-8 py-6 w-[1000px]" bind:this={element}></div>
+	</div>
 </div>

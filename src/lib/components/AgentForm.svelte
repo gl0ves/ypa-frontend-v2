@@ -3,7 +3,6 @@
 	import Input from './ui/input/input.svelte';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import YpaText from './ui/text/YpaText.svelte';
-	import CheckboxWithLabel from './CheckboxWithLabel.svelte';
 	import Button from './ui/button/button.svelte';
 
 	let companyName = $state('');

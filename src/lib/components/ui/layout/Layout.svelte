@@ -6,6 +6,7 @@
 	let { maxWidth = 'sm', children }: { maxWidth: Size; children: Snippet } = $props();
 
 	const maxWidthClasses = {
+		full: 'w-full',
 		lg: 'max-w-7xl',
 		md: 'max-w-5xl',
 		sm: 'max-w-3xl'

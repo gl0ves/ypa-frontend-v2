@@ -1,4 +1,9 @@
 ---
+description: 
+globs: 
+alwaysApply: false
+---
+---
 description: Sveltekit instructions
 globs: +page.server.ts
 alwaysApply: false
