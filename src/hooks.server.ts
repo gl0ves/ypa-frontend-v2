@@ -1,38 +1,47 @@
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export async function handleFetch({ request, fetch, event }) {
 	if (request.url.startsWith('http://localhost:5173/backend/')) {
-		// Create new headers
-		const headers = new Headers(request.headers);
+		// Get the content type
+		const contentType = request.headers.get('content-type') || '';
 
-		// Add authentication and CSRF tokens
-		const sessionToken = event?.cookies?.get('session');
-		const csrfToken = event?.cookies?.get('csrftoken');
-
-		if (sessionToken) {
-			// Set both session tokens and CSRF token in Cookie header
-			const cookies = [`sessionid=${sessionToken}`];
-			if (csrfToken) {
-				cookies.push(`csrftoken=${csrfToken}`);
+		// Handle the body based on content type
+		let body;
+		if (request.method !== 'GET' && request.method !== 'HEAD') {
+			if (
+				contentType.includes('multipart/form-data') ||
+				contentType.includes('image/') ||
+				contentType.includes('application/octet-stream')
+			) {
+				// For binary data, preserve it as is
+				body = await request.arrayBuffer();
+			} else {
+				// For text data, convert to text
+				body = await request.text();
 			}
-			headers.set('Cookie', cookies.join('; '));
-			headers.set('X-Session-Token', sessionToken);
 		}
 
-		// Add CSRF token for non-GET requests
-		if (request.method !== 'GET' && csrfToken) {
-			headers.set('X-CSRFToken', csrfToken);
+		const sessionToken = event?.cookies?.get('session'); // Change to 'sessionid' for Django
+
+		const headers = new Headers(request.headers);
+		if (sessionToken) {
+			// Set the Django session cookie
+			headers.set('Cookie', `sessionid=${sessionToken}`);
 		}
 
-		// Create options for the new request
 		const options: RequestInit = {
 			method: request.method,
 			headers: headers,
-			// Don't modify the body - pass it through as is
-			body: request.body,
+			body: body,
 			credentials: 'same-origin' as RequestCredentials
 		};
 
-		// Create a new request with the modified URL and options
+		console.log('Request options:', {
+			method: options.method,
+			headers: Object.fromEntries(headers.entries()),
+			hasBody: !!body,
+			contentType
+		});
+
 		request = new Request(
 			request.url.replace('http://localhost:5173/backend/', 'http://ypa-backend:8000/api/'),
 			options
@@ -45,8 +54,6 @@ export async function handleFetch({ request, fetch, event }) {
 export async function handle({ event, resolve }) {
 	// Use 'sessionid' for Django sessions
 	const sessionToken = event.cookies.get('session');
-	const csrfToken = event.cookies.get('csrftoken');
-
 	if (sessionToken) {
 		event.locals.sessionToken = sessionToken;
 	}
@@ -54,34 +61,40 @@ export async function handle({ event, resolve }) {
 	if (event.url.pathname.startsWith('/backend/')) {
 		const headers = new Headers(event.request.headers);
 		if (sessionToken) {
-			// Set both session tokens and CSRF token in Cookie header
-			const cookies = [`sessionid=${sessionToken}`];
-			if (csrfToken) {
-				cookies.push(`csrftoken=${csrfToken}`);
-			}
-			headers.set('Cookie', cookies.join('; '));
-			headers.set('X-Session-Token', sessionToken);
+			headers.set('Cookie', `sessionid=${sessionToken}`);
 		}
 
-		// Add CSRF token for non-GET requests
-		if (event.request.method !== 'GET' && csrfToken) {
-			headers.set('X-CSRFToken', csrfToken);
+		// Get the content type
+		const contentType = event.request.headers.get('content-type') || '';
+
+		// Handle the body based on content type
+		let body;
+		if (event.request.method !== 'GET' && event.request.method !== 'HEAD') {
+			if (
+				contentType.includes('multipart/form-data') ||
+				contentType.includes('image/') ||
+				contentType.includes('application/octet-stream')
+			) {
+				// For binary data, preserve it as is
+				body = await event.request.arrayBuffer();
+			} else {
+				// For text data, convert to text
+				body = await event.request.text();
+			}
 		}
 
-		// Clone the request to preserve the body
-		const clonedRequest = event.request.clone();
-
-		// For client-side requests, the URL will be /api/...
-		const response = await fetch(
-			event.url.href.replace(`${event.url.origin}/api/`, 'http://ypa-backend:8000/api/'),
-			{
-				method: event.request.method,
-				headers: headers,
-				// Pass the body through without modification
-				body: clonedRequest.body,
-				credentials: 'same-origin'
-			}
+		// Create new request
+		const proxyUrl = event.url.href.replace(
+			`${event.url.origin}/backend/`,
+			'http://ypa-backend:8000/api/'
 		);
+
+		const response = await fetch(proxyUrl, {
+			method: event.request.method,
+			headers: headers,
+			body: body,
+			credentials: 'same-origin'
+		});
 
 		// Forward the session cookie from Django's response
 		const responseCookies = response.headers.get('set-cookie');
