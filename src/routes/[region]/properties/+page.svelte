@@ -9,5 +9,5 @@
 <Search {data} />
 <Layout maxWidth="lg">
 	<RegionPrelude region={data.region} />
-	<ListingPage {data} />
 </Layout>
+<ListingPage {data} />

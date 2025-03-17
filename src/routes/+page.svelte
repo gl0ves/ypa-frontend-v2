@@ -6,7 +6,4 @@
 </script>
 
 <Search {data} />
-
-<Layout maxWidth="lg">
-	<ListingPage {data} />
-</Layout>
+<ListingPage {data} />

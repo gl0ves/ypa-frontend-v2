@@ -8,16 +8,18 @@
 	let { propertyRegionOptions } = data.options;
 </script>
 
-<div class="flex justify-between flex-wrap gap-4">
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 w-full">
 	{#each data.listings as listing}
-		<ListingCard {listing} {propertyRegionOptions} />
+		<div class="w-full">
+			<ListingCard {listing} {propertyRegionOptions} />
+		</div>
 	{/each}
 	{#if data.listings.length === 0}
-		<h2 class="font-semibold min-h-[200px]">
+		<h2 class="font-semibold min-h-[200px] col-span-full">
 			We couldnt find any properties matching your criteria, please try again.
 		</h2>
 	{/if}
-	<div class="mt-2">
+	<div class="mt-2 col-span-full">
 		<YpaPagination count={data.listingsCount} />
 	</div>
 </div>

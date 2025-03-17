@@ -14,7 +14,7 @@
 </script>
 
 <div class="w-full flex justify-center">
-	<div class={`${maxWidthClasses[maxWidth]} min-h-[900px] px-4 py-8`}>
+	<div class={`${maxWidthClasses[maxWidth]} px-4 py-8`}>
 		{@render children?.()}
 	</div>
 </div>
