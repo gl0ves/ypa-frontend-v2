@@ -21,11 +21,34 @@ export async function handleFetch({ request, fetch, event }) {
 		}
 
 		const sessionToken = event?.cookies?.get('session'); // Change to 'sessionid' for Django
+		const csrfToken = event?.cookies?.get('csrftoken'); // Get Django CSRF token
+		const sessionTokenAuth = event?.cookies?.get('session_token'); // Get session_token for X-Session-Token header
 
 		const headers = new Headers(request.headers);
+
+		// Build the cookie header with all necessary cookies
+		let cookieHeader = '';
 		if (sessionToken) {
-			// Set the Django session cookie
-			headers.set('Cookie', `sessionid=${sessionToken}`);
+			cookieHeader += `sessionid=${sessionToken}`;
+		}
+		if (csrfToken) {
+			// Add csrftoken cookie to the Cookie header
+			cookieHeader += cookieHeader ? `; csrftoken=${csrfToken}` : `csrftoken=${csrfToken}`;
+		}
+
+		// Set the combined cookie header if we have any cookies
+		if (cookieHeader) {
+			headers.set('Cookie', cookieHeader);
+		}
+
+		// Add CSRF token to headers for non-GET requests
+		if (csrfToken && request.method !== 'GET' && request.method !== 'HEAD') {
+			headers.set('X-CSRFToken', csrfToken);
+		}
+
+		// Add X-Session-Token header if available
+		if (sessionTokenAuth) {
+			headers.set('X-Session-Token', sessionTokenAuth);
 		}
 
 		const options: RequestInit = {
@@ -60,8 +83,34 @@ export async function handle({ event, resolve }) {
 
 	if (event.url.pathname.startsWith('/backend/')) {
 		const headers = new Headers(event.request.headers);
+
+		// Get CSRF token from cookies
+		const csrfToken = event.cookies.get('csrftoken');
+
+		// Build the cookie header with all necessary cookies
+		let cookieHeader = '';
 		if (sessionToken) {
-			headers.set('Cookie', `sessionid=${sessionToken}`);
+			cookieHeader += `sessionid=${sessionToken}`;
+		}
+		if (csrfToken) {
+			// Add csrftoken cookie to the Cookie header
+			cookieHeader += cookieHeader ? `; csrftoken=${csrfToken}` : `csrftoken=${csrfToken}`;
+		}
+
+		// Set the combined cookie header if we have any cookies
+		if (cookieHeader) {
+			headers.set('Cookie', cookieHeader);
+		}
+
+		// Add CSRF token to headers for non-GET requests
+		if (csrfToken && event.request.method !== 'GET' && event.request.method !== 'HEAD') {
+			headers.set('X-CSRFToken', csrfToken);
+		}
+
+		// Get session_token for X-Session-Token header
+		const sessionTokenAuth = event.cookies.get('session_token');
+		if (sessionTokenAuth) {
+			headers.set('X-Session-Token', sessionTokenAuth);
 		}
 
 		// Get the content type

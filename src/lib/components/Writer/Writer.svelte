@@ -30,8 +30,35 @@
 
 	let saveTimeout: ReturnType<typeof setTimeout>;
 
-	const editorStyle =
-		'prose prose-slate prose-headings:font-display prose-h1:text-4xl prose-h1:font-bold prose-h2:text-3xl prose-h2:font-semibold prose-h3:text-2xl prose-h3:font-medium prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline prose-a:font-medium prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:my-6 prose-ol:my-6 prose-li:my-2 prose-img:shadow-md min-h-[700px]';
+	// Editor styles grouped by element type
+	const baseStyle = 'prose prose-slate min-h-[700px] outline-none';
+
+	const headingStyles = [
+		'prose-headings:font-display',
+		'prose-h1:text-4xl prose-h1:font-bold',
+		'prose-h2:text-3xl prose-h2:font-semibold',
+		'prose-h3:text-2xl prose-h3:font-medium'
+	].join(' ');
+
+	const paragraphStyles = 'prose-p:text-gray-600 prose-p:leading-relaxed';
+
+	const linkStyles = 'prose-a:text-blue-600 prose-a:no-underline prose-a:font-medium';
+
+	const emphasisStyles = 'prose-strong:text-gray-900 prose-strong:font-semibold';
+
+	const listStyles = 'prose-ul:my-6 prose-ol:my-6 prose-li:my-2';
+
+	const imageStyles = 'prose-img:shadow-md';
+
+	const editorStyle = [
+		baseStyle,
+		headingStyles,
+		paragraphStyles,
+		linkStyles,
+		emphasisStyles,
+		listStyles,
+		imageStyles
+	].join(' ');
 
 	let html = $state(data.html || '');
 	let slug = $state(data.slug);
