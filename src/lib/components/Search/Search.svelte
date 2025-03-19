@@ -88,9 +88,13 @@
 			<div class="flex flex-wrap justify-center">
 				<Slider />
 			</div>
-			<div class="flex justify-center gap-8">
-				<Button onclick={(e) => resetSearch(e)}>RESET</Button>
-				<PropertyAlertyForm {options} />
+			<div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 w-full">
+				<div class="w-full sm:w-auto">
+					<Button onclick={(e) => resetSearch(e)}>RESET</Button>
+				</div>
+				<div class="w-full sm:w-auto">
+					<PropertyAlertyForm {options} />
+				</div>
 			</div>
 		</div>
 	</div>

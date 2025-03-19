@@ -1,8 +1,8 @@
 <script lang="ts">
 	import * as Menubar from '$lib/components/ui/menubar/index.js';
-	import * as Drawer from '$lib/components/ui/drawer/index.js';
+	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { navItems } from '$lib/components/Navbar/NavItems';
 	import IconMenu from '~icons/mdi/menu';
 	import IconChevronDown from '~icons/mdi/chevron-down';
@@ -13,8 +13,13 @@
 	import IconFacebook from '~icons/mdi/facebook';
 	import IconInstagram from '~icons/mdi/instagram';
 	import IconPhone from '~icons/mdi/phone';
+	import IconClose from '~icons/mdi/close';
 
 	let open = $state(false);
+	const handleGoTo = (href: string) => {
+		open = false;
+		goto(href);
+	};
 </script>
 
 <div class="flex-col sticky top-0 z-50">
@@ -111,54 +116,120 @@
 	</div>
 </div>
 
-<div class="lg:hidden flex justify-end">
-	<Drawer.Root bind:open direction="bottom">
-		<Drawer.Trigger>
-			<div class="full p-2 justify-end flex">
-				<IconMenu class="text-lg"></IconMenu>
-			</div>
-		</Drawer.Trigger>
-		<Drawer.Content>
-			<div class="m-6">
-				{#each navItems as item}
-					<div class="mb-4">
-						{#if item.href}
-							<div>
+<div class="lg:hidden flex justify-between items-center bg-primary p-4 space-y-2">
+	<a aria-label="Your Property Abroad Homepage" href="/">
+		<img
+			class="max-h-12"
+			height="20"
+			alt="Your Property Abroad Logo"
+			src={`${PUBLIC_CDN_URL}/static/logo.png`}
+		/>
+	</a>
+	<Sheet.Root bind:open>
+		<Sheet.Trigger>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="hover:bg-primary-foreground p-6 hover:text-primary active:bg-primary-foreground active:text-white"
+			>
+				<IconMenu class="text-white" />
+			</Button>
+		</Sheet.Trigger>
+		<Sheet.Portal>
+			<Sheet.Overlay />
+			<Sheet.Content side="right" class="w-full h-full overflow-y-auto bg-primary text-white">
+				<Sheet.Header class="flex justify-between items-center flex-row">
+					<Sheet.Title>
+						<a class="" aria-label="Your Property Abroad Homepage" href="/">
+							<img
+								class="max-h-12"
+								height="20"
+								alt="Your Property Abroad Logo"
+								src={`${PUBLIC_CDN_URL}/static/logo.png`}
+							/>
+						</a>
+					</Sheet.Title>
+					<Sheet.Close>
+						<Button
+							variant="ghost"
+							size="icon"
+							class="hover:bg-primary-foreground p-4 hover:text-primary active:bg-primary-foreground active:text-white"
+						>
+							<IconClose class="h-20 w-20" />
+						</Button>
+					</Sheet.Close>
+				</Sheet.Header>
+				<div class="py-4">
+					{#each navItems as item}
+						<div class="mb-4">
+							{#if item.href}
 								<Button
-									class="text-lg font-medium leading-none"
-									variant="link"
-									onclick={() => goto(item.href)}>{item.name}</Button
+									class="w-full justify-start text-md font-medium text-white hover:bg-primary-foreground hover:text-primary active:text-white focus:text-white"
+									variant="ghost"
+									onclick={() => handleGoTo(item.href)}
 								>
-							</div>
-							<Separator class="mb-2" />
-						{:else}
-							<h4 class="flex flex-row text-lg ml-4 font-medium leading-none">
-								{item.name}<IconChevronDown class="text-lg" />
-							</h4>
-							<Separator class="mt-3 mb-2" />
-						{/if}
-						{#if item.subNavItems}
-							<div>
-								{#each item.subNavItems as subItem}
-									<div>
+									{item.name}
+								</Button>
+								<Separator class="mb-2" />
+							{:else}
+								<div class="px-4 py-2">
+									<h4 class="flex items-center justify-between text-md font-medium text-white">
+										{item.name}
+										<IconChevronDown class="h-4 w-4" />
+									</h4>
+								</div>
+								<Separator class="mb-2" />
+							{/if}
+							{#if item.subNavItems}
+								<div class="pl-4">
+									{#each item.subNavItems as subItem}
 										<Button
-											class="text-muted-foreground"
-											variant="link"
-											onclick={() => goto(subItem.href)}>{subItem.name}</Button
+											class="w-full justify-start text-white hover:bg-primary-foreground hover:text-primary active:text-white focus:text-white"
+											variant="ghost"
+											onclick={() => handleGoTo(subItem.href)}
 										>
-									</div>
-								{/each}
-							</div>
-						{/if}
-					</div>
-				{/each}
-			</div>
-			<div class="m-6"></div>
-			<Drawer.Footer class="pt-2">
-				<Drawer.Close>
-					<Button variant="outline">Close</Button>
-				</Drawer.Close>
-			</Drawer.Footer>
-		</Drawer.Content>
-	</Drawer.Root>
+											{subItem.name}
+										</Button>
+									{/each}
+								</div>
+							{/if}
+						</div>
+					{/each}
+				</div>
+				<div class="flex items-center justify-center gap-4 mt-4">
+					<a href="tel:31618472480" target="_blank">
+						<Button variant="outline" size="icon" class="border-white bg-white hover:bg-white">
+							<IconPhone class="h-6 w-6 text-primary" />
+						</Button>
+					</a>
+					<a href="https://wa.me/31618472480" target="_blank">
+						<Button variant="ghost" size="icon" class="border-white bg-whatsapp hover:bg-whatsapp">
+							<IconWhatsApp class="h-6 w-6 text-white" />
+						</Button>
+					</a>
+					<a href="https://www.facebook.com/yourpropertyabroad/" target="_blank">
+						<Button variant="ghost" size="icon" class="border-white bg-facebook hover:bg-facebook">
+							<IconFacebook class="h-6 w-6 text-white" />
+						</Button>
+					</a>
+					<a href="https://www.instagram.com/yourpropertyabroad" target="_blank">
+						<Button
+							variant="ghost"
+							size="icon"
+							class="border-white bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600"
+						>
+							<IconInstagram class="h-6 w-6 text-white" />
+						</Button>
+					</a>
+				</div>
+				<Sheet.Footer class="pt-8">
+					<Sheet.Close>
+						<Button size="sm" variant="default" class="bg-white text-black font-semibold"
+							>CLOSE</Button
+						>
+					</Sheet.Close>
+				</Sheet.Footer>
+			</Sheet.Content>
+		</Sheet.Portal>
+	</Sheet.Root>
 </div>

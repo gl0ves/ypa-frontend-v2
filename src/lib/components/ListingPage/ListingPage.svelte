@@ -8,9 +8,11 @@
 	let { propertyRegionOptions } = data.options;
 </script>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto px-4 w-full">
+<div
+	class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 w-full max-w-7xl mx-auto px-4 overflow-hidden"
+>
 	{#each data.listings as listing}
-		<div class="w-full">
+		<div class="flex justify-center">
 			<ListingCard {listing} {propertyRegionOptions} />
 		</div>
 	{/each}

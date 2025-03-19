@@ -32,7 +32,7 @@
 	};
 </script>
 
-<div class="w-96 bg-white shadow rounded-lg overflow-hidden">
+<div class="w-full max-w-sm bg-white shadow rounded-lg overflow-hidden">
 	<div class="relative h-48 w-full">
 		<button onclick={() => goToListing()} class="absolute inset-0">
 			<img

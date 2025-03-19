@@ -13,6 +13,7 @@
 	},
 	"devDependencies": {
 		"@iconify-json/mdi": "^1.2.1",
+		"@lucide/svelte": "^0.482.0",
 		"@sveltejs/adapter-auto": "^3.3.1",
 		"@sveltejs/kit": "^2.15.1",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
@@ -20,7 +21,7 @@
 		"@typescript-eslint/eslint-plugin": "^8.11.0",
 		"@typescript-eslint/parser": "^8.11.0",
 		"autoprefixer": "^10.4.20",
-		"bits-ui": "^1.0.0-next.66",
+		"bits-ui": "^1.3.13",
 		"embla-carousel-svelte": "^8.5.1",
 		"eslint": "^9.13.0",
 		"eslint-config-prettier": "^9.1.0",
