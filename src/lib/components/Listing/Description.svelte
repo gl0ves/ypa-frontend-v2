@@ -11,9 +11,11 @@
 			nl: string[];
 		};
 	} = $props();
+
+	let accordionValue = 'item-1';
 </script>
 
-<Accordion.Root value={'item-1'}>
+<Accordion.Root type="single" value={accordionValue}>
 	{#if descriptions.en.length}
 		<Accordion.Item value="item-1">
 			<Accordion.Trigger

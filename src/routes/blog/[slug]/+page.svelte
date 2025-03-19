@@ -9,12 +9,7 @@
 <Layout maxWidth="lg">
 	<div class="mb-5 mt-5 container">
 		<div class:container--centered={data.blog.category === 'directory'}>
-			<img
-				class="image"
-				src={data.blog.cover}
-				alt="Cover"
-				style:max-width={data.blog.category === 'blog' ? '1920px' : '350px'}
-			/>
+			<img class="image w-full" src={data.blog.cover} alt="Cover" />
 		</div>
 
 		<div>
@@ -47,6 +42,7 @@
 		:global(p) {
 			font-size: $paragraph-size;
 			color: $paragraph-color;
+			margin-bottom: 1em;
 		}
 		:global(li) {
 			font-size: $paragraph-size;
@@ -91,6 +87,10 @@
 			font-size: 16px;
 			margin-bottom: 20px;
 			line-height: 1.2;
+		}
+
+		:global(img) {
+			margin-bottom: 2em;
 		}
 	}
 

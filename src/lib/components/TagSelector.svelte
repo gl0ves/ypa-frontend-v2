@@ -22,6 +22,7 @@
 </script>
 
 <YpaText size="md" weight="semibold">Topics</YpaText>
+
 <div class="flex gap-1 flex-wrap">
 	{#each tags as tag}
 		<Toggle

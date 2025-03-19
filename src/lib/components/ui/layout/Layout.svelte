@@ -13,8 +13,8 @@
 	};
 </script>
 
-<div class="w-full flex justify-center">
-	<div class={`${maxWidthClasses[maxWidth]} px-4 py-8`}>
+<div class="w-full">
+	<div class={`${maxWidthClasses[maxWidth]} px-4 py-8 mx-auto`}>
 		{@render children?.()}
 	</div>
 </div>
