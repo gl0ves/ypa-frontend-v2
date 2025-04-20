@@ -2,7 +2,6 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { BlogUpdateData } from '$lib/ypaTypes';
 export const PATCH: RequestHandler = async ({ request, params, fetch }) => {
-	console.log({ ...params });
 	try {
 		const data: BlogUpdateData = await request.json();
 		const { id } = params;
@@ -26,9 +25,6 @@ export const PATCH: RequestHandler = async ({ request, params, fetch }) => {
 
 		// Return the successful response from the backend
 		const responseData = await response.json();
-
-		console.log({ responseData });
-
 		return json(responseData);
 	} catch (error) {
 		console.error('Error updating blog post:', error);
@@ -41,8 +37,6 @@ export const PATCH: RequestHandler = async ({ request, params, fetch }) => {
 
 export const GET: RequestHandler = async ({ request, params, fetch }) => {
 	const { id } = params;
-
-	console.log({ ...params });
 
 	const response = await fetch(`/backend/writer/${id}/`);
 	return json(await response.json());

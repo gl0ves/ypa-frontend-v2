@@ -7,7 +7,8 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import YpaText from '$lib/components/ui/text/YpaText.svelte';
 
-	let { data }: { data: { form: SuperValidated<Infer<LoginFormSchema>>, returnTo?: string } } = $props();
+	let { data }: { data: { form: SuperValidated<Infer<LoginFormSchema>>; returnTo?: string } } =
+		$props();
 	const form = superForm(data.form, {
 		validators: zodClient(loginFormSchema)
 	});
