@@ -70,6 +70,7 @@ jobs:
               --network ypa-network \
               --env-file $ENV_FILE \
               --name $CONTAINER \
+              -p 3000:3000 \
               $IMAGE
 
             # Start the container
@@ -82,7 +83,7 @@ jobs:
           KNOWN_HOSTS: ${{ secrets.YPA_HOSTS }}
           SSH_HOST: 91.99.74.239
           # MARK: Docker & GitHub
-          IMAGE: ghcr.io/gl0ves/ypassr
+          IMAGE: ghcr.io/gl0ves/ypa-frontend-v2
           CONTAINER: ypa-frontend
           REGISTRY: ghcr.io
           USERNAME: ${{ github.actor }}
