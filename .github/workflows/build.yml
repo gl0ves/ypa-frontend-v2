@@ -68,7 +68,6 @@ jobs:
 
             docker create \
               --network ypa-network \
-              --env-file $ENV_FILE \
               --name $CONTAINER \
               -p 3000:3000 \
               $IMAGE
