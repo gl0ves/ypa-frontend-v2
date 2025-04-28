@@ -1,0 +1,91 @@
+name: Deploy Dockerized SvelteKit to Server
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/gl0ves/ypa-frontend-v2
+          flavor: latest=true
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy Docker image
+        if: github.ref == 'refs/heads/master'
+        run: |
+          # MARK: SSH settings
+            mkdir -p ~/.ssh/
+            echo "$PRIVATE_KEY" > ~/.ssh/key
+            sudo chmod 600 ~/.ssh/key
+            echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+            trap 'rm -f ~/.ssh/key' EXIT
+
+            ssh ci@$SSH_HOST -i ~/.ssh/key <<< """
+
+            # Docker operations
+            docker login $REGISTRY -u $USERNAME -p $PASSWORD
+            docker pull $IMAGE
+
+            # Stop and remove existing containers if they exist
+            docker stop -t 1 $CONTAINER || true
+            docker rm $CONTAINER || true
+
+            # Create private network if it doesn't exist
+            docker network create ypa-network || true
+
+            docker create \
+              --network ypa-network \
+              --env-file $ENV_FILE \
+              --name $CONTAINER \
+              $IMAGE
+
+            # Start the container
+            docker start $CONTAINER
+            """
+        shell: bash
+        env:
+          # MARK: SSH settings
+          PRIVATE_KEY: ${{ secrets.YPA_KEY }}
+          KNOWN_HOSTS: ${{ secrets.YPA_HOSTS }}
+          SSH_HOST: 91.99.74.239
+          # MARK: Docker & GitHub
+          IMAGE: ghcr.io/gl0ves/ypassr
+          CONTAINER: ypa-frontend
+          REGISTRY: ghcr.io
+          USERNAME: ${{ github.actor }}
+          PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          # MARK: Host-related paths
+          ENV_FILE: /home/ci/.frontend-env

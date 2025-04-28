@@ -1,0 +1,32 @@
+# Build stage
+FROM node:23-slim AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+# Production image
+FROM node:23-slim AS runner
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install --omit=dev
+
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/.svelte-kit ./.svelte-kit
+COPY --from=builder /app/static ./static
+
+# Needed for the production server
+COPY --from=builder /app/server ./server
+COPY --from=builder /app/svelte.config.js ./
+
+EXPOSE 3000
+
+# Start the Node server
+CMD ["node", "--env-file=.frontend-env", "build"]
