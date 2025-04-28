@@ -3,6 +3,14 @@ FROM node:23-slim AS builder
 
 WORKDIR /app
 
+ARG PUBLIC_CDN_URL
+ARG PUBLIC_DOMAIN
+ARG PUBLIC_MAPBOX_TOKEN
+
+ENV PUBLIC_CDN_URL=$PUBLIC_CDN_URL
+ENV PUBLIC_DOMAIN=$PUBLIC_DOMAIN
+ENV PUBLIC_MAPBOX_TOKEN=$PUBLIC_MAPBOX_TOKEN
+
 COPY package.json package-lock.json ./
 RUN npm install
 
@@ -29,4 +37,4 @@ COPY --from=builder /app/svelte.config.js ./
 EXPOSE 3000
 
 # Start the Node server
-CMD ["node", "--env-file=.frontend-env", "build"]
+CMD ["node", "build"]

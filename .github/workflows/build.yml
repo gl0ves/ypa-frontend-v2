@@ -87,5 +87,7 @@ jobs:
           REGISTRY: ghcr.io
           USERNAME: ${{ github.actor }}
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          # MARK: Host-related paths
-          ENV_FILE: /home/ci/.frontend-env
+          build-args: |
+            PUBLIC_CDN_URL=${{ secrets.PUBLIC_CDN_URL }}
+            PUBLIC_DOMAIN=${{ secrets.PUBLIC_DOMAIN }}
+            PUBLIC_MAPBOX_TOKEN=${{ secrets.PUBLIC_MAPBOX_TOKEN }}
