@@ -27,12 +27,7 @@ COPY package.json package-lock.json ./
 RUN npm install --omit=dev
 
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/.svelte-kit ./.svelte-kit
 COPY --from=builder /app/static ./static
-
-# Needed for the production server
-COPY --from=builder /app/server ./server
-COPY --from=builder /app/svelte.config.js ./
 
 EXPOSE 3000
 
