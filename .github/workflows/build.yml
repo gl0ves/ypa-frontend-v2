@@ -45,36 +45,35 @@ jobs:
       - name: Deploy Docker image
         if: github.ref == 'refs/heads/master'
         run: |
-          # MARK: SSH settings
-            mkdir -p ~/.ssh/
-            echo "$PRIVATE_KEY" > ~/.ssh/key
-            sudo chmod 600 ~/.ssh/key
-            echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          mkdir -p ~/.ssh/
+          echo "$PRIVATE_KEY" > ~/.ssh/key
+          sudo chmod 600 ~/.ssh/key
+          echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
 
-            trap 'rm -f ~/.ssh/key' EXIT
+          trap 'rm -f ~/.ssh/key' EXIT
 
-            ssh ci@$SSH_HOST -i ~/.ssh/key <<< """
+          ssh ci@$SSH_HOST -i ~/.ssh/key <<< """
 
-            # Docker operations
-            docker login $REGISTRY -u $USERNAME -p $PASSWORD
-            docker pull $IMAGE
+          # Docker operations
+          docker login $REGISTRY -u $USERNAME -p $PASSWORD
+          docker pull $IMAGE
 
-            # Stop and remove existing containers if they exist
-            docker stop -t 1 $CONTAINER || true
-            docker rm $CONTAINER || true
+          # Stop and remove existing containers if they exist
+          docker stop -t 1 $CONTAINER || true
+          docker rm $CONTAINER || true
 
-            # Create private network if it doesn't exist
-            docker network create ypa-network || true
+          # Create private network if it doesn't exist
+          docker network create ypa-network || true
 
-            docker create \
-              --network ypa-network \
-              --name $CONTAINER \
-              -p 3000:3000 \
-              $IMAGE
+          docker create \
+            --network ypa-network \
+            --name $CONTAINER \
+            -p 3000:3000 \
+            $IMAGE
 
-            # Start the container
-            docker start $CONTAINER
-            """
+          # Start the container
+          docker start $CONTAINER
+          """
         shell: bash
         env:
           # MARK: SSH settings
