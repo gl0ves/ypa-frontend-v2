@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+# Allow all crawlers access to everything. Modify as needed for your SEO/privacy requirements. 
