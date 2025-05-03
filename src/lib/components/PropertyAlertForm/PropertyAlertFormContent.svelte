@@ -68,7 +68,7 @@
 		let parsedRegion = propertyRegionOptions.find(
 			(option) => option.value === region || option.label === region
 		)?.value;
-		const res = await fetch(`/api/v2/areas?region=${parsedRegion}`);
+		const res = await fetch(`/api/v2/listings?region=${parsedRegion}&display=areas&limit=1000`);
 		const { results } = await res.json();
 		regionAreas = results;
 	};

@@ -14,20 +14,79 @@
 	let showRegionSelect = $derived(() => {
 		return !page.params.region;
 	});
-	let paramAreas = $state(page.url.searchParams.getAll('areas'));
 
-	let { data }: { data: { options: Options; listingsCount: number; areas: string[] } } = $props();
+	let {
+		data,
+		searchTriggered
+	}: {
+		data: { options: Options; listingsCount: number; areas: string[] };
+		searchTriggered: () => void;
+	} = $props();
+
 	const { options } = data;
+
+	let minPrice = $state(parseInt(page.url.searchParams.get('min_price') || '0'));
+	let maxPrice = $state(parseInt(page.url.searchParams.get('max_price') || '1000000'));
+
+	const setMinPrice = (value: number) => {
+		minPrice = value;
+		searchParams.set('min_price', value.toString());
+	};
+
+	const setMaxPrice = (value: number) => {
+		maxPrice = value;
+		searchParams.set('max_price', value.toString());
+	};
+
+	let bedValue = $state(page.url.searchParams.get('bedrooms') || '0');
+	let bathValue = $state(page.url.searchParams.get('bathrooms') || '0');
+
+	const setBedValue = (value: string) => {
+		bedValue = value;
+		searchParams.set('bedrooms', value);
+	};
+
+	const setBathValue = (value: string) => {
+		bathValue = value;
+		searchParams.set('bathrooms', value);
+	};
+
+	let typeValue = $state(page.url.searchParams.get('type') || 'Any type');
+
+	const setTypeValue = (value: string) => {
+		typeValue = value;
+		searchParams.set('type', value);
+	};
+
+	let regionValue = $state(page.url.searchParams.get('region') || '');
+
+	const setRegionValue = async (value: string) => {
+		regionValue = value;
+		const res = await fetch(`/api/v2/listings?region=${regionValue}&display=areas&limit=1000`);
+		const { results } = await res.json();
+		areaOptions = results;
+	};
 
 	const resetSearch = (_e: Event) => {
 		goto('/');
+		minPrice = 0;
+		maxPrice = 1000000;
+		bedValue = '0';
+		bathValue = '0';
+		paramAreas = [];
+		typeValue = 'Any type';
+		regionValue = '';
+		refValue = '';
 	};
 
 	const clearAreaState = () => {
 		paramAreas = [];
 	};
 
-	$inspect(showRegionSelect());
+	let searchParams: URLSearchParams = $state(page.url.searchParams);
+
+	let paramAreas = $state(page.url.searchParams.getAll('areas'));
+	let areaOptions = $state(data.areas);
 
 	const handleAreaSelected = (value: string) => {
 		if (paramAreas.includes(value)) {
@@ -36,21 +95,33 @@
 			paramAreas = [...paramAreas, value];
 		}
 
-		const params = new URLSearchParams(window.location.search);
-
-		params.delete('page');
-		params.delete('areas');
+		searchParams.delete('page');
+		searchParams.delete('areas');
 
 		paramAreas.forEach((area) => {
 			if (typeof area !== 'string') return;
-			params.append('areas', area);
+			searchParams.append('areas', area);
 		});
+	};
 
-		goto(`?${params.toString()}`);
+	let refValue = $state(page.url.searchParams.get('ref') || '');
+
+	const setRefValue = (value: string) => {
+		refValue = value;
+		searchParams.set('ref', value);
+	};
+
+	const setParams = (value: URLSearchParams) => {
+		searchParams = value;
+	};
+
+	const handleSearch = async () => {
+		await goto(`?${searchParams.toString()}`);
+		searchTriggered();
 	};
 </script>
 
-<div class="min-w-full bg-hero bg-cover bg-center p-4 md:p-12 mb-8 relative">
+<div id="search-container" class="min-w-full bg-hero bg-cover bg-center p-4 md:p-12 mb-8 relative">
 	<div class="absolute inset-0 bg-black opacity-50"></div>
 	<div class="flex justify-center z-10 relative">
 		<div class="w-full max-w-[1216px] text-center px-4">
@@ -73,24 +144,41 @@
 				class="grid grid-cols-1 text-left lg:grid-cols-3 md:grid-cols-2 gap-8 pb-6 mb-6 pt-6 rounded-lg"
 			>
 				{#if showRegionSelect()}
-					<RegionSelect {clearAreaState} {options} />
+					<RegionSelect  {setParams}  {searchParams} {setRegionValue} {regionValue} {clearAreaState} {options} />
 				{/if}
 
-				<AreaSelect options={data.areas} selected={paramAreas} handleSelect={handleAreaSelected} />
+				<AreaSelect  options={areaOptions} selected={paramAreas} handleSelect={handleAreaSelected} />
 
-				<TypeSelect />
+				<TypeSelect {setParams}  {searchParams} {setTypeValue} {typeValue} />
 
-				<BedAndBathroomSelect {options} bedOrBath="bedrooms" />
-				<BedAndBathroomSelect {options} bedOrBath="bathrooms" />
+				<BedAndBathroomSelect
+				{setParams} 
+					 {searchParams}
+					setValue={setBedValue}
+					value={bedValue}
+					{options}
+					bedOrBath="bedrooms"
+				/>
+				<BedAndBathroomSelect
+				{setParams} 
+					 {searchParams}
+					setValue={setBathValue}
+					value={bathValue}
+					{options}
+					bedOrBath="bathrooms"
+				/>
 
-				<RefInput />
+				<RefInput {setParams}  {searchParams} {setRefValue} {refValue}  />
 			</div>
 			<div class="flex flex-wrap justify-center">
-				<Slider />
+				<Slider {setParams}  {searchParams}  {setMinPrice} {setMaxPrice} {minPrice} {maxPrice} />
 			</div>
 			<div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 w-full">
 				<div class="w-full sm:w-auto">
-					<Button onclick={(e) => resetSearch(e)}>RESET</Button>
+					<Button onclick={(_e) => handleSearch()}>SEARCH</Button>
+				</div>
+				<div class="w-full sm:w-auto">
+					<Button variant="destructive" onclick={(e) => resetSearch(e)}>RESET</Button>
 				</div>
 				<div class="w-full sm:w-auto">
 					<PropertyAlertyForm {options} />

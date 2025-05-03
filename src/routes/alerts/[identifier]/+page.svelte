@@ -73,11 +73,11 @@
 			handleFormDataUpdated={(data) => handleFormDataUpdated(data)}
 		/>
 		<div class="grid gap-2 pt-5">
-			<Button disabled={!formData?.first_name} on:click={update} type="submit">SAVE</Button>
-			<Button variant="destructive" on:click={() => handleDeletePropertyAlert()} type="submit"
+			<Button disabled={!formData?.first_name} onclick={update} type="submit">SAVE</Button>
+			<Button variant="destructive" onclick={() => handleDeletePropertyAlert()} type="submit"
 				>DELETE ALERT</Button
 			>
-			<Button variant="destructive" on:click={() => handleDeletePropertyAlert(true)} type="submit"
+			<Button variant="destructive" onclick={() => handleDeletePropertyAlert(true)} type="submit"
 				>DELETE ALL ALERTS</Button
 			>
 		</div>

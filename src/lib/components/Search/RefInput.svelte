@@ -1,30 +1,27 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Input } from '$lib/components/ui/input';
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 	import { debounce } from '$lib/utils';
-	import { page } from '$app/state';
 
-	let inputValue = $state('');
-	const refParam = $derived(page.url.searchParams.get('ref'));
-
-	$effect(() => {
-		if (refParam) {
-			inputValue = refParam;
-		}
-	});
+	let {
+		setRefValue,
+		refValue,
+		setParams,
+		searchParams
+	}: {
+		setRefValue: (value: string) => void;
+		refValue: string;
+		setParams: (value: URLSearchParams) => void;
+		searchParams: URLSearchParams;
+	} = $props();
 
 	const handleInputChange = (event: Event) => {
 		const target = event.target as HTMLInputElement;
-		inputValue = target.value;
-		const params = new URLSearchParams(page.url.searchParams);
+		const params = new URLSearchParams(searchParams);
 		params.delete('page');
-		if (inputValue === '') {
-			params.delete('ref');
-		} else {
-			params.set('ref', inputValue);
-		}
-		goto(`?${params.toString()}`, { keepFocus: true });
+		params.set('ref', target.value);
+		setRefValue(target.value);
+		setParams(params);
 	};
 
 	const debouncedInputChange = debounce(handleInputChange, 200);
@@ -32,7 +29,7 @@
 
 <FormLabel label="Identifier">
 	<Input
-		value={inputValue}
+		value={refValue}
 		oninput={debouncedInputChange}
 		class="w-full"
 		type="text"

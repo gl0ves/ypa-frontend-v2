@@ -1,7 +1,5 @@
 <script lang="ts">
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/state';
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 
 	const options = [
@@ -14,11 +12,21 @@
 		{ label: 'Penthouse', value: 'Penthouse' }
 	];
 
-	const param = $derived(() => page.url.searchParams.get('type') || 'Any type');
+	let {
+		setParams,
+		setTypeValue,
+		typeValue,
+		searchParams
+	}: {
+		setParams: (value: URLSearchParams) => void;
+		setTypeValue: (value: string) => void;
+		typeValue: string;
+		searchParams: URLSearchParams;
+	} = $props();
 
 	const selectedOption = $derived(() => {
 		return (
-			options.find((option) => option.value === param()) || {
+			options.find((option) => option.value === typeValue) || {
 				value: '',
 				label: 'Any type'
 			}
@@ -27,10 +35,11 @@
 
 	const handleOptionSelect = (option: string | undefined) => {
 		if (option === undefined) return;
-		const params = new URLSearchParams(page.url.searchParams);
+		const params = new URLSearchParams(searchParams);
 		params.delete('page');
 		params.set('type', option.toString());
-		goto(`?${params.toString()}`);
+		setTypeValue(option);
+		setParams(params);
 	};
 
 	const triggerContent = $derived(() => {

@@ -9,6 +9,7 @@
 </script>
 
 <div
+	id="listings-container"
 	class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 w-full max-w-7xl mx-auto px-4 overflow-hidden"
 >
 	{#each data.listings as listing}
