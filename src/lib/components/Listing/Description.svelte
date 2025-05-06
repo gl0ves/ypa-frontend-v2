@@ -19,10 +19,10 @@
 	{#if descriptions.en.length}
 		<Accordion.Item value="item-1">
 			<Accordion.Trigger
-				><YpaText weight="semibold" size="md">Description</YpaText></Accordion.Trigger
+				><YpaText weight="semibold" size="md">Description (EN)</YpaText></Accordion.Trigger
 			>
 			<Accordion.Content aria-expanded={true}>
-				<YpaText weight="semibold" size="sm">
+				<YpaText color="read" weight="semibold" size="sm">
 					{#each descriptions.en as sentence, idx}
 						<p>{sentence}</p>
 						{#if idx % 3 === 0}
@@ -37,7 +37,7 @@
 	{#if descriptions.de.length}
 		<Accordion.Item value="item-2">
 			<Accordion.Trigger
-				><YpaText weight="semibold" size="md">Beschreibung</YpaText></Accordion.Trigger
+				><YpaText weight="semibold" size="md">Beschreibung (DE)</YpaText></Accordion.Trigger
 			>
 			<Accordion.Content>
 				<YpaText weight="semibold" size="sm">
@@ -55,7 +55,7 @@
 	{#if descriptions.es.length}
 		<Accordion.Item value="item-3">
 			<Accordion.Trigger
-				><YpaText weight="semibold" size="md">Descripción</YpaText></Accordion.Trigger
+				><YpaText weight="semibold" size="md">Descripción (ES)</YpaText></Accordion.Trigger
 			>
 			<Accordion.Content>
 				<YpaText weight="semibold" size="sm">
@@ -73,7 +73,7 @@
 	{#if descriptions.nl.length}
 		<Accordion.Item value="item-4">
 			<Accordion.Trigger
-				><YpaText weight="semibold" size="md">Beschrijving</YpaText></Accordion.Trigger
+				><YpaText weight="semibold" size="md">Beschrijving (NL)</YpaText></Accordion.Trigger
 			>
 			<Accordion.Content>
 				<YpaText weight="semibold" size="sm">

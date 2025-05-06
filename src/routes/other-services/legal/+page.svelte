@@ -12,9 +12,10 @@
 					>Expert Legal Services in Spain from Lexidy Law Boutique</YpaText
 				>
 				<br />
-				<YpaText size="sm">Do you need legal assistance when dealing with matters in Spain?</YpaText
+				<YpaText size="sm" color="read"
+					>Do you need legal assistance when dealing with matters in Spain?</YpaText
 				>
-				<YpaText size="sm">
+				<YpaText size="sm" color="read">
 					<b>Your Property Abroad</b> partners with legal experts <b>Lexidy Law Boutique</b>; a
 					boutique-style modern and dynamic English speaking law firm like no other, with offices in
 					Spain and Portugal. They offer many legal services, such as Brexit, immigration and
@@ -23,25 +24,25 @@
 				</YpaText>
 				<br />
 				<ul class="m-4 list-disc max-w-full">
-					<li><YpaText size="sm">Expert Legal Advisors</YpaText></li>
+					<li><YpaText size="sm" color="read">Expert Legal Advisors</YpaText></li>
 					<li>
-						<YpaText size="sm"
+						<YpaText size="sm" color="read"
 							>English speaking and can also communicate in Spanish and Portuguese.</YpaText
 						>
 					</li>
-					<li><YpaText size="sm">Digital & Modern</YpaText></li>
-					<li><YpaText size="sm">Brexit legal services</YpaText></li>
-					<li><YpaText size="sm">Efficient & professional</YpaText></li>
+					<li><YpaText size="sm" color="read">Digital & Modern</YpaText></li>
+					<li><YpaText size="sm" color="read">Brexit legal services</YpaText></li>
+					<li><YpaText size="sm" color="read">Efficient & professional</YpaText></li>
 					<li>
-						<YpaText size="sm">Free initial consultation available</YpaText>
+						<YpaText size="sm" color="read">Free initial consultation available</YpaText>
 					</li>
 					<li>
-						<YpaText size="sm"
+						<YpaText size="sm" color="read"
 							>Prepared to support you even in the most complex legal matters</YpaText
 						>
 					</li>
 					<li>
-						<YpaText size="sm">Communicate in an easy to understand language</YpaText>
+						<YpaText size="sm" color="read">Communicate in an easy to understand language</YpaText>
 					</li>
 				</ul>
 				<br />

@@ -36,7 +36,7 @@
 
 <style lang="scss" scoped>
 	$paragraph-size: 20px;
-	$paragraph-color: #111111;
+	$paragraph-color: #424242;
 
 	.blog-content {
 		:global(p) {

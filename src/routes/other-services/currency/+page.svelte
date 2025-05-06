@@ -17,7 +17,7 @@
 		<YpaTitle>Fast, Experienced and Affordable Currency Exchange with Optimal Currency</YpaTitle>
 	</div>
 	<div class="mb-4">
-		<YpaText size="sm">
+		<YpaText size="sm" color="read">
 			Buying property in Spain is an exciting step and with so much to consider, it's easy to
 			overlook the fact that there are substantial savings to be made when you transfer money to
 			another country. If you use your bank to convert currencies for a holding deposit, property
@@ -38,7 +38,7 @@
 	</div>
 
 	<div class="mb-4">
-		<YpaText size="sm">
+		<YpaText size="sm" color="read">
 			Optimal Currency specialise in overseas property payments and make the process easier, cheaper
 			and faster. Unlike some currency brokers, they welcome clients from around the world, and with
 			local banking in the eurozone, UK and the US, they can eliminate wire and correspondent bank
@@ -48,7 +48,7 @@
 	</div>
 
 	<div class="mb-4">
-		<YpaText size="sm">
+		<YpaText size="sm" color="read">
 			If you are concerned your budget might be threatened by adverse currency market movements and
 			want to fix a rate of exchange in advance, or be alerted to big rate changes, they can help.
 			With Optimal, you'll have a highly experienced currency broker as your single point of
@@ -61,7 +61,7 @@
 
 	<YpaText size="md" weight="semibold">Why choose Optimal Currency?</YpaText>
 
-	<YpaText size="sm">
+	<YpaText size="sm" color="read">
 		<ol>
 			<li>
 				Exceptional customer service - your currency broker is with you every step of the way, you
@@ -84,7 +84,7 @@
 	<YpaText size="md" weight="semibold"
 		>Want more information by broker at Optimal Currency Exchange?</YpaText
 	>
-	<YpaText size="sm">Submit your details via the form below:</YpaText>
+	<YpaText size="sm" color="read">Submit your details via the form below:</YpaText>
 	<div>
 		<CurrencyForm />
 	</div>

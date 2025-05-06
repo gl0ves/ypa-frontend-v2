@@ -77,7 +77,7 @@
 			>
 				<IconWhatsApp class="h-6 w-6 mr-1" />
 				<div class="lg:block hidden">
-					<YpaText size="sm" weight="semibold" color="white">Contact us on Whatsapp</YpaText>
+					<YpaText size="sm" weight="semibold" color="white">Whatsapp</YpaText>
 				</div>
 			</a>
 			<a
@@ -85,20 +85,14 @@
 				target="_blank"
 				class="p-2 rounded-none flex items-center text-white hover:bg-secondary-foreground"
 			>
-				<IconFacebook class="h-6 w-6 mr-1" />
-				<div class="lg:block hidden">
-					<YpaText size="sm" weight="semibold" color="white">Visit us on Facebook</YpaText>
-				</div>
+				<IconFacebook class="h-6 w-6 mr-1 ml-1" />
 			</a>
 			<a
 				href="https://www.instagram.com/yourpropertyabroad"
 				target="_blank"
 				class="p-2 rounded-none flex items-center text-white hover:bg-secondary-foreground"
 			>
-				<IconInstagram class="h-6 w-6 mr-1" />
-				<div class="lg:block hidden">
-					<YpaText size="sm" weight="semibold" color="white">Follow us on Instagram</YpaText>
-				</div>
+				<IconInstagram class="h-6 w-6 mr-1 ml-1" />
 			</a>
 		</div>
 	</div>
