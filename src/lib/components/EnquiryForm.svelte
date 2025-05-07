@@ -19,13 +19,7 @@
 	let submitted = $state(false);
 
 	const everythingIsFilledIn = $derived(() => {
-		return (
-			firstname.length > 0 &&
-			lastname.length > 0 &&
-			email.length > 0 &&
-			phone.length > 0 &&
-			message.length > 0
-		);
+		return firstname.length > 0 && lastname.length > 0 && email.length > 0 && phone.length > 0;
 	});
 
 	const submitFormData = async () => {
@@ -133,35 +127,39 @@
 		<div class="flex flex-col items-stretch gap-4">
 			<div class="w-full space-y-3">
 				<div>
-					<FormLabel width="w-full" textColor="text-black" label="First Name">
-						<Input bind:value={firstname} placeholder="First Name" class="w-full" />
+					<FormLabel required width="w-full" textColor="text-black" label="First Name">
+						<Input required bind:value={firstname} placeholder="First Name" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
-					<FormLabel width="w-full" textColor="text-black" label="Last Name">
-						<Input bind:value={lastname} placeholder="Last Name" class="w-full" />
+					<FormLabel required width="w-full" textColor="text-black" label="Last Name">
+						<Input required bind:value={lastname} placeholder="Last Name" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
-					<FormLabel width="w-full" textColor="text-black" label="Email">
-						<Input bind:value={email} placeholder="Email" class="w-full" />
+					<FormLabel required width="w-full" textColor="text-black" label="Email">
+						<Input required bind:value={email} placeholder="Email" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
-					<FormLabel width="w-full" textColor="text-black" label="Phone">
-						<Input bind:value={phone} placeholder="Phone" class="w-full" />
+					<FormLabel required width="w-full" textColor="text-black" label="Phone">
+						<Input required bind:value={phone} placeholder="Phone" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
 					<FormLabel width="w-full" textColor="text-black" label="Message">
-						<Textarea bind:value={message} placeholder="Message" class="w-full min-h-[100px]" />
+						<Textarea
+							bind:value={message}
+							placeholder="Message (optional)"
+							class="w-full min-h-[100px]"
+						/>
 					</FormLabel>
 				</div>
 			</div>
 			<div class="space-y-3 px-2">
 				<CheckboxWithLabel
 					handleChecked={handleNewsletterChecked}
-					label="I agree to receive the newsletter from YourPropertyAbroad"
+					label="I agree to receive the newsletter from YourPropertyAbroad (optional)"
 				/>
 				<CheckboxWithLabel
 					handleChecked={handleCurrencyChecked}
@@ -169,7 +167,7 @@
 				/>
 				<CheckboxWithLabel
 					handleChecked={handleMortgageChecked}
-					label="I would also like information on Spanish mortgages"
+					label="I would also like information on Spanish mortgages (optional)"
 				/>
 			</div>
 			<div class="px-2 mt-2">
@@ -177,7 +175,7 @@
 					disabled={!everythingIsFilledIn}
 					onclick={submitFormData}
 					variant="default"
-					class="w-full">Submit</Button
+					class="w-full">REQUEST MORE INFO</Button
 				>
 			</div>
 		</div>
