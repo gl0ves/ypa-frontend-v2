@@ -121,8 +121,17 @@
 	};
 </script>
 
-<div id="search-container" class="min-w-full bg-hero bg-cover bg-center p-4 md:p-12 mb-8 relative">
-	<div class="absolute inset-0 bg-black opacity-50"></div>
+<div id="search-container" class="min-w-full relative p-4 md:p-12 mb-8">
+	<img
+		src="https://cdn.yourpropertyabroad.com/static/banner.jpg"
+		alt="Your Property Abroad Banner"
+		class="absolute inset-0 w-full h-full object-cover z-0"
+		fetchpriority="high"
+		decoding="async"
+		aria-hidden="true"
+		draggable="false"
+	/>
+	<div class="absolute inset-0 bg-black opacity-50 z-10"></div>
 	<div class="flex justify-center z-10 relative">
 		<div class="w-full max-w-[1216px] text-center px-4">
 			<h1 class="text-xl md:text-3xl font-bold text-white z-10 relative">
@@ -144,34 +153,41 @@
 				class="grid grid-cols-1 text-left lg:grid-cols-3 md:grid-cols-2 gap-8 pb-6 mb-6 pt-6 rounded-lg"
 			>
 				{#if showRegionSelect()}
-					<RegionSelect  {setParams}  {searchParams} {setRegionValue} {regionValue} {clearAreaState} {options} />
+					<RegionSelect
+						{setParams}
+						{searchParams}
+						{setRegionValue}
+						{regionValue}
+						{clearAreaState}
+						{options}
+					/>
 				{/if}
 
-				<AreaSelect  options={areaOptions} selected={paramAreas} handleSelect={handleAreaSelected} />
+				<AreaSelect options={areaOptions} selected={paramAreas} handleSelect={handleAreaSelected} />
 
-				<TypeSelect {setParams}  {searchParams} {setTypeValue} {typeValue} />
+				<TypeSelect {setParams} {searchParams} {setTypeValue} {typeValue} />
 
 				<BedAndBathroomSelect
-				{setParams} 
-					 {searchParams}
+					{setParams}
+					{searchParams}
 					setValue={setBedValue}
 					value={bedValue}
 					{options}
 					bedOrBath="bedrooms"
 				/>
 				<BedAndBathroomSelect
-				{setParams} 
-					 {searchParams}
+					{setParams}
+					{searchParams}
 					setValue={setBathValue}
 					value={bathValue}
 					{options}
 					bedOrBath="bathrooms"
 				/>
 
-				<RefInput {setParams}  {searchParams} {setRefValue} {refValue}  />
+				<RefInput {setParams} {searchParams} {setRefValue} {refValue} />
 			</div>
 			<div class="flex flex-wrap justify-center">
-				<Slider {setParams}  {searchParams}  {setMinPrice} {setMaxPrice} {minPrice} {maxPrice} />
+				<Slider {setParams} {searchParams} {setMinPrice} {setMaxPrice} {minPrice} {maxPrice} />
 			</div>
 			<div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 w-full">
 				<div class="w-full sm:w-auto">

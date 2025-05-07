@@ -21,7 +21,7 @@
 		<Dialog.Header>
 			<Dialog.Title><YpaText size="md" weight="semibold">Privacy Statement</YpaText></Dialog.Title>
 		</Dialog.Header>
-		<Dialog.Description class="max-h-[80vh] overflow-y-auto">
+		<Dialog.Description class="max-h-[80vh] overflow-y-auto text-gray-800">
 			<p class="font-bold">
 				Your right to privacy is important to us. Your Property Abroad handles your personal data
 				carefully.
