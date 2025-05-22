@@ -189,7 +189,7 @@
 			<div class="flex flex-wrap justify-center">
 				<Slider {setParams} {searchParams} {setMinPrice} {setMaxPrice} {minPrice} {maxPrice} />
 			</div>
-			<div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 w-full">
+			<div class="flex flex-col-reverse sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 w-full">
 				<div class="w-full sm:w-auto">
 					<Button size="lg" variant="destructive" onclick={(e) => resetSearch(e)} class="w-full">RESET</Button>
 				</div>

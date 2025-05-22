@@ -58,7 +58,7 @@
 	};
 </script>
 
-<FormLabel label="Regions">
+<FormLabel label="Regions" hideLabelOnMobile={true}>
 	<Select.Root
 		type="single"
 		value={selectedRegion.value || undefined}

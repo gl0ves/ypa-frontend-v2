@@ -27,12 +27,12 @@
 	const debouncedInputChange = debounce(handleInputChange, 200);
 </script>
 
-<FormLabel label="Identifier">
+<FormLabel label="Identifier" hideLabelOnMobile={true}>
 	<Input
 		value={refValue}
 		oninput={debouncedInputChange}
 		class="w-full"
 		type="text"
-		placeholder="Search"
+		placeholder="Search by reference"
 	/>
 </FormLabel>

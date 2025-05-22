@@ -36,7 +36,7 @@
 </script>
 
 <Popover.Root bind:open>
-	<FormLabel label="Areas" textColor={areaSelectLabelColor}>
+	<FormLabel label="Areas" textColor={areaSelectLabelColor} hideLabelOnMobile={true}>
 		<Popover.Trigger>
 			{#snippet child({ props })}
 				<Button

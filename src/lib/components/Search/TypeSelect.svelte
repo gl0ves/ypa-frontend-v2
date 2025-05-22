@@ -47,7 +47,7 @@
 	});
 </script>
 
-<FormLabel label="Type">
+<FormLabel label="Type" hideLabelOnMobile={true}>
 	<Select.Root
 		type="single"
 		value={selectedOption().value}
