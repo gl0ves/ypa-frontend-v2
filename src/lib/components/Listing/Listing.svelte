@@ -38,11 +38,11 @@
 	</div>
 </div>
 <Separator />
-<div class="flex justify-between pt-4 mb-2">
+<div class="flex flex-col md:flex-row md:justify-between pt-4 mb-2">
 	<YpaText weight="bold" size="lg"
 		>{listing.bedrooms} bedroom {listing.type} in {listing.area} - {listing.ref}</YpaText
 	>
-	<YpaText weight="bold" size="lg">{listing.price.toLocaleString()}€</YpaText>
+	<YpaText weight="bold" size="lg" class="text-right md:text-left">{listing.price.toLocaleString()}€</YpaText>
 </div>
 <div class="mb-6">
 	<Carousel {listing} />

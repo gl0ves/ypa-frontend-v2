@@ -8,18 +8,20 @@
 		children,
 		size = 'md',
 		color = 'primary',
-		weight = 'normal'
+		weight = 'normal',
+		class: className = ''
 	}: {
 		children: Snippet;
 		size?: Size;
 		color?: Color;
 		weight?: Weight;
+		class?: string;
 	} = $props();
 
 	const sizeClasses = {
 		sm: 'text-sm',
 		md: 'text-md',
-		lg: 'text-lg uppercase'
+		lg: 'text-md md:text-lg uppercase'
 	};
 
 	const colorClasses = {
@@ -38,15 +40,15 @@
 </script>
 
 {#if size === 'lg'}
-	<h1 class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]}`}>
+	<h1 class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]} ${className}`}>
 		{@render children()}
 	</h1>
 {:else if size === 'md'}
-	<h2 class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]}`}>
+	<h2 class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]} ${className}`}>
 		{@render children()}
 	</h2>
 {:else}
-	<div class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]}`}>
+	<div class={`${sizeClasses[size]} ${colorClasses[color]} ${weightClasses[weight]} ${className}`}>
 		{@render children()}
 	</div>
 {/if}
