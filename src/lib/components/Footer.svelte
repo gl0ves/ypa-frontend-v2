@@ -112,32 +112,22 @@
 			<div class="flex flex-col gap-2">
 				<a
 					class="text-white hover:underline"
-					href="/buyer-information/brexit-legal-guide-lexidy-law-boutique"
-				>
-					<h3 class="font-semibold">Brexit: UK Legal & Financial Info</h3>
-				</a>
-				<a class="text-white hover:underline" href="/buyer-information">
-					<h3 class="font-semibold">Buyer Information</h3>
-				</a>
-				<a
-					class="text-white hover:underline"
-					href="https://yourpropertyabroad.com/blog/"
+					href="/blog/"
 					target="_blank"
 				>
 					<h3 class="font-semibold">Spain property blog</h3>
 				</a>
-				<a
-					class="text-white hover:underline"
-					href="https://yourpropertyabroad.com/directory/"
-					target="_blank"
-				>
-					<h3 class="font-semibold">Spain business directory</h3>
-				</a>
-				<a class="text-white hover:underline" href="/services/mortgage">
+				<a class="text-white hover:underline" href="/other-services/mortgage">
 					<h3 class="font-semibold">Mortgage services</h3>
 				</a>
-				<a class="text-white hover:underline" href="/services/currency-exchange">
+				<a class="text-white hover:underline" href="/other-services/currency">
 					<h3 class="font-semibold">Currency exchange</h3>
+				</a>
+				<a class="text-white hover:underline" href="/other-services/legal">
+					<h3 class="font-semibold">Legal services</h3>
+				</a>
+				<a class="text-white hover:underline" href="/other-services/spanish-course">
+					<h3 class="font-semibold">Learn Spanish</h3>
 				</a>
 			</div>
 		</div>
