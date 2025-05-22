@@ -6,12 +6,14 @@
 	import { savePropertyAlert } from '$lib/api';
 	import { type AlertFormData, type ListingDetails } from '$lib/ypaTypes';
 	import { type Options } from '$lib/data/options';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 
 	let formSubmitted = $state(false);
 	let formSubmissionFailed = $state(false);
 	let formData: AlertFormData | null = $state(null);
 	let { options, listing }: { options: Options; listing?: ListingDetails } = $props();
+	let dialogOpen = $state(false);
 
 	onMount(() => {
 		if (listing && formData) {
@@ -40,9 +42,30 @@
 		if (!data) return;
 		formData = { ...formData, ...data };
 	};
+
+	// Simple back button handling
+	$effect(() => {
+		if (!browser || !dialogOpen) return;
+
+		// Push state when modal opens
+		history.pushState(null, '', location.href);
+		
+		const handleBackButton = () => {
+			if (dialogOpen) {
+				dialogOpen = false;
+				history.pushState(null, '', location.href);
+			}
+		};
+
+		window.addEventListener('popstate', handleBackButton);
+		
+		return () => {
+			window.removeEventListener('popstate', handleBackButton);
+		};
+	});
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open={dialogOpen}>
 	<Dialog.Trigger class="w-full">
 		<span class="w-full py-2 bg-attention h-11 rounded-md px-8 text-white hover:bg-attention/90 text-sm font-semibold inline-flex justify-center gap-2">CREATE PROPERTY ALERT</span>
 	</Dialog.Trigger>
