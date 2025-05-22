@@ -86,7 +86,7 @@
 		if (newsletter) formData.tags.push('Newsletter');
 		if (currency) formData.tags.push('Currency');
 		if (mortgage) formData.tags.push('Mortgage');
-		const response = await fetch('/api/forms', {
+		const response = await fetch('/api/form/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
