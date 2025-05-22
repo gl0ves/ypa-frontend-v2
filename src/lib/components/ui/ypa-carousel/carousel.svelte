@@ -21,6 +21,7 @@
 	}
 	function setIndex() {
 		selectedIndex = emblaApi.selectedScrollSnap();
+		thumbsApi.scrollTo(selectedIndex);
 	}
 </script>
 
