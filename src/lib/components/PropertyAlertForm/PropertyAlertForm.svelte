@@ -43,12 +43,9 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger
-		><span
-			class="h-10 px-4 w-full py-2 bg-attention text-white hover:bg-attention/90 rounded-md text-sm font-semibold inline-flex justify-center gap-2"
-			>CREATE PROPERTY ALERT</span
-		></Dialog.Trigger
-	>
+	<Dialog.Trigger class="w-full">
+		<span class="w-full py-2 bg-attention h-11 rounded-md px-8 text-white hover:bg-attention/90 text-sm font-semibold inline-flex justify-center gap-2">CREATE PROPERTY ALERT</span>
+	</Dialog.Trigger>
 	<form id="alert-form" method="POST">
 		<Dialog.Content class="sm:max-w-[426px] max-h-[80vh] overflow-auto">
 			<Dialog.Header>

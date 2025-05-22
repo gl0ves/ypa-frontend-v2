@@ -191,13 +191,13 @@
 			</div>
 			<div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 w-full">
 				<div class="w-full sm:w-auto">
-					<Button onclick={(_e) => handleSearch()}>SEARCH</Button>
-				</div>
-				<div class="w-full sm:w-auto">
-					<Button variant="destructive" onclick={(e) => resetSearch(e)}>RESET</Button>
+					<Button size="lg" variant="destructive" onclick={(e) => resetSearch(e)} class="w-full">RESET</Button>
 				</div>
 				<div class="w-full sm:w-auto">
 					<PropertyAlertyForm {options} />
+				</div>
+				<div class="w-full sm:w-auto">
+					<Button size="lg" variant="tertiary" onclick={(_e) => handleSearch()} class="w-full">SEARCH</Button>
 				</div>
 			</div>
 		</div>
