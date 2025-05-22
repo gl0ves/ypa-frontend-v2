@@ -1,6 +1,5 @@
 import { fetchAlert } from '$lib/api/index';
 import { type AlertFormData } from '$lib/ypaTypes';
-import { error } from '@sveltejs/kit';
 import {
 	propertyRegionOptions,
 	propertyTypeOptions,
@@ -10,28 +9,25 @@ import {
 } from '$lib/data/options';
 import { type Options } from '$lib/data/options';
 
-/** @type {import('./$types').PageLoad} */
+/** @type {import('./$types').LayoutLoad} */
 export const load = async ({
 	fetch,
 	params
-}): Promise<{ alert: AlertFormData; options: Options } | never> => {
+}): Promise<{ alert: AlertFormData | null; options: Options; status: number }> => {
 	const { alert, status } = (await fetchAlert(fetch, params.identifier)) as {
 		alert: AlertFormData;
 		status: number;
 	};
 
-	if (status === 404) {
-		throw error(404, 'Not Found');
-	}
-
 	return {
-		alert: alert,
+		alert: status === 404 ? null : alert,
 		options: {
 			propertyRegionOptions,
 			propertyTypeOptions,
 			bedAndBathroomOptions,
 			maxPriceOptions,
 			emailFrequencyOptions
-		}
+		},
+		status
 	};
-};
+}; 

@@ -55,8 +55,8 @@
 				<Dialog.Title>CREATE PROPERTY ALERT</Dialog.Title>
 				<Dialog.Description>
 					{#if formSubmitted}
-						Your property alert has been successfully created. If this is your first alert, please
-						check your email to verify your email address.
+						Your property alert has been successfully created. Please check your email to verify
+						your email address.
 					{:else if formSubmissionFailed}
 						There was an error creating your property alert. Please try again later.
 					{:else}

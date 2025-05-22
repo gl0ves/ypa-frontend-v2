@@ -39,17 +39,17 @@
 	}
 
 	let defaultFormData: AlertFormData = $state({
-		identifier: null,
-		first_name: null,
-		email: null,
-		region: searchParams.get('region'),
-		areas: searchParams.getAll('areas') ?? [],
-		bedrooms: searchParams.get('bedrooms') ?? '0',
-		bathrooms: searchParams.get('bathrooms') ?? '0',
-		price_max: closestPrice,
-		type: searchParams.get('type'),
-		frequency: '7',
-		verified: false
+		identifier: formData?.identifier ?? null,
+		first_name: formData?.first_name ?? null,
+		email: formData?.email ?? null,
+		region: formData?.region ?? searchParams.get('region'),
+		areas: formData?.areas ?? searchParams.getAll('areas') ?? [],
+		bedrooms: formData?.bedrooms?.toString() ?? searchParams.get('bedrooms') ?? '0',
+		bathrooms: formData?.bathrooms?.toString() ?? searchParams.get('bathrooms') ?? '0',
+		price_max: formData?.price_max?.toString() ?? closestPrice,
+		type: formData?.type ?? searchParams.get('type'),
+		frequency: formData?.frequency.toString() ?? '7',
+		verified: formData?.verified ?? false
 	});
 
 	const showEmail = page.params.identifier ? false : true;
@@ -58,9 +58,6 @@
 
 	onMount(() => {
 		if (defaultFormData.region) fetchAreas(defaultFormData.region);
-		if (formData != null) {
-			defaultFormData = { ...defaultFormData, ...formData };
-		}
 	});
 
 	const fetchAreas = async (region: string | null) => {

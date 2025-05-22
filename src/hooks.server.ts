@@ -58,6 +58,7 @@ async function processRequestBody(request: Request) {
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export async function handleFetch({ request, fetch, event }) {
+
 	if (request.url.startsWith('http://localhost/backend/')) {
 		const body = await processRequestBody(request);
 		const headers = prepareAuthHeaders(new Headers(request.headers), event.cookies, request.method);
@@ -116,6 +117,14 @@ export async function handle({ event, resolve }) {
 			statusText: response.statusText,
 			headers: response.headers
 		});
+	}
+
+	if (
+		event.url.pathname.startsWith(
+			'/.well-known/appspecific/com.chrome.devtools'
+		)
+	) {
+		return new Response(null, { status: 204 }); // Return empty response with 204 No Content
 	}
 
 	return resolve(event);

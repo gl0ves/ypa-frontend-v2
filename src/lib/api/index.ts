@@ -32,13 +32,13 @@ const fetchAreas = async (url: URL, fetch: FetchFunction, region?: string) => {
 };
 
 const fetchAlert = async (fetch: FetchFunction, identifier: string) => {
-	const response = await fetch(`/backend/alerts/${identifier}/get_property_alert/`);
+	const response = await fetch(`/backend/v2/alerts/${identifier}/`);
 	const data = (await response.json()) as AlertFormData;
 	return { alert: data, status: response.status };
 };
 
 const savePropertyAlert = async (alertFormData: AlertFormData) => {
-	const response = await fetch('/api/alerts', {
+	const response = await fetch(`/api/v2/alerts/`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -48,9 +48,27 @@ const savePropertyAlert = async (alertFormData: AlertFormData) => {
 	return response;
 };
 
+const updatePropertyAlert = async (identifier: string, data: AlertFormData) => {
+	const response = await fetch(`/api/v2/alerts/${identifier}/`, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	});
+	return response;
+};
+
+const verifyPropertyAlert = async (identifier: string, data: { verified: boolean }) => {
+	const response = await fetch(`/api/v2/alerts/${identifier}/`, {
+		method: 'PATCH'
+	});
+	return response;
+};
+
 const deletePropertyAlert = async (identifier: string, all: boolean) => {
 	const param = all ? '?all=true' : '';
-	const response = await fetch(`/api/alerts/${identifier}` + param, {
+	const response = await fetch(`/api/v2/alerts/${identifier}/` + param, {
 		method: 'DELETE'
 	});
 	return response;
@@ -124,6 +142,8 @@ export {
 	fetchAreas,
 	fetchAlert,
 	savePropertyAlert,
+	updatePropertyAlert,
+	verifyPropertyAlert,
 	deletePropertyAlert,
 	upload,
 	saveBlogPost,
