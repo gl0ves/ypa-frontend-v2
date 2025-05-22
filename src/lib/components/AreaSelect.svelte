@@ -6,6 +6,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { cn } from '$lib/utils.js';
 	import FormLabel from '$lib/components/ui/form-label/FormLabel.svelte';
+	import { browser } from '$app/environment';
 
 	let {
 		options = [],
@@ -33,9 +34,27 @@
 	const combinedLabel = $derived(truncateLabel([...selected].join(', ')));
 
 	let open = $state(false);
+
+	// Prevent scroll to top on mobile when opening
+	const handleOpenChange = (newOpen: boolean) => {
+		if (browser && newOpen) {
+			// Store current scroll position
+			const scrollY = window.scrollY;
+			
+			// Set open state
+			open = newOpen;
+			
+			// Restore scroll position after DOM updates
+			setTimeout(() => {
+				window.scrollTo(0, scrollY);
+			}, 0);
+		} else {
+			open = newOpen;
+		}
+	};
 </script>
 
-<Popover.Root bind:open>
+<Popover.Root open={open} onOpenChange={handleOpenChange}>
 	<FormLabel label="Areas" textColor={areaSelectLabelColor} hideLabelOnMobile={true}>
 		<Popover.Trigger>
 			{#snippet child({ props })}
@@ -53,12 +72,23 @@
 			{/snippet}
 		</Popover.Trigger>
 	</FormLabel>
-	<Popover.Content class="max-w-[361px] w-[90%] p-0">
+	<Popover.Content 
+		class="max-w-[361px] w-[90vw] md:w-[361px] p-0 z-50" 
+		side="bottom" 
+		align="start" 
+		sideOffset={4}
+		avoidCollisions={true}
+		collisionPadding={8}
+	>
 		<Command.Root>
-			<Command.Input placeholder="Search area..." class="h-9" />
+			<Command.Input 
+				placeholder="Search area..." 
+				class="h-9" 
+				data-prevent-scroll="true"
+			/>
 			<Command.List>
 				<Command.Empty>No areas found.</Command.Empty>
-				<Command.Group class="max-h-[300px] overflow-y-scroll">
+				<Command.Group class="max-h-[200px] md:max-h-[300px] overflow-y-auto">
 					{#each parsedOptions as option}
 						<Command.Item
 							value={option.value}
