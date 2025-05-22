@@ -150,7 +150,7 @@
 			</h2>
 
 			<div
-				class="grid grid-cols-1 text-left lg:grid-cols-3 md:grid-cols-2 gap-8 pb-6 mb-6 pt-6 rounded-lg"
+				class="grid grid-cols-1 text-left lg:grid-cols-3 md:grid-cols-2 gap-6 pb-6 mb-6 pt-6 rounded-lg"
 			>
 				{#if showRegionSelect()}
 					<RegionSelect
