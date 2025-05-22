@@ -33,6 +33,6 @@
 		oninput={debouncedInputChange}
 		class="w-full"
 		type="text"
-		placeholder="Search by reference"
+		placeholder="Reference number"
 	/>
 </FormLabel>

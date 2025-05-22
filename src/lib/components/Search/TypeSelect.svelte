@@ -3,7 +3,7 @@
 	import FormLabel from '../ui/form-label/FormLabel.svelte';
 
 	const options = [
-		{ label: 'Any type', value: '' },
+		{ label: 'Property type', value: '' },
 		{ label: 'Apartment', value: 'Apartment' },
 		{ label: 'Commercial and Hotel', value: 'Commercial and Hotel' },
 		{ label: 'Finca / Rural house', value: 'Finca / Rural house' },
@@ -28,7 +28,7 @@
 		return (
 			options.find((option) => option.value === typeValue) || {
 				value: '',
-				label: 'Any type'
+				label: 'Property type'
 			}
 		);
 	});

@@ -24,7 +24,7 @@
 	};
 
 	const truncateLabel = (label: string, maxLength = 25) => {
-		if (!label) return 'Select areas...';
+		if (!label) return 'Select area(s)';
 		return label.length > maxLength ? label.slice(0, maxLength) + '...' : label;
 	};
 
@@ -47,7 +47,7 @@
 					aria-expanded={open}
 					disabled={!options.length}
 				>
-					{!options.length ? 'Please select a region' : combinedLabel || 'Select areas...'}
+					{!options.length ? 'Please select a region' : combinedLabel || 'Select area(s)'}
 					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			{/snippet}

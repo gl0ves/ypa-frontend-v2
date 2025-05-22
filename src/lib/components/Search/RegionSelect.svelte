@@ -65,7 +65,7 @@
 		onValueChange={(value: string) => handleRegionSelected(value)}
 	>
 		<Select.Trigger class="w-full">
-			{selectedRegion.label || 'Select a region'}
+			{selectedRegion.label || 'Select a region*'}
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>

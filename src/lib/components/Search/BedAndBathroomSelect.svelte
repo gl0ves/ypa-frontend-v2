@@ -19,15 +19,18 @@
 		searchParams: URLSearchParams;
 	} = $props();
 
-	const defaultValue = { value: '0', label: 'Any amount' };
+	const defaultValue = $derived(() => ({ 
+		value: '0', 
+		label: bedOrBath === 'bedrooms' ? 'Bedrooms' : 'Bathrooms'
+	}));
 
 	const { bedAndBathroomOptions } = options;
 
 	let selectedOption = $derived(() => {
-		if (value === '0') return defaultValue;
+		if (value === '0') return defaultValue();
 		return (
 			bedAndBathroomOptions.find((option: Option) => option.value?.toString() === value) ||
-			defaultValue
+			defaultValue()
 		);
 	});
 
@@ -43,7 +46,7 @@
 	};
 
 	const triggerContent = $derived(() => {
-		return selectedOption().label || 'Any amount';
+		return selectedOption().label || defaultValue().label;
 	});
 </script>
 
