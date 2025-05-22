@@ -88,7 +88,7 @@
 			/>
 			<Command.List>
 				<Command.Empty>No areas found.</Command.Empty>
-				<Command.Group class="max-h-[200px] md:max-h-[300px] overflow-y-auto">
+				<Command.Group class="max-h-[200px] md:max-h-[300px] overflow-y-scroll">
 					{#each parsedOptions as option}
 						<Command.Item
 							value={option.value}
