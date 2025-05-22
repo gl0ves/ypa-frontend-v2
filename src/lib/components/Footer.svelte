@@ -73,34 +73,34 @@
 				<a class="text-white hover:underline" href="/"
 					><h3 class="font-semibold">All Spanish Properties</h3></a
 				>
-				<a class="text-white hover:underline" href="/lanzarote?region=lanzarote"
+				<a class="text-white hover:underline" href="/?region=lanzarote"
 					><h3 class="font-semibold">Properties in Lanzarote</h3></a
 				>
-				<a class="text-white hover:underline" href="/tenerife?region=tenerife"
+				<a class="text-white hover:underline" href="/?region=tenerife"
 					><h3 class="font-semibold">Properties in Tenerife</h3></a
 				>
-				<a class="text-white hover:underline" href="/gran-canaria?region=gran-canaria"
+				<a class="text-white hover:underline" href="/?region=gran-canaria"
 					><h3 class="font-semibold">Properties in Gran Canaria</h3></a
 				>
-				<a class="text-white hover:underline" href="/costa-blanca?region=costa-blanca"
+				<a class="text-white hover:underline" href="/?region=costa-blanca"
 					><h3 class="font-semibold">Properties in Costa Blanca</h3></a
 				>
-				<a class="text-white hover:underline" href="/costa-del-sol?region=costa-del-sol"
+				<a class="text-white hover:underline" href="/?region=costa-del-sol"
 					><h3 class="font-semibold">Properties in Costa del Sol</h3></a
 				>
-				<a class="text-white hover:underline" href="/costa-almeria?region=costa-almeria"
+				<a class="text-white hover:underline" href="/?region=costa-almeria"
 					><h3 class="font-semibold">Properties in Costa Almería</h3></a
 				>
-				<a class="text-white hover:underline" href="/costa-calida?region=costa-calida"
+				<a class="text-white hover:underline" href="/?region=costa-calida"
 					><h3 class="font-semibold">Properties in Costa Cálida</h3></a
 				>
-				<a class="text-white hover:underline" href="/mallorca?region=mallorca"
+				<a class="text-white hover:underline" href="/?region=mallorca"
 					><h3 class="font-semibold">Properties in Mallorca</h3></a
 				>
-				<a class="text-white hover:underline" href="/menorca?region=menorca"
+				<a class="text-white hover:underline" href="/?region=menorca"
 					><h3 class="font-semibold">Properties in Menorca</h3></a
 				>
-				<a class="text-white hover:underline" href="/ibiza?region=ibiza"
+				<a class="text-white hover:underline" href="/?region=ibiza"
 					><h3 class="font-semibold">Properties in Ibiza</h3></a
 				>
 			</div>
