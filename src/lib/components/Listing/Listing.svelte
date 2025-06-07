@@ -94,7 +94,7 @@
 		</div>
 	</div>
 	<div class="flex min-w-[300px] h-full justify-center lg:justify-end">
-		<EnquiryForm />
+		<EnquiryForm ref={listing.ref} />
 	</div>
 </div>
 <div class="mb-6">

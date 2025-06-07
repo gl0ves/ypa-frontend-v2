@@ -12,11 +12,12 @@
 	let phone = $state('');
 	let message = $state('');
 	let region = $state('');
-	let reference = $state('');
 	let newsletter = $state(false);
 	let currency = $state(false);
 	let mortgage = $state(false);
 	let submitted = $state(false);
+
+	const {ref}: {ref: string} = $props();
 
 	const everythingIsFilledIn = $derived(() => {
 		return firstname.length > 0 && lastname.length > 0 && email.length > 0 && phone.length > 0;
@@ -63,7 +64,7 @@
 				},
 				{
 					name: 'refno',
-					value: reference,
+					value: ref,
 					type: 'CUSTOM',
 					field_type: 'TEXT'
 				},
