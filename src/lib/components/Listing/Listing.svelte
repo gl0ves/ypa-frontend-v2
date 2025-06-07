@@ -29,8 +29,6 @@
 	});
 </script>
 
-<!-- TODO: Flex col on small screens -->
-
 <div class="flex justify-between pt-4 mb-2">
 	<YpaText weight="semibold" size="md">{listing.ref}</YpaText>
 	<div class="flex justify-end">
