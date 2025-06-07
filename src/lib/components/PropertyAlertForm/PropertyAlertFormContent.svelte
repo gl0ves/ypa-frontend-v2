@@ -110,20 +110,26 @@
 	};
 </script>
 
-<div class="grid gap-4 z-100000">
+<form class="grid gap-4 z-100000">
 	<div class="grid items-center gap-4">
-		<FormLabel textColor="text-black" label="First Name">
+		<FormLabel required textColor="text-black" label="First Name">
 			<Input
 				required
+				type="text"
+				name="first_name"
+				autocomplete="given-name"
 				placeholder="What is your first name?"
 				oninput={handleInputChange}
 				bind:value={defaultFormData.first_name}
 			/>
 		</FormLabel>
 		{#if showEmail}
-			<FormLabel textColor="text-black" label="Email">
+			<FormLabel required textColor="text-black" label="Email">
 				<Input
 					required
+					type="email"
+					name="email"
+					autocomplete="email"
 					placeholder="Where should we send the alerts?"
 					oninput={handleInputChange}
 					bind:value={defaultFormData.email}
@@ -180,4 +186,4 @@
 			handleSelect={(option) => handleNumberSelect('price_max', option)}
 		/>
 	</div>
-</div>
+</form>

@@ -124,26 +124,26 @@
 		<div class="mb-4 px-2">
 			<YpaText weight="semibold" size="md">Interested? Let us know!</YpaText>
 		</div>
-		<div class="flex flex-col items-stretch gap-4">
+		<form class="flex flex-col items-stretch gap-4">
 			<div class="w-full space-y-3">
 				<div>
 					<FormLabel required width="w-full" textColor="text-black" label="First Name">
-						<Input required bind:value={firstname} placeholder="First Name" class="w-full" />
+						<Input required name="first_name" autocomplete="given-name" bind:value={firstname} placeholder="First Name" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
 					<FormLabel required width="w-full" textColor="text-black" label="Last Name">
-						<Input required bind:value={lastname} placeholder="Last Name" class="w-full" />
+						<Input required name="last_name" autocomplete="family-name" bind:value={lastname} placeholder="Last Name" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
 					<FormLabel required width="w-full" textColor="text-black" label="Email">
-						<Input required bind:value={email} placeholder="Email" class="w-full" />
+						<Input required name="email" autocomplete="email" type="email" bind:value={email} placeholder="Email" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
 					<FormLabel required width="w-full" textColor="text-black" label="Phone">
-						<Input required bind:value={phone} placeholder="Phone" class="w-full" />
+						<Input required name="phone" autocomplete="tel" type="tel" bind:value={phone} placeholder="Phone" class="w-full" />
 					</FormLabel>
 				</div>
 				<div>
@@ -178,6 +178,6 @@
 					class="w-full">REQUEST MORE INFO</Button
 				>
 			</div>
-		</div>
+		</form>
 	{/if}
 </div>

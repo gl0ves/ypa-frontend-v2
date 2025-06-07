@@ -18,7 +18,7 @@
 	<Checkbox id="terms" bind:checked />
 	<Label
 		for="terms"
-		class="text-sm font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+		class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 	>
 		{label}
 	</Label>
